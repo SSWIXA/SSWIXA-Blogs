@@ -11,7 +11,7 @@ import 'element-plus/theme-chalk/display.css'
 import spanIcon from './spanIcon.vue'
 import { reactive } from 'vue'
 
-let iconMsg = reactive([{'txt':'主页','before':'🏠'}, {'txt':'导航','before':'🏹'}, {'txt':'前端开发','before':'💻'}, {'txt':'后端开发','before':'📦'},{'txt':'关于','before':'🔅'}]) //图标信息
+let iconMsg = reactive([{'txt':'主页','before':'🏠','child':[]}, {'txt':'导航','before':'🏹','child':[]}, {'txt':'前端开发','before':'💻','child':[]}, {'txt':'后端开发','before':'📦','child':[]},{'txt':'关于','before':'🔅','child':[]}]) //图标信息
 
 </script>
 
