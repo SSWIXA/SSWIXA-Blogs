@@ -1,7 +1,7 @@
 <template>
   <div class="iconSpan_item">
     <RouterLink
-      to="/"
+      :to="itemRouter"
       style="
         text-decoration: none;
         color: inherit;
@@ -10,14 +10,50 @@
         align-items: center;
       "
     >
-      <el-text v-if="spanModel" class="item_txt" :style="`--my-content: '${itemBeforeIcon}';`">{{
-        itemT
-      }}</el-text>
-      <el-dropdown v-else @command="handleCommand">
+      <el-text
+        v-if="spanModel"
+        class="item_txt_before"
+        :style="`--my-content: '${itemBeforeIcon}';`"
+        >{{ itemT }}
+        <el-icon class="el-icon--right" v-if="specialIcon" style="margin-left: 0">
+          <svg
+            t="1710314679307"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="1703"
+            width="200"
+            height="200"
+          >
+            <path
+              d="M972.8 549.9136v294.7584A128.0768 128.0768 0 0 1 844.8 972.8H179.2a128 128 0 0 1-128-128V179.2c0-70.7328 57.1904-128 127.872-128h202.3168a25.6 25.6 0 0 0 0-51.2H179.072A179.072 179.072 0 0 0 0 179.2v665.6a179.2 179.2 0 0 0 179.2 179.2h665.6c98.944 0 179.2-80.2816 179.2-179.328V549.9136a25.6 25.6 0 0 0-51.2 0z"
+              fill="#222222"
+              p-id="1704"
+            ></path>
+            <path
+              d="M960 128c-353.4592 0-640 286.5408-640 640a25.6 25.6 0 0 0 51.2 0c0-325.1968 263.6032-588.8 588.8-588.8a25.6 25.6 0 0 0 0-51.2z"
+              fill="#222222"
+              p-id="1705"
+            ></path>
+            <path
+              d="M720.1024 62.1568l256 102.4a25.6 25.6 0 0 0 18.9952-47.5136l-256-102.4a25.6 25.6 0 0 0-18.9952 47.5136z"
+              fill="#222222"
+              p-id="1706"
+            ></path>
+            <path
+              d="M808.8064 348.4672l194.6368-189.312a25.6 25.6 0 1 0-35.6864-36.7104L773.12 311.7568a25.6 25.6 0 1 0 35.6864 36.7104z"
+              fill="#222222"
+              p-id="1707"
+            ></path>
+          </svg>
+        </el-icon>
+      </el-text>
+      <el-dropdown v-else>
         <span class="el-dropdown-link" :style="`--my-content: '${itemBeforeIcon}';`">
           {{ itemT
-          }}<el-icon class="el-icon--right"
-            ><svg
+          }}<el-icon class="el-icon--right">
+            <svg
               t="1710237213521"
               class="icon"
               viewBox="0 0 1024 1024"
@@ -36,11 +72,12 @@
           </el-icon>
         </span>
         <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="a"></el-dropdown-item>
-            <el-dropdown-item command="b"></el-dropdown-item>
-            <el-dropdown-item command="c"></el-dropdown-item>
-            <el-dropdown-item command="d"></el-dropdown-item>
+          <el-dropdown-menu class="drop_menu">
+            <el-dropdown-item command="a" v-for="item in itemChild" class="drop_items">
+              <el-text class="secondTxt" :style="`--my-content: '${item.before}';`">{{
+                item.txt
+              }}</el-text>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -49,28 +86,26 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, ref, onMounted ,reactive} from 'vue'
+import { toRefs, ref, onMounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
 
 const handleCommand = (command: string | number | object) => {
-//   ElMessage(`click on item ${command}`)
+  //点击二级菜单时会触发的回调
+  //   ElMessage(`click on item ${command}`)
 }
+
 const props = defineProps(['msg'])
 let orVal = toRefs(props)
-let itemT = ref<string>(orVal['msg']?.value?.txt)
-let itemBeforeT = ref<string>(orVal['msg']?.value?.before)
-// let itemChild = ref<>
-let itemBeforeIcon = ref<string>(itemBeforeT.value)
-let spanModel = ref<boolean>()
-
+let itemT = ref<string>(orVal['msg']?.value?.txt) //右侧导航栏文本
+let itemBeforeT = ref<string>(orVal['msg']?.value?.before) //右侧导航栏icon响应式
+let itemChild = ref(orVal['msg']?.value?.child) //右侧导航栏子栏
+let itemBeforeIcon = ref<string>(itemBeforeT.value) //右侧导航栏icon内容
+let itemRouter = ref<string>(orVal['msg']?.value?.router)
+let spanModel = ref<boolean>(true) //是否有二级菜单
+let specialIcon = ref<boolean>(false) //使用特殊iconSVG
 onMounted(() => {
-  spanModel.value = itemT.value == '主页' || itemT.value == '关于'
-  if(spanModel.value){
-  
-
-
-  }
+  spanModel.value = itemChild.value.length == 0
+  specialIcon.value = itemT.value == 'Gitee'
 })
 </script>
 
@@ -80,25 +115,40 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   padding: 0 10px 0 10px;
-  .item_txt {
+  .item_txt_before {
     &::before {
       content: var(--my-content);
     }
   }
-
+  .item_txt_after {
+    &::after {
+      content: var(--my-content);
+    }
+  }
   .el-dropdown-link {
     display: flex;
     align-items: center;
     &::before {
       content: var(--my-content);
     }
+    &:focus-visible {
+      outline: none;
+    }
   }
 }
 
-.example-showcase .el-dropdown-link {
-  cursor: pointer;
-  color: var(--el-color-primary);
-  display: flex;
-  align-items: center;
+.drop_items {
+  &:hover {
+    color: blueviolet;
+    background-color: aqua;
+  }
+  .secondTxt {
+    &::before {
+      content: var(--my-content);
+    }
+    &:hover {
+      color: blueviolet;
+    }
+  }
 }
 </style>
