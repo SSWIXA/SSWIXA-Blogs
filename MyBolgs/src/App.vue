@@ -4,12 +4,12 @@ import Header from './views/Header.vue'
 </script>
 
 <template>
-  <div class="common-layout">
-    <Header></Header>
-    <RouterView/>
-  </div>
+  <el-scrollbar class="main-scrollbar">
+    <div class="common-layout">
+      <Header></Header>
+      <RouterView />
+    </div>
+  </el-scrollbar>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

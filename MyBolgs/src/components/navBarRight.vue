@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import axiosInstance from '@/axios'
+import axiosInstance from '@/axios/axios'
 import spanIcon from './spanIcon.vue'
 import { reactive, onMounted, ref, onBeforeMount, computed } from 'vue'
 //导航栏icon以及对应跳转路由

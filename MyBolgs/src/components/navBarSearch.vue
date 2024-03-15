@@ -14,23 +14,41 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-const input1 = ref('');
+const input1 = ref('')
 
 let warpper = ref<HTMLCollection | null>(null)
-onMounted(() => {
-  nextTick(() => {
-    warpper.value = document.getElementsByClassName('el-input__wrapper')
-    const firstElement = warpper.value[0] as HTMLElement;
-    firstElement.style.borderRadius = '20px';
-  })
-})
+onMounted(() => {})
 </script>
 
 <style scoped lang="scss">
+$placeholderColor: purple;
+$opcity: 0.5;
 .nav_div {
   padding: 0px 10px;
   border-right: solid 1px gray;
+  ::v-deep .el-input__wrapper {
+    border-radius: 20px;
+    .el-input__inner {
+      &::placeholder {
+        color: $placeholderColor;
+        opacity: $opcity;
+      }
+      &::-ms-input-placeholder {
+        color: $placeholderColor;
+        opacity: $opcity;
+      }
+      &::-moz-placeholder {
+        color: $placeholderColor;
+        opacity: $opcity;
+      }
+      &::-webkit-input-placeholder {
+        color: $placeholderColor;
+        opacity: $opcity;
+      }
+    }
+  }
+  ::v-deep .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1px purple inset;
+  }
 }
-
-
 </style>

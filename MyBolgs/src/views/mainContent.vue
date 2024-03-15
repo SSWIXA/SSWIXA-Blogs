@@ -1,13 +1,16 @@
 <template>
   <div>
     <el-container style="padding-top: 60px">
-      <el-aside width="200px">Aside</el-aside>
-      <el-main>Main</el-main>
+      <Asider></Asider>
+      <MainContents></MainContents>
     </el-container>
   </div>
 </template>
 
 <script setup lang="ts">
+import Asider from '@/views/Aside.vue'
+import MainContents from '@/views/MainCon.vue'
+
 
 </script>
 

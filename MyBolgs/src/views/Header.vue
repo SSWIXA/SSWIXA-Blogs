@@ -20,13 +20,14 @@ import navBarRight from '@/components/navBarRight.vue'
 <style scoped lang="scss">
 .el_hd {
   position: fixed;
-  background-color: #fefefe;
+  background-color: rgba($color: #ffffff, $alpha: .9);
   width: 100%;
   padding: 0.5rem;
   height: 0;
   min-height: 60px;
   border-bottom: solid gray 1px;
   box-shadow: 0px 2px 2px grey;
+  z-index: 999;
   .nav_all {
     display: flex;
     .fav {

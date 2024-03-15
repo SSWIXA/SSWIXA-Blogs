@@ -73,7 +73,7 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu class="drop_menu">
-            <el-dropdown-item command="a" v-for="item in itemChild" class="drop_items">
+            <el-dropdown-item command="a" v-for="item in itemChild">
               <el-text class="secondTxt" :style="`--my-content: '${item.before}';`">{{
                 item.txt
               }}</el-text>
@@ -115,9 +115,14 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   padding: 0 10px 0 10px;
+  box-sizing: border-box;
+
   .item_txt_before {
     &::before {
       content: var(--my-content);
+    }
+    &:hover {
+      border-bottom: solid 2px purple;
     }
   }
   .item_txt_after {
@@ -125,29 +130,42 @@ onMounted(() => {
       content: var(--my-content);
     }
   }
-  .el-dropdown-link {
-    display: flex;
-    align-items: center;
-    &::before {
-      content: var(--my-content);
+  .el-dropdown {
+    padding-bottom: 3px;
+    padding-top: 3px;
+    &:hover {
+      border-bottom: solid 2px purple;
     }
-    &:focus-visible {
-      outline: none;
+    .el-dropdown-link {
+      display: flex;
+      align-items: center;
+      &::before {
+        content: var(--my-content);
+      }
+      &:focus-visible {
+        outline: none;
+      }
     }
   }
 }
 
-.drop_items {
-  &:hover {
-    color: blueviolet;
-    background-color: aqua;
-  }
-  .secondTxt {
-    &::before {
-      content: var(--my-content);
+.drop_menu {
+  ::v-deep .el-dropdown-menu__item {
+    &:not(.is-disabled) {
+      &:focus {
+        background-color: #efefef;
+      }
     }
     &:hover {
-      color: blueviolet;
+      background-color: #efefef;
+    }
+    .secondTxt {
+      &::before {
+        content: var(--my-content);
+      }
+      &:hover {
+        color: blueviolet;
+      }
     }
   }
 }
