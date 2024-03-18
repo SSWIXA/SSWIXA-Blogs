@@ -131,8 +131,8 @@ onMounted(() => {
     }
   }
   .el-dropdown {
-    padding-bottom: 3px;
-    padding-top: 3px;
+    padding-bottom: 4px;
+    padding-top: 4px;
     &:hover {
       border-bottom: solid 2px purple;
     }
