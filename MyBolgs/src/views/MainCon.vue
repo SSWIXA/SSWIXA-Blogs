@@ -1,7 +1,9 @@
 <template>
   <el-main>
     <div class="aside_maincontainer">
-      <div class="page-container"></div>
+      <div class="page-container">
+        
+      </div>
     </div>
   </el-main>
 </template>
@@ -16,7 +18,6 @@
   .aside_maincontainer {
     background-color: #fff;
     border-radius: 5px;
-    opacity: 0.9;
     min-width: 750px;
     padding: 10px 10px 10px 15px;
     .page-container{

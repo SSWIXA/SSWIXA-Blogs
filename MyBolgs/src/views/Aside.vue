@@ -80,6 +80,7 @@ let controlSize = (classname: string) => {
     el[0].style.height = curHeight - 100 + 'px'
   }
 }
+
 onMounted(() => {
   //挂载时候的节点
   controlSize('aside_tree')
@@ -165,7 +166,7 @@ $opcity: 0.5;
   .el-tree {
     color: #222222;
     font-size: 1.2em;
-    font-family: 'Bookman Old Style', serif;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
     &:hover {
       cursor: pointer;
     }

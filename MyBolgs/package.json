@@ -19,6 +19,7 @@
     "axios": "^1.6.7",
     "element-plus": "^2.6.1",
     "sass": "latest",
+    "swiper": "latest",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },

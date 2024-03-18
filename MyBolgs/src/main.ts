@@ -9,6 +9,9 @@ import 'element-plus/theme-chalk/display.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import axios from 'axios'
 import axiosInstance from './axios/axios'
+import '../src/scss/gobal.scss';
+
+import 'swiper/css';
 
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -18,6 +21,5 @@ app.config.globalProperties.$axios = axiosInstance
 app.provide('$axios', axios)
 app.provide('$router', router)
 
-app.use(router)
-app.use(ElementPlus)
-app.mount('#app')
+app.use(router).use(ElementPlus).mount('#app')
+
