@@ -1,5 +1,4 @@
 <template>
-  <el-backtop :right="50" :bottom="50" />
   <div class="swiper-container">
     <swiper
       :style="{
@@ -24,7 +23,7 @@
         slot="container-start"
         class="parallax-bg"
         :style="{
-          'background-image': 'url(../../public/images/th.jpg)'
+          'background-image': `url(../../public/images/th${curBackPic}.jpg)`
         }"
         data-swiper-parallax="-23%"
       ></div>
@@ -66,17 +65,23 @@
   </div>
   <el-main>
     <div class="home_page_content">
-      <el-main class="main_left"></el-main>
-      <aside class="main_right"></aside>
+      <el-main class="main_left">
+        <HomeLeft></HomeLeft>
+      </el-main>
+      <aside class="main_right">
+        <HomeRight></HomeRight>
+      </aside>
     </div>
   </el-main>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, nextTick, watch } from 'vue'
+import { reactive, ref, onMounted, nextTick, watch ,onBeforeMount } from 'vue'
 import { Autoplay, Parallax, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ElBacktop } from 'element-plus'
+import HomeLeft from '@/components/home_left_part.vue'
+import HomeRight from '@/components/home_right_part.vue'
+
 import 'swiper/css'
 import 'swiper/scss/pagination'
 
@@ -126,6 +131,14 @@ const optionSwiper: Slide[] = reactive([
   }
 ])
 
+let curBackPic = ref();
+
+onBeforeMount(()=>{
+  curBackPic.value = getrandom()
+
+})
+
+
 onMounted(() => {
   nextTick(() => {
     controlSizeSwiper()
@@ -135,6 +148,12 @@ onMounted(() => {
     controlSizeSwiper()
   })
 })
+
+const getrandom = () => {
+  let ran = Math.floor(Math.random() * 4)
+  return ran
+}
+
 
 //动态调整轮播图大小
 const controlSizeSwiper = () => {
@@ -180,18 +199,16 @@ watch(opacity, (oldval: any, newval: any) => {
 .home_page_content {
   max-width: 1100px;
   height: 1000px;
-  background-color: white;
   border-radius: 5px;
   margin: 0 auto;
   display: flex;
   .main_left {
     flex: 1;
-    background-color: gray;
   }
   .main_right {
     width: 350px;
-    background-color: rebeccapurple;
-    @media screen and (max-width: 750px) {
+    padding: 20px 10px 10px;
+    @media screen and (max-width: 1000px) {
       display: none;
     }
   }

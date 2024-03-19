@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, nextTick } from 'vue'
 import Header from './views/Header.vue'
 import Sakura from '@/components/Sakura.vue'
+import backTop from '@/components/backTop.vue'
+
 
 onMounted(() => {
   nextTick(() => {
@@ -16,11 +18,11 @@ onMounted(() => {
   })
 })
 
-// console.log(Sakura)
 </script>
 
 <template>
   <el-scrollbar class="main-scrollbar">
+    <backTop></backTop>
     <Sakura></Sakura>
     <div class="common-layout">
       <Header></Header>

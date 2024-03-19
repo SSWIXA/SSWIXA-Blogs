@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="0px">
+  <el-aside>
     <div class="aside_main">
       <div class="aside_title">
         <el-input
@@ -49,17 +49,18 @@ const handleNodeClick = (data: Tree) => {
   }
 }
 
+const currentRoutePath: any = ref(router.currentRoute.value.path)
+
 const filterText = ref('') //过滤框
 const treeRef = ref<InstanceType<typeof ElTree>>() //响应式过滤文本
 let TreeData: Tree[] = reactive([]) //树状数据
 
 onBeforeMount(async () => {
+  currentRoutePath.value = router.currentRoute.value.path
   hashChange()
 })
 
 const hashChange = async () => {
-  const currentRoutePath: any = ref(router.currentRoute.value.path)
-  // console.log(currentRoutePath.value)
   let curAPI = currentRoutePath.value == '/WebNote' ? '/asideDirWeb' : '/asideDirServer' //判断前端后端
   const res = (await axiosInstance.get(`/317821${curAPI}`))?.data?.data
   TreeData.splice(0) // 清空数组，准备填充新数据
@@ -79,6 +80,7 @@ watch(filterText, (val) => {
 })
 
 watch(router.currentRoute, function (to, from) {
+  currentRoutePath.value = router.currentRoute.value.path
   hashChange()
 })
 
@@ -131,67 +133,83 @@ const filterNode = (value: string, data: Tree) => {
 $position: fixed;
 $placeholderColor: purple;
 $opcity: 0.5;
-.aside_main {
-  min-width: 18rem;
-  width: 18rem;
-  height: 100vh;
-  background-color: #ffffff;
-  padding: 5px 5px 0px 5px;
+
+.el-aside {
   position: $position;
-  opacity: 0.9;
-  .aside_title {
-    display: flex;
-    justify-content: center;
-    .filter_input {
-      width: 250px;
-      margin-bottom: 5px;
-      ::v-deep .el-input__wrapper {
-        border-radius: 20px;
-        .el-input__inner {
-          &::placeholder {
-            color: $placeholderColor;
-            opacity: $opcity;
-          }
-          &::-ms-input-placeholder {
-            color: $placeholderColor;
-            opacity: $opcity;
-          }
-          &::-moz-placeholder {
-            color: $placeholderColor;
-            opacity: $opcity;
-          }
-          &::-webkit-input-placeholder {
-            color: $placeholderColor;
-            opacity: $opcity;
+  transition: transform .4s ease-in-out;
+  @media screen and (max-width: 1200px) {
+    transform: translateX(-300px);
+  }
+  .aside_main {
+    min-width: 18rem;
+    width: 18rem;
+    height: 100vh;
+    background-color: #ffffff;
+    padding: 5px 5px 0px 5px;
+    opacity: 0.9;
+    .aside_title {
+      display: flex;
+      justify-content: center;
+      .filter_input {
+        width: 250px;
+        margin-bottom: 5px;
+        ::v-deep .el-input__wrapper {
+          border-radius: 20px;
+          .el-input__inner {
+            &::placeholder {
+              color: $placeholderColor;
+              opacity: $opcity;
+            }
+            &::-ms-input-placeholder {
+              color: $placeholderColor;
+              opacity: $opcity;
+            }
+            &::-moz-placeholder {
+              color: $placeholderColor;
+              opacity: $opcity;
+            }
+            &::-webkit-input-placeholder {
+              color: $placeholderColor;
+              opacity: $opcity;
+            }
           }
         }
-      }
-      ::v-deep .el-input__wrapper.is-focus {
-        box-shadow: 0 0 0 1px purple inset;
+        ::v-deep .el-input__wrapper.is-focus {
+          box-shadow: 0 0 0 1px purple inset;
+        }
       }
     }
-  }
 
-  .aside_tree {
-    height: 100%;
-    box-sizing: border-box;
-  }
-  .el-tree {
-    color: #000000;
-    font-size: 1.1em;
-    font-family: Inter,Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\5fae\8f6f\96c5\9ed1,Arial,sans-serif;
-    &:hover {
-      cursor: pointer;
+    .aside_tree {
+      height: 100%;
+      box-sizing: border-box;
     }
-    ::v-deep .el-tree-node {
-      padding: 4px;
-      .el-tree-node__label {
-        -webkit-user-select: none; /* 针对Webkit内核（如Chrome、Safari） */
-        -moz-user-select: none; /* 针对Firefox浏览器 */
-        -ms-user-select: none; /* 针对Internet Explorer浏览器 */
-        user-select: none;
-        &:hover {
-          color: purple;
+    .el-tree {
+      color: #000000;
+      font-size: 1.1em;
+      font-family:
+        Inter,
+        Helvetica Neue,
+        Helvetica,
+        PingFang SC,
+        Hiragino Sans GB,
+        Microsoft YaHei,
+        \5fae\8f6f\96c5\9ed1,
+        Arial,
+        sans-serif;
+      &:hover {
+        cursor: pointer;
+      }
+      ::v-deep .el-tree-node {
+        padding: 4px;
+        .el-tree-node__label {
+          -webkit-user-select: none; /* 针对Webkit内核（如Chrome、Safari） */
+          -moz-user-select: none; /* 针对Firefox浏览器 */
+          -ms-user-select: none; /* 针对Internet Explorer浏览器 */
+          user-select: none;
+          &:hover {
+            color: purple;
+          }
         }
       }
     }

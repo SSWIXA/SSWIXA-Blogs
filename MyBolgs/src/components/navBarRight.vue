@@ -13,7 +13,7 @@ import { reactive, onMounted, ref, onBeforeMount, computed } from 'vue'
 //导航栏icon以及对应跳转路由
 let iconArr = [
   { icon: '🏠', href: '/' },
-  { icon: '🏹', href: '/' },
+  { icon: '🏹', href: '/Navigation' },
   { icon: '💻', href: '/WebNote' },
   { icon: '📦', href: '/ServerNote' },
   { icon: '🔅', href: '/' },
