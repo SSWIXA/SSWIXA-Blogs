@@ -10,7 +10,10 @@ const router = createRouter({
       component: HomeView
     }
     ,{
-      path: '/note',
+      path: '/WebNote',
+      component: note
+    },{
+      path: '/ServerNote',
       component: note
     },
   ]

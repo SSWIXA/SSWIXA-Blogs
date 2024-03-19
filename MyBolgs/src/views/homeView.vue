@@ -127,8 +127,8 @@ const optionSwiper: Slide[] = reactive([
 ])
 
 onMounted(() => {
-  controlSizeSwiper()
   nextTick(() => {
+    controlSizeSwiper()
     animateOpacity()
   })
   window.addEventListener('resize', () => {
@@ -142,7 +142,9 @@ const controlSizeSwiper = () => {
   let innerHeight: any = ref<number>()
   innerHeight.value = window.innerHeight
   mySwiper = document.getElementsByClassName('mySwiper')[0]
-  mySwiper.style.height = innerHeight.value + 'px'
+  if (mySwiper) {
+    mySwiper.style.height = innerHeight.value + 'px'
+  }
 }
 
 //scrolltop到主要内容区域

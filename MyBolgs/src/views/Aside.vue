@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeMount, watch, nextTick } from 'vue'
+import { ref, reactive, onMounted, onBeforeMount, watch, nextTick, onUpdated } from 'vue'
 import { ElTree } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import axiosInstance from '@/axios/axios'
@@ -54,7 +54,14 @@ const treeRef = ref<InstanceType<typeof ElTree>>() //响应式过滤文本
 let TreeData: Tree[] = reactive([]) //树状数据
 
 onBeforeMount(async () => {
-  const res = (await axiosInstance.get('/317821/asideDir'))?.data?.data
+  hashChange()
+})
+
+const hashChange = async () => {
+  const currentRoutePath: any = ref(router.currentRoute.value.path)
+  // console.log(currentRoutePath.value)
+  let curAPI = currentRoutePath.value == '/WebNote' ? '/asideDirWeb' : '/asideDirServer' //判断前端后端
+  const res = (await axiosInstance.get(`/317821${curAPI}`))?.data?.data
   TreeData.splice(0) // 清空数组，准备填充新数据
   TreeData.push(
     ...res.map((item: any, index: number) => ({
@@ -64,11 +71,15 @@ onBeforeMount(async () => {
   )
   //给二级目录添加路由
   setRoute(TreeData)
-})
+}
 
 //监听过滤框文本
 watch(filterText, (val) => {
   treeRef.value!.filter(val)
+})
+
+watch(router.currentRoute, function (to, from) {
+  hashChange()
 })
 
 //自适应填充左侧树状栏
@@ -83,12 +94,14 @@ let controlSize = (classname: string) => {
 
 onMounted(() => {
   //挂载时候的节点
-  controlSize('aside_tree')
-  window.addEventListener('resize', () => {
-    nextTick(() => {
+  nextTick(() => {
+    controlSize('aside_tree')
+    window.addEventListener('resize', () => {
       const aside_tree_scrollbar: any = document.getElementsByClassName('aside_tree')
-      aside_tree_scrollbar[0].style.height = '100%'
-      controlSize('aside_tree')
+      if (aside_tree_scrollbar[0]) {
+        aside_tree_scrollbar[0].style.height = '100%'
+        controlSize('aside_tree')
+      }
     })
   })
 })
@@ -110,7 +123,7 @@ const setRoute = (data: Array<Tree>) => {
 //过滤目录结构
 const filterNode = (value: string, data: Tree) => {
   if (!value) return true
-  return data.label.includes(value);
+  return data.label.includes(value)
 }
 </script>
 
@@ -164,17 +177,15 @@ $opcity: 0.5;
     box-sizing: border-box;
   }
   .el-tree {
-    color: #222222;
-    font-size: 1.2em;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+    color: #000000;
+    font-size: 1.1em;
+    font-family: Inter,Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\5fae\8f6f\96c5\9ed1,Arial,sans-serif;
     &:hover {
       cursor: pointer;
     }
     ::v-deep .el-tree-node {
       padding: 4px;
       .el-tree-node__label {
-        font-weight: 550;
-        opacity: 0.8;
         -webkit-user-select: none; /* 针对Webkit内核（如Chrome、Safari） */
         -moz-user-select: none; /* 针对Firefox浏览器 */
         -ms-user-select: none; /* 针对Internet Explorer浏览器 */

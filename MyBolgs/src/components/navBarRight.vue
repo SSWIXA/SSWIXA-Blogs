@@ -14,8 +14,8 @@ import { reactive, onMounted, ref, onBeforeMount, computed } from 'vue'
 let iconArr = [
   { icon: '🏠', href: '/' },
   { icon: '🏹', href: '/' },
-  { icon: '💻', href: '/' },
-  { icon: '📦', href: '/' },
+  { icon: '💻', href: '/WebNote' },
+  { icon: '📦', href: '/ServerNote' },
   { icon: '🔅', href: '/' },
   { icon: '', href: '/' }
 ]
