@@ -22,3 +22,6 @@ app.provide('$axios', axios)
 app.provide('$router', router)
 
 app.use(router).use(ElementPlus).mount('#app')
+
+
+

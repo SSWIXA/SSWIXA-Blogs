@@ -145,7 +145,7 @@
         var sakuraList = new SakuraList();
         const img = new Image();
   
-        img.src = '../../public/sakura.png'; //樱花效果图相对路径
+        img.src = 'src/assets/sakura.png'; //樱花效果图相对路径
   
         for (var i = 0; i < that.num; i++) {
           let sakura, randomX, randomY, randomS, randomR, randomFnx, randomFny, randomFnR;
