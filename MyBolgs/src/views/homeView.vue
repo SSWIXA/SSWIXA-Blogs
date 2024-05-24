@@ -198,7 +198,6 @@ watch(opacity, (oldval: any, newval: any) => {
 <style scoped lang="scss">
 .home_page_content {
   max-width: 1100px;
-  height: 1000px;
   border-radius: 5px;
   margin: 0 auto;
   display: flex;

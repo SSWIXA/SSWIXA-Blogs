@@ -26,7 +26,7 @@
     max-width: 1000px;
     padding: 10px 10px 10px 15px;
     .page-container {
-      height: 200px;
+      height: 1000px;
       background-color: aqua;
     }
   }

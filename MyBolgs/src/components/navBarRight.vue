@@ -121,6 +121,7 @@ onBeforeMount(fetchData) // 在组件挂载前发起请求
   margin-left: 10px;
   .iconBar {
     height: 100%;
+    overflow: hidden;
     float: right;
     display: flex;
   }

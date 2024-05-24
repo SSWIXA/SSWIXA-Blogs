@@ -5,30 +5,26 @@ import Header from './views/Header.vue'
 import Sakura from '@/components/Sakura.vue'
 import backTop from '@/components/backTop.vue'
 
-
 onMounted(() => {
   nextTick(() => {
     window.addEventListener('resize', () => {
       let canvas: any = document.getElementById('canvas_sakura')
       if (canvas) {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
+        canvas.width = window?.innerWidth
+        canvas.height = window?.innerHeight
       }
     })
   })
 })
-
 </script>
 
 <template>
-  <el-scrollbar class="main-scrollbar">
-    <backTop></backTop>
-    <Sakura></Sakura>
-    <div class="common-layout">
-      <Header></Header>
-      <RouterView />
-    </div>
-  </el-scrollbar>
+  <backTop></backTop>
+  <Sakura></Sakura>
+  <div class="common-layout">
+    <Header></Header>
+    <RouterView />
+  </div>
 </template>
 
 <style scoped lang="scss"></style>

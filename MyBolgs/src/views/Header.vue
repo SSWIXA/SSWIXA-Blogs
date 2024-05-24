@@ -3,6 +3,7 @@ import { reactive, toRefs } from 'vue'
 import favatar from '@/components/favatar.vue'
 import navBarSearch from '@/components/navBarSearch.vue'
 import navBarRight from '@/components/navBarRight.vue'
+
 </script>
 
 <template>
@@ -27,6 +28,7 @@ import navBarRight from '@/components/navBarRight.vue'
   min-height: 60px;
   border-bottom: solid gray 1px;
   box-shadow: 0px 2px 2px grey;
+  overflow: hidden;
   z-index: 999;
   .nav_all {
     display: flex;
