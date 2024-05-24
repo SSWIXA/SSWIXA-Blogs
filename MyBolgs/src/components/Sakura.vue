@@ -136,7 +136,7 @@ export default {
         window.oRequestAnimationFrame
       var canvas = document.getElementById('canvas_sakura')
       this.staticx = true
-      this.$refs.canvas_sakura.width = window.innerWidth
+      this.$refs.canvas_sakura.width = document.body.clientWidth
       this.$refs.canvas_sakura.height = window.innerHeight
       var cxt = this.$refs.canvas_sakura.getContext('2d')
       var sakuraList = new SakuraList()

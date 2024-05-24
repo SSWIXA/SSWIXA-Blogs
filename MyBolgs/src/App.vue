@@ -10,8 +10,8 @@ onMounted(() => {
     window.addEventListener('resize', () => {
       let canvas: any = document.getElementById('canvas_sakura')
       if (canvas) {
-        canvas.width = window?.innerWidth
-        canvas.height = window?.innerHeight
+        canvas.width = document.body.clientWidth
+        canvas.height = window.innerHeight
       }
     })
   })
@@ -21,10 +21,14 @@ onMounted(() => {
 <template>
   <backTop></backTop>
   <Sakura></Sakura>
-  <div class="common-layout">
-    <Header></Header>
+  <Header></Header>
+  <div class="blur_mask">
     <RouterView />
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.blur_mask {
+  backdrop-filter: blur(150px);
+}
+</style>
