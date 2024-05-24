@@ -22,13 +22,9 @@ onMounted(() => {
   <backTop></backTop>
   <Sakura></Sakura>
   <Header></Header>
-  <div class="blur_mask">
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <style scoped lang="scss">
-.blur_mask {
-  backdrop-filter: blur(150px);
-}
+
 </style>

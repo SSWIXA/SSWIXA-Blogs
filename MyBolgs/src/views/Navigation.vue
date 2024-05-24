@@ -1,7 +1,7 @@
 <template>
   <el-main class="catalogue">
     <div class="main_page"></div>
-     </el-main>
+  </el-main>
 </template>
 
 <script setup lang="ts"></script>
@@ -9,6 +9,7 @@
 <style scoped lang="scss">
 .catalogue {
   padding-top: 80px;
+  backdrop-filter: blur(150px);
   .main_page {
     height: 700px;
     background-color: #efefef;

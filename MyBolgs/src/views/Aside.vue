@@ -1,5 +1,5 @@
 <template>
-  <el-aside>
+  <el-aside style="z-index: 100;padding-top: 60px;">
     <div class="aside_main">
       <div class="aside_title">
         <el-input

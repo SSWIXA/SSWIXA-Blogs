@@ -1,82 +1,84 @@
 <template>
-  <div class="swiper-container">
-    <swiper
-      :style="{
-        '--swiper-navigation-color': '#fff',
-        '--swiper-pagination-color': '#fff'
-      }"
-      :autoplay="{
-        delay: 3000,
-        disableOnInteraction: false
-      }"
-      :pagination="{
-        clickable: true
-      }"
-      :speed="800"
-      :mousewheel="true"
-      :parallax="true"
-      :navigation="true"
-      :modules="[Parallax, Autoplay, Pagination]"
-      class="mySwiper"
-    >
-      <div
-        slot="container-start"
-        class="parallax-bg"
+  <div class="blur_mask">
+    <div class="swiper-container">
+      <swiper
         :style="{
-          'background-image': `url(../../public/images/th${curBackPic}.jpg)`
+          '--swiper-navigation-color': '#fff',
+          '--swiper-pagination-color': '#fff'
         }"
-        data-swiper-parallax="-23%"
-      ></div>
-      <swiper-slide v-for="item in optionSwiper" :key="item.title" class="swiper_slide">
-        <div class="content">
-          <div class="title" data-swiper-parallax="0">{{ item.title }}</div>
-          <div v-if="item.Subtitle" class="subtitle" data-swiper-parallax="0">
-            {{ item.Subtitle }}
-          </div>
-          <div class="text" data-swiper-parallax="0">
-            <p>
-              {{ item.txt }}
-            </p>
-          </div>
-        </div>
-      </swiper-slide>
-    </swiper>
-    <div class="arrow-down" @click="gotoMain" :style="OpacityStr">
-      <svg
-        t="1710742076257"
-        class="icon"
-        viewBox="0 0 1024 1024"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        p-id="897"
-        width="100"
-        height="100"
+        :autoplay="{
+          delay: 3000,
+          disableOnInteraction: false
+        }"
+        :pagination="{
+          clickable: true
+        }"
+        :speed="800"
+        :mousewheel="true"
+        :parallax="true"
+        :navigation="true"
+        :modules="[Parallax, Autoplay, Pagination]"
+        class="mySwiper"
       >
-        <path
-          d="M532.886439 534.015436l345.472988-270.394708c3.951488-3.38699 6.209482-7.902977 6.209481-13.547961V168.220507c0-7.338479-7.902977-11.289967-13.54796-6.77398L512 443.131202 152.979052 162.011025c-5.644983-4.515987-13.54796-0.564498-13.54796 6.773981v81.85226c0 5.080485 2.257993 10.16097 6.209481 13.54796L491.113561 534.015436c12.418964 9.596472 29.353914 9.596472 41.772878 0z m0 0"
-          p-id="898"
-        ></path>
-        <path
-          d="M532.886439 855.779493l345.472988-270.394708c3.951488-3.38699 6.209482-7.902977 6.209481-13.54796V489.984564c0-7.338479-7.902977-11.289967-13.54796-6.77398l-359.020948 281.120177-359.020948-280.555678c-5.644983-4.515987-13.54796-0.564498-13.54796 6.77398v81.85226c0 5.080485 2.257993 10.16097 6.209481 13.54796L491.113561 855.779493c12.418964 10.16097 29.353914 10.16097 41.772878 0z m0 0"
-          p-id="899"
-        ></path>
-      </svg>
+        <div
+          slot="container-start"
+          class="parallax-bg"
+          :style="{
+            'background-image': `url(../../public/images/th${curBackPic}.jpg)`
+          }"
+          data-swiper-parallax="-23%"
+        ></div>
+        <swiper-slide v-for="item in optionSwiper" :key="item.title" class="swiper_slide">
+          <div class="content">
+            <div class="title" data-swiper-parallax="0">{{ item.title }}</div>
+            <div v-if="item.Subtitle" class="subtitle" data-swiper-parallax="0">
+              {{ item.Subtitle }}
+            </div>
+            <div class="text" data-swiper-parallax="0">
+              <p>
+                {{ item.txt }}
+              </p>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+      <div class="arrow-down" @click="gotoMain" :style="OpacityStr">
+        <svg
+          t="1710742076257"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="897"
+          width="100"
+          height="100"
+        >
+          <path
+            d="M532.886439 534.015436l345.472988-270.394708c3.951488-3.38699 6.209482-7.902977 6.209481-13.547961V168.220507c0-7.338479-7.902977-11.289967-13.54796-6.77398L512 443.131202 152.979052 162.011025c-5.644983-4.515987-13.54796-0.564498-13.54796 6.773981v81.85226c0 5.080485 2.257993 10.16097 6.209481 13.54796L491.113561 534.015436c12.418964 9.596472 29.353914 9.596472 41.772878 0z m0 0"
+            p-id="898"
+          ></path>
+          <path
+            d="M532.886439 855.779493l345.472988-270.394708c3.951488-3.38699 6.209482-7.902977 6.209481-13.54796V489.984564c0-7.338479-7.902977-11.289967-13.54796-6.77398l-359.020948 281.120177-359.020948-280.555678c-5.644983-4.515987-13.54796-0.564498-13.54796 6.77398v81.85226c0 5.080485 2.257993 10.16097 6.209481 13.54796L491.113561 855.779493c12.418964 10.16097 29.353914 10.16097 41.772878 0z m0 0"
+            p-id="899"
+          ></path>
+        </svg>
+      </div>
     </div>
+    <el-main>
+      <div class="home_page_content">
+        <el-main class="main_left">
+          <HomeLeft></HomeLeft>
+        </el-main>
+        <aside class="main_right">
+          <HomeRight></HomeRight>
+        </aside>
+      </div>
+    </el-main>
   </div>
-  <el-main>
-    <div class="home_page_content">
-      <el-main class="main_left">
-        <HomeLeft></HomeLeft>
-      </el-main>
-      <aside class="main_right">
-        <HomeRight></HomeRight>
-      </aside>
-    </div>
-  </el-main>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, nextTick, watch ,onBeforeMount } from 'vue'
+import { reactive, ref, onMounted, nextTick, watch, onBeforeMount } from 'vue'
 import { Autoplay, Parallax, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import HomeLeft from '@/components/home_left_part.vue'
@@ -131,13 +133,11 @@ const optionSwiper: Slide[] = reactive([
   }
 ])
 
-let curBackPic = ref();
+let curBackPic = ref()
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   curBackPic.value = getrandom()
-
 })
-
 
 onMounted(() => {
   nextTick(() => {
@@ -153,7 +153,6 @@ const getrandom = () => {
   let ran = Math.floor(Math.random() * 4)
   return ran
 }
-
 
 //动态调整轮播图大小
 const controlSizeSwiper = () => {
@@ -196,81 +195,85 @@ watch(opacity, (oldval: any, newval: any) => {
 </script>
 
 <style scoped lang="scss">
-.home_page_content {
-  max-width: 1100px;
-  border-radius: 5px;
-  margin: 0 auto;
-  display: flex;
-  .main_left {
-    flex: 1;
-  }
-  .main_right {
-    width: 350px;
-    padding: 20px 10px 10px;
-    @media screen and (max-width: 1000px) {
-      display: none;
-    }
-  }
-}
+.blur_mask {
+  backdrop-filter: blur(150px);
 
-.swiper-container {
-  position: relative;
-  .mySwiper {
-    width: 100%;
-    background: transparent;
-    ::v-deep .swiper-pagination-bullet {
-      float: right;
+  .home_page_content {
+    max-width: 1100px;
+    border-radius: 5px;
+    margin: 0 auto;
+    display: flex;
+    .main_left {
+      flex: 1;
     }
-    .parallax-bg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 130%;
-      height: 100%;
-      -webkit-background-size: cover;
-      background-size: cover;
-      background-position: center;
-    }
-    .swiper-slide {
-      font-size: 18px;
-      color: #efefef;
-      font-family: cursive;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      user-select: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .content {
-        margin: 0 auto;
-        .title {
-          text-align: center;
-          font-size: 50px;
-          font-weight: 300;
-        }
-        .subtitle {
-          text-align: center;
-          font-size: 30px;
-        }
-        .text {
-          text-align: center;
-          font-size: 24px;
-          max-width: 400px;
-          line-height: 1.3;
-        }
+    .main_right {
+      width: 350px;
+      padding: 20px 10px 10px;
+      @media screen and (max-width: 1000px) {
+        display: none;
       }
     }
   }
-  .arrow-down {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    margin-left: -50px;
-    opacity: 0.7;
-    display: flex;
-    justify-content: center;
-    z-index: 10;
-    cursor: pointer;
+
+  .swiper-container {
+    position: relative;
+    .mySwiper {
+      width: 100%;
+      background: transparent;
+      ::v-deep .swiper-pagination-bullet {
+        float: right;
+      }
+      .parallax-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 130%;
+        height: 100%;
+        -webkit-background-size: cover;
+        background-size: cover;
+        background-position: center;
+      }
+      .swiper-slide {
+        font-size: 18px;
+        color: #efefef;
+        font-family: cursive;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .content {
+          margin: 0 auto;
+          .title {
+            text-align: center;
+            font-size: 50px;
+            font-weight: 300;
+          }
+          .subtitle {
+            text-align: center;
+            font-size: 30px;
+          }
+          .text {
+            text-align: center;
+            font-size: 24px;
+            max-width: 400px;
+            line-height: 1.3;
+          }
+        }
+      }
+    }
+    .arrow-down {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -50px;
+      opacity: 0.7;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+    }
   }
 }
 </style>

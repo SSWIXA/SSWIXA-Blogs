@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <Asider></Asider>
+  <div class="blur_mask">
     <el-container style="padding-top: 60px">
-      <Asider></Asider>
       <MainContents></MainContents>
     </el-container>
   </div>
@@ -10,10 +10,10 @@
 <script setup lang="ts">
 import Asider from '@/views/Aside.vue'
 import MainContents from '@/views/MainCon.vue'
-
-
 </script>
 
 <style scoped lang="scss">
-
+.blur_mask {
+  backdrop-filter: blur(150px);
+}
 </style>
