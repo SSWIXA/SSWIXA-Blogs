@@ -134,7 +134,6 @@ const optionSwiper: Slide[] = reactive([
 ])
 
 let curBackPic = ref()
-
 onBeforeMount(() => {
   curBackPic.value = getrandom()
 })
@@ -205,11 +204,12 @@ watch(opacity, (oldval: any, newval: any) => {
     display: flex;
     .main_left {
       flex: 1;
+      min-width: 600px;
     }
     .main_right {
       width: 350px;
       padding: 20px 10px 10px;
-      @media screen and (max-width: 1000px) {
+      @media screen and (max-width: 800px) {
         display: none;
       }
     }
