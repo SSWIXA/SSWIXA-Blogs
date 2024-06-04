@@ -1,4 +1,5 @@
 import './assets/main.css'
+import '@/js/heartEffect.js'
 
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -12,19 +13,25 @@ import axios from 'axios'
 import axiosInstance from './axios/axios'
 import '../src/scss/gobal.scss'
 import 'swiper/css'
-import Antd from 'ant-design-vue';
-// import 'ant-design-vue/dist/reset.css';
+import Antd from 'ant-design-vue'
 
+
+
+
+
+
+
+// import 'ant-design-vue/dist/reset.css';
 
 // Use plugin with optional defaults
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
-
+let antd: any = Antd
 const pinia = createPinia()
 app.config.globalProperties.$axios = axiosInstance
 app.provide('$axios', axios)
 app.provide('$router', router)
-app.config.productionTip = false;
-app.use(router).use(ElementPlus).use(Antd).use(pinia).mount('#app')
+// app.config.productionTip = false;
+app.use(router).use(ElementPlus).use(antd).use(pinia).mount('#app')

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div :style="{ width: '330px' ,'opacity': '0.8'}">
-      <a-calendar v-model:value="value" :fullscreen="false" @panelChange="onPanelChange" />
+      <a-calendar v-model:value="value" :fullscreen="false" />
     </div>
     <div class="hot_tags">
       <div class="hot_tags_title">
@@ -44,11 +44,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import moment from 'moment'
-const value = ref<moment>()
-const onPanelChange = (value: moment, mode: string) => {
-  // console.log(value, mode)
-}
+const value = ref<any>()
+
 </script>
 <style scoped lang="scss">
 .intro_blogers {

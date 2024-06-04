@@ -2,8 +2,11 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, nextTick } from 'vue'
 import Header from './views/Header.vue'
-import Sakura from '@/components/Sakura.vue'
-import backTop from '@/components/backTop.vue'
+import Sakura from '@/components/Sakura/Sakura.vue'
+import backTop from '@/components/backTop/backTop.vue'
+import Live2d from '@/components/live_2d/live_2d.vue'
+
+import bgpic from '@/assets/bg.jpg'
 
 onMounted(() => {
   nextTick(() => {
@@ -19,10 +22,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <backTop></backTop>
-  <Sakura></Sakura>
   <Header></Header>
   <RouterView />
+  <Sakura></Sakura>
+  <Live2d></Live2d>
+  <backTop></backTop>
 </template>
 
 <style scoped lang="scss">

@@ -21,7 +21,7 @@ onMounted(() => {})
 </script>
 
 <style scoped lang="scss">
-$placeholderColor: purple;
+$placeholderColor: rgb(2, 102, 252, 0.5);
 $opcity: 0.5;
 .nav_div {
   padding: 0px 10px;
@@ -48,7 +48,7 @@ $opcity: 0.5;
     }
   }
   ::v-deep .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 1px purple inset;
+    box-shadow: 0 0 0 1px rgb(2, 102, 252, 0.5) inset;
   }
 }
 </style>

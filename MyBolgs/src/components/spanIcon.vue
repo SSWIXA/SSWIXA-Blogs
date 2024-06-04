@@ -122,7 +122,7 @@ onMounted(() => {
       content: var(--my-content);
     }
     &:hover {
-      border-bottom: solid 2px purple;
+      border-bottom: solid 2px rgba(0, 0, 255, 0.3);
     }
   }
   .item_txt_after {
@@ -134,7 +134,7 @@ onMounted(() => {
     padding-bottom: 4px;
     padding-top: 4px;
     &:hover {
-      border-bottom: solid 2px purple;
+      border-bottom: solid 2px rgba(0, 0, 255, 0.3);
     }
     .el-dropdown-link {
       display: flex;
@@ -164,7 +164,7 @@ onMounted(() => {
         content: var(--my-content);
       }
       &:hover {
-        color: blueviolet;
+        color: rgba(0, 0, 255, 0.6);
       }
     }
   }

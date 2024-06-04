@@ -24,7 +24,7 @@
           slot="container-start"
           class="parallax-bg"
           :style="{
-            'background-image': `url(../../public/images/th${curBackPic}.jpg)`
+            'background-image': `url(${curBackPic})`
           }"
           data-swiper-parallax="-23%"
         ></div>
@@ -64,7 +64,7 @@
         </svg>
       </div>
     </div>
-    <el-main>
+    <el-main style="overflow: hidden">
       <div class="home_page_content">
         <el-main class="main_left">
           <HomeLeft></HomeLeft>
@@ -83,6 +83,10 @@ import { Autoplay, Parallax, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import HomeLeft from '@/components/home_left_part.vue'
 import HomeRight from '@/components/home_right_part.vue'
+import th0 from '$/images/th0.jpg'
+import th1 from '$/images/th1.jpg'
+import th2 from '$/images/th2.jpg'
+import th3 from '$/images/th3.jpg'
 
 import 'swiper/css'
 import 'swiper/scss/pagination'
@@ -133,9 +137,10 @@ const optionSwiper: Slide[] = reactive([
   }
 ])
 
-let curBackPic = ref()
+let curBackPic: any = ref()
 onBeforeMount(() => {
-  curBackPic.value = getrandom()
+  let picUrl = [th1, th2, th3, th0]
+  curBackPic.value = picUrl[Math.floor(Math.random() * picUrl.length)]
 })
 
 onMounted(() => {
@@ -147,11 +152,6 @@ onMounted(() => {
     controlSizeSwiper()
   })
 })
-
-const getrandom = () => {
-  let ran = Math.floor(Math.random() * 4)
-  return ran
-}
 
 //动态调整轮播图大小
 const controlSizeSwiper = () => {
