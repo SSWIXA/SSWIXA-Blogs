@@ -2,128 +2,155 @@
   <div class="link">
     <div class="iconBar">
       <spanIcon v-for="item in iconMsg" :msg="item"></spanIcon>
+      <DarkModeToggle />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import axiosInstance from '@/axios/axios'
 import spanIcon from './spanIcon.vue'
-import { reactive, onMounted, ref, onBeforeMount, computed } from 'vue'
+import DarkModeToggle from './DarkModeToggle.vue'
+import { reactive } from 'vue'
 //导航栏icon以及对应跳转路由
-let iconArr = [
-  { icon: '🏠', href: '/' },
-  { icon: '🏹', href: '/Navigation' },
-  { icon: '💻', href: '/WebNote' },
-  { icon: '📦', href: '/ServerNote' },
-  { icon: '🔅', href: '/' },
-  { icon: '', href: '/' }
-]
-
-//导航栏二级菜单数据
-const secondMenu = [
+let navData = [
+  { icon: '🏠', href: '/', txt: '首页', child: [] },
+  { icon: '🏹', href: '/Navigation', txt: '导航', child: [] },
   {
+    icon: '💻',
+    href: '/WebNote',
     txt: '前端开发',
     child: [
       {
         txt: 'web技术',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: 'npm教程',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: 'git教程',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: 'MarkDown笔记',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: '其他文档',
-        before: '📜',
+        icon: '📜',
         child: []
       }
     ]
   },
   {
+    icon: '📦',
+    href: '/ServerNote',
     txt: '后端开发',
     child: [
       {
         txt: 'nodeJS',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: 'PHP',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: 'Python',
-        before: '📚',
+        icon: '📚',
         child: []
       },
       {
         txt: 'MySQL',
-        before: '🐬',
+        icon: '🐬',
         child: []
       }
     ]
-  }
+  },
+  {
+    icon: '🤖',
+    href: '/AINote',
+    txt: '人工智能',
+    child: [
+      {
+        txt: '机器学习',
+        icon: '🧠',
+        child: []
+      },
+      {
+        txt: '深度学习',
+        icon: '🔍',
+        child: []
+      },
+      {
+        txt: '神经网络',
+        icon: '🌐',
+        child: []
+      },
+      {
+        txt: 'NLP',
+        icon: '💬',
+        child: []
+      },
+      {
+        txt: '计算机视觉',
+        icon: '👁️',
+        child: []
+      }
+    ]
+  },
+  { icon: '🔅', href: '/', txt: '关于', child: [] },
+  { icon: '', href: 'https://gitee.com/sswixa', txt: 'Gitee', child: [] }
 ]
 
-const iconMsg = reactive<navbardata[]>([])
+const iconMsg = reactive<navbardata[]>(navData)
 
 interface navbardata {
   txt: string
-  before: string
-  router: string
-  child: object
+  icon: string
+  child: Array<secondMenu>
+  href: string
 }
 
-const fetchData = async () => {
-  try {
-    const response = await axiosInstance.get('/317821/navBarRight')
-    iconMsg.splice(0) // 清空数组，准备填充新数据
-    iconMsg.push(
-      ...response.data.data.map((item: navbardata, index: number) => ({
-        txt: item.txt,
-        before: iconArr[index].icon,
-        child: item.child,
-        router: iconArr[index].href
-      }))
-    )
-    //写入二级菜单数据
-    for (const iterator of secondMenu) {
-      iconMsg.forEach((e, i) => {
-        if(e.txt == iterator.txt){
-          e.child = iterator.child
-        }
-      })
-    }
-  } catch (error) {}
+interface secondMenu {
+  txt: string
+  icon: string
+  child: any
 }
-
-onBeforeMount(fetchData) // 在组件挂载前发起请求
 </script>
 
 <style scoped lang="scss">
+.dark-mode {
+  .link {
+    color: #fefefe !important;
+
+    ::v-deep .el-dropdown-link {
+      color: #fefefe !important;
+    }
+
+    ::v-deep .item_txt_before {
+      color: #fefefe !important;
+    }
+  }
+}
+
 .link {
   flex: 1;
-  min-width: 550px;
+  min-width: 820px;
   margin-left: 10px;
   .iconBar {
     height: 100%;
     overflow: hidden;
     float: right;
     display: flex;
+    gap: 5px; // 添加元素间的间隙
   }
 }
 </style>

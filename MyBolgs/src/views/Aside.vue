@@ -1,5 +1,5 @@
 <template>
-  <el-aside style="z-index: 100;padding-top: 60px;">
+  <el-aside style="z-index: 100; padding-top: 60px">
     <div class="aside_main">
       <div class="aside_title">
         <el-input
@@ -26,10 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeMount, watch, nextTick, onUpdated } from 'vue'
+import { ref, reactive, onMounted, onBeforeMount, watch, nextTick } from 'vue'
 import { ElTree } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import axiosInstance from '@/axios/axios'
 import router from '@/router'
 
 interface Tree {
@@ -43,6 +42,187 @@ const defaultProps = {
   label: 'label'
 }
 
+const asideServerTree = [
+  {
+    label: 'Python',
+    children: [
+      {
+        label: 'Flask',
+        children: []
+      },
+      {
+        label: 'Django',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'PHP',
+    children: [
+      {
+        label: 'Larval',
+        children: []
+      },
+      {
+        label: 'PHPExcel',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'NodeJS',
+    children: [
+      {
+        label: 'Node入门',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'Lua',
+    children: [
+      {
+        label: 'lua入门',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'MySQL',
+    children: [
+      {
+        label: 'sql命令',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'MongoDB',
+    children: [
+      {
+        label: 'mongoDB入门',
+        children: []
+      }
+    ]
+  }
+]
+
+const asideWebTree = [
+  {
+    label: 'web技术',
+    children: [
+      {
+        label: 'javaScript',
+        children: []
+      },
+      {
+        label: 'typeScript',
+        children: []
+      },
+      {
+        label: 'HTML',
+        children: []
+      },
+      {
+        label: 'CSS',
+        children: []
+      },
+      {
+        label: 'H5Canvas',
+        children: []
+      },
+      {
+        label: 'Vue',
+        children: []
+      },
+      {
+        label: 'React',
+        children: []
+      },
+      {
+        label: 'Taro',
+        children: []
+      },
+      {
+        label: 'Uniapp',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'npm教程',
+    children: [
+      {
+        label: 'npm安装',
+        children: []
+      },
+      {
+        label: 'cnpm',
+        children: []
+      },
+      {
+        label: 'npm命令',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'git教程',
+    children: [
+      {
+        label: 'git安装',
+        children: []
+      },
+      {
+        label: 'git仓库',
+        children: []
+      },
+      {
+        label: 'git命令',
+        children: []
+      }
+    ]
+  },
+  {
+    label: 'markdown笔记',
+    children: [
+      {
+        label: 'markdown安装',
+        children: []
+      },
+      {
+        label: 'markown使用',
+        children: []
+      }
+    ]
+  },
+  {
+    label: '技术分享',
+    children: [
+      {
+        label: 'ElementPlus',
+        children: []
+      },
+      {
+        label: 'Antd Design',
+        children: []
+      },
+      {
+        label: 'Swiper',
+        children: []
+      },
+      {
+        label: 'E-charts',
+        children: []
+      },
+      {
+        label: 'monaco editor',
+        children: []
+      }
+    ]
+  }
+]
+
 const handleNodeClick = (data: Tree) => {
   if (data.route) console.log(data.route)
   else {
@@ -50,10 +230,11 @@ const handleNodeClick = (data: Tree) => {
 }
 
 const currentRoutePath: any = ref(router.currentRoute.value.path)
-
 const filterText = ref('') //过滤框
 const treeRef = ref<InstanceType<typeof ElTree>>() //响应式过滤文本
-let TreeData: Tree[] = reactive([]) //树状数据
+let TreeData: Tree[] = reactive(
+  currentRoutePath.value == '/WebNote' ? asideWebTree : asideServerTree
+) //树状数据
 
 onBeforeMount(async () => {
   currentRoutePath.value = router.currentRoute.value.path
@@ -61,15 +242,7 @@ onBeforeMount(async () => {
 })
 
 const hashChange = async () => {
-  let curAPI = currentRoutePath.value == '/WebNote' ? '/asideDirWeb' : '/asideDirServer' //判断前端后端
-  const res = (await axiosInstance.get(`/317821${curAPI}`))?.data?.data
-  TreeData.splice(0) // 清空数组，准备填充新数据
-  TreeData.push(
-    ...res.map((item: any, index: number) => ({
-      label: item.label,
-      children: item.children
-    }))
-  )
+  console.log(TreeData)
   //给二级目录添加路由
   setRoute(TreeData)
 }
@@ -131,30 +304,49 @@ const filterNode = (value: string, data: Tree) => {
 
 <style scoped lang="scss">
 $position: fixed;
-$placeholderColor: purple;
-$opcity: 0.5;
+$placeholderColor: #87cefa;
+$opcity: 0.7;
 
 .el-aside {
   position: $position;
-  transition: transform .4s ease-in-out;
+  transition: transform 0.4s ease-in-out;
+  box-shadow: 2px 0 10px rgba(135, 206, 250, 0.2);
+
   @media screen and (max-width: 1200px) {
     transform: translateX(-300px);
   }
+
   .aside_main {
     min-width: 18rem;
     width: 18rem;
     height: 100vh;
-    background-color: #ffffff;
-    padding: 5px 5px 0px 5px;
-    opacity: 0.9;
+    background: linear-gradient(135deg, rgba(135, 206, 250, 0.1) 0%, rgba(135, 206, 250, 0.2) 100%);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow:
+      0 4px 20px rgba(135, 206, 250, 0.15),
+      inset 2px 2px 4px rgba(255, 255, 255, 0.7),
+      inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+
     .aside_title {
       display: flex;
       justify-content: center;
+      margin-bottom: 15px;
+
       .filter_input {
-        width: 250px;
+        width: 100%;
         margin-bottom: 5px;
+
         ::v-deep .el-input__wrapper {
-          border-radius: 20px;
+          border-radius: 25px;
+          background: rgba(255, 255, 255, 0.8);
+          box-shadow:
+            0 2px 6px rgba(135, 206, 250, 0.1),
+            inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+            inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+          border: 1px solid rgba(135, 206, 250, 0.3);
+          transition: all 0.3s ease;
+
           .el-input__inner {
             &::placeholder {
               color: $placeholderColor;
@@ -174,41 +366,113 @@ $opcity: 0.5;
             }
           }
         }
+
         ::v-deep .el-input__wrapper.is-focus {
-          box-shadow: 0 0 0 1px purple inset;
+          box-shadow:
+            0 2px 12px rgba(135, 206, 250, 0.3),
+            inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+            inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+          border: 1px solid rgba(135, 206, 250, 0.5);
         }
       }
     }
 
     .aside_tree {
-      height: 100%;
+      height: calc(100% - 70px);
       box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow:
+        inset 2px 2px 5px rgba(135, 206, 250, 0.1),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.8);
     }
-    .el-tree {
-      color: #000000;
-      font-size: 1.1em;
-      font-family:
-        Inter,
-        Helvetica Neue,
-        Helvetica,
-        PingFang SC,
-        Hiragino Sans GB,
-        Microsoft YaHei,
-        \5fae\8f6f\96c5\9ed1,
-        Arial,
-        sans-serif;
+
+    ::v-deep .el-tree {
+      color: #2d3436;
+      font-size: 1em;
+      font-family: 'Noto Sans SC', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+        'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+      background: transparent;
+
       &:hover {
         cursor: pointer;
       }
-      ::v-deep .el-tree-node {
-        padding: 4px;
+
+      .el-tree-node__content {
+        border-radius: 8px;
+        margin: 2px 0;
+        transition: all 0.2s ease;
+        padding: 5px 8px;
+
+        &:hover {
+          background: rgba(135, 206, 250, 0.2);
+          transform: translateX(3px);
+        }
+
+        .el-tree-node__expand-icon {
+          color: #87cefa;
+        }
+      }
+
+      .el-tree-node__label {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: #87cefa;
+        }
+      }
+
+      .el-tree-node.is-current > .el-tree-node__content {
+        background: linear-gradient(
+          90deg,
+          rgba(135, 206, 250, 0.3) 0%,
+          rgba(135, 206, 250, 0.1) 100%
+        );
+        color: #87cefa;
+        font-weight: 600;
+      }
+
+      .el-tree-node.is-expanded > .el-tree-node__content {
         .el-tree-node__label {
-          -webkit-user-select: none; /* 针对Webkit内核（如Chrome、Safari） */
-          -moz-user-select: none; /* 针对Firefox浏览器 */
-          -ms-user-select: none; /* 针对Internet Explorer浏览器 */
-          user-select: none;
-          &:hover {
-            color: purple;
+          color: #87cefa;
+        }
+      }
+    }
+  }
+}
+
+// 在暗黑模式下保持搜索栏的原始样式
+.dark-mode {
+  .el-aside {
+    .aside_main {
+      .aside_title {
+        .filter_input {
+          ::v-deep .el-input__wrapper {
+            background: rgba(255, 255, 255, 0.8) !important;
+            box-shadow:
+              0 2px 6px rgba(135, 206, 250, 0.1),
+              inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(135, 206, 250, 0.3) !important;
+
+            .el-input__inner {
+              color: #333 !important;
+              background: rgba(255, 255, 255, 0.8) !important;
+            }
+          }
+
+          ::v-deep .el-input__wrapper.is-focus {
+            box-shadow:
+              0 2px 12px rgba(135, 206, 250, 0.3),
+              inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(135, 206, 250, 0.5) !important;
           }
         }
       }

@@ -14,11 +14,7 @@ import axiosInstance from './axios/axios'
 import '../src/scss/gobal.scss'
 import 'swiper/css'
 import Antd from 'ant-design-vue'
-
-
-
-
-
+import './scss/dark-mode.scss'
 
 
 // import 'ant-design-vue/dist/reset.css';

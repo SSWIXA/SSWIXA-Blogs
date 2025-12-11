@@ -6,28 +6,29 @@
     <div class="list" v-else></div>
   </div>
 </template>
+
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeMount } from 'vue'
+import { ref, onMounted } from 'vue'
 import PagePart from '@/components/PagePart.vue'
-import axiosInstance from '@/axios/axios'
-let showList: any = ref(false)
-// 获取数据用于展示
-let itemMessage: any = ref([])
+import { getAllArticles } from '@/api/articleService'
+
+const showList = ref(false)
+const itemMessage = ref<any[]>([])
 
 onMounted(() => {
-  getData(`317821/showItem`)
+  getData()
 })
 
-onBeforeMount(() => {
-
-})
-
-async function getData(url: string) {
-  await axiosInstance.get(url).then((res) => {
-    itemMessage.value = res?.data?.data
+async function getData() {
+  try {
+    const data = await getAllArticles()
+    itemMessage.value = data
     showList.value = true
-  })
+    console.log('itemMessage', itemMessage.value)
+  } catch (error) {
+    console.error('获取文章列表失败:', error)
+  }
 }
-
 </script>
+
 <style scoped lang="scss"></style>

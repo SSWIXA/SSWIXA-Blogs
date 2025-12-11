@@ -1,6 +1,15 @@
 <template>
   <div class="favBLK">
-    <RouterLink to="/" style="text-decoration: none; color: inherit; background-color: transparent;display: flex;align-items: center;">
+    <RouterLink
+      to="/"
+      style="
+        text-decoration: none;
+        color: inherit;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+      "
+    >
       <el-avatar shape="square" :size="40" fit="cover" :src="url" class="fav_pic" />
       <el-text class="mx-1" ref="Blogstxt" size="large">SSWIXA's Blogs</el-text>
     </RouterLink>
@@ -18,11 +27,7 @@ const state = reactive({
 const { fits, url } = toRefs(state)
 const Blogstxt = ref()
 
-onMounted(() => {
-
-  
-})
-
+onMounted(() => {})
 </script>
 
 <style scoped lang="scss">

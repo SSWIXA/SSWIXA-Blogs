@@ -1,74 +1,90 @@
 <template>
   <div class="live_2d_container">
-    <div class="live_2d_container_cvs"></div>
-    <div class="selectAnimation btn-group" role="group" aria-label="Animation">
-      <el-scrollbar style="height: 100px; width: 100px">
-        <el-button
-          class="ani_btn"
-          v-for="(items, k) in modelBtn"
-          type="primary"
-          :key="k"
-          plain
-          @click="playEffectAni(String(k))"
-          >{{ k }}</el-button
-        >
-      </el-scrollbar>
+    <div class="live_2d_container_cvs">
+      <canvas ref="cvsNode" class="live2d" id="live2d" width="300" height="600"></canvas>
     </div>
+    <!-- 添加模型切换按钮 -->
+<!--     <div class="model-switcher">
+      <button @click="switchModel('previous')">←</button>
+      <button @click="switchModel('next')">→</button>
+    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import charData from '@/js/charData.js'
-import { onMounted, ref, watch } from 'vue'
+import LAppDefine from '@/js/LAppDefine.js'
+import loadlive2d from '@/js/live2d.js'
 
-interface Viewer {
-  init(modelData: object, path: string): void
-  model: any
-  app: object
-  canvas: any
-  isClick: boolean
-  l2d: object
-}
+import { onMounted, ref, onUnmounted } from 'vue'
 
-let modelData = ref<Viewer | any>()
-let modelBtn = ref<object | any>({})
-let modelPool = ref<object[] | any>([])
-let charDataRef = ref<object[] | any>(charData)
+let cvsNode = ref<HTMLElement | null>(null)
+let live2DInstance: any = null
+let currentModelIndex = 0
+
+// 定义可用的模型列表
+let availableModels: any[] = []
+
+// 监听暗黑模式变化的函数
+const handleDarkModeChange = (mutationsList: MutationRecord[]) => {
+  for (let mutation of mutationsList) {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+      const body = document.body;
+      const isDarkMode = body.classList.contains('dark-mode');
+      
+      // 根据暗黑模式状态选择模型
+      let modelPath = isDarkMode 
+        ? 'model/tororo/tororo.model.json' 
+        : 'model/hijiki/hijiki.model.json';
+      
+      // 加载对应模型
+      if (live2DInstance) {
+        live2DInstance.loadFuc(live2DInstance.CANVAS_ID, modelPath);
+      }
+    }
+  }
+};
+
+let observer: MutationObserver | null = null;
 
 onMounted(() => {
-  let viewer: Viewer = new Viewer('public/model', '.live_2d_container_cvs')
-  for (const key in charDataRef.value) {
-    if (Object.prototype.hasOwnProperty.call(charDataRef.value, key)) {
-      let el = charDataRef.value[key]
-      modelPool.value.push([key, el])
-    }
-  }
-  viewer.init(modelData, modelPool.value[randInt(0, modelPool.value.length - 1)][1])
+  live2DInstance = new LAppDefine(cvsNode, false, loadlive2d)
+  // 将MODELS数组扁平化，获取所有模型的第一个皮肤
+  availableModels = live2DInstance.MODELS.map(
+    (modelGroup: any) => modelGroup[modelGroup.length - 1]
+  )
+  
+  // 初始化时根据当前模式加载对应模型
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  let initialModel = isDarkMode 
+    ? 'model/tororo/tororo.model.json' 
+    : 'model/hijiki/hijiki.model.json';
+  
+  live2DInstance.loadFuc(live2DInstance.CANVAS_ID, initialModel);
+  
+  // 创建一个观察器实例并传入回调函数
+  observer = new MutationObserver(handleDarkModeChange);
+  // 开始观察body元素的属性变化
+  observer.observe(document.body, { attributes: true });
 })
-function modelBtnAni(val: Viewer) {
-  // 动画按钮
-  val.model?.motions.forEach((e: any, k: string) => {
-    modelBtn.value[k] = e
-  })
-}
-//播放对应动画
-function playEffectAni(effect: string) {
-  modelData.value?.startAnimation(effect, 'base')
-}
-function randInt(min: number, max: number) {
-  return min + Math.floor(Math.random() * (max - min + 1))
-}
 
-watch(
-  () => modelData.value,
-  (newVal, oldVal) => {
-    if (newVal) {
-      console.log(newVal)
-      // modelBtnAni(newVal)
-    }
+onUnmounted(() => {
+  // 组件销毁时断开观察器
+  if (observer) {
+    observer.disconnect();
   }
-)
+})
 
+// 切换模型函数
+const switchModel = (direction: string) => {
+  if (!live2DInstance) return
+  if (direction === 'next') {
+    currentModelIndex = (currentModelIndex + 1) % availableModels.length
+  } else if (direction === 'previous') {
+    currentModelIndex = (currentModelIndex - 1 + availableModels.length) % availableModels.length
+  }
+  // 重新加载模型
+  live2DInstance.loadFuc(live2DInstance.CANVAS_ID, availableModels[currentModelIndex])
+}
 </script>
 
 <style scoped lang="scss">
@@ -77,19 +93,28 @@ watch(
   position: fixed;
   left: 0;
   bottom: 0;
-  pointer-events: none;
-  .live_2d_container_cvs {
-    opacity: 0.15;
-  }
-  .selectAnimation {
-    display: flex;
-    flex-wrap: nowrap;
+  transform: scale(0.5, 0.5);
+  transform-origin: left bottom;
+
+  .model-switcher {
     position: absolute;
-    top: 0;
-    left: 0;
-    .ani_btn {
-      margin: 0;
-      font-size: 10px;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100px;
+      height: 50px;
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
     }
   }
 }

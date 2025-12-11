@@ -219,6 +219,7 @@ import { ElBacktop } from 'element-plus'
   justify-content: center;
   width: 50px;
   height: 50px;
+  z-index: 9999;
   .el-icon {
     width: 2em;
     height: 2em;

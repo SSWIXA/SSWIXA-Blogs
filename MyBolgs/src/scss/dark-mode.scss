@@ -1,0 +1,119 @@
+// 暗黑模式全局样式
+.dark-mode {
+  // 背景颜色
+  background-color: #1a1a1a !important;
+  color: #e0e0e0 !important;
+  
+  // 头部导航
+  .el-header {
+    background-color: rgba(40, 40, 40, 0.9) !important;
+    border-bottom: solid rgba(70, 70, 70, 0.3) 1px !important;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3) !important;
+    color: #e0e0e0 !important;
+  }
+  
+  // 卡片和容器
+  .el-card {
+    background-color: #2d2d2d !important;
+    border: 1px solid #444 !important;
+    color: #e0e0e0 !important;
+  }
+  
+  .profile-card {
+    background-color: rgba(45, 45, 45, 0.9) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    color: #e0e0e0 !important;
+    
+    &:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    .username {
+      color: #f0f0f0 !important;
+    }
+    
+    .bio {
+      color: #aaa !important;
+    }
+  }
+  
+  // 标签
+  .el-tag {
+    background-color: #3a3a3a !important;
+    border-color: #555 !important;
+    color: #e0e0e0 !important;
+  }
+  
+  // 分割线
+  .el-divider {
+    background-color: #444 !important;
+  }
+  
+  // 按钮
+  .el-button {
+    background-color: #3a3a3a !important;
+    border-color: #555 !important;
+    color: #e0e0e0 !important;
+  }
+  
+  // 输入框
+  .el-input__inner {
+    background-color: #3a3a3a !important;
+    border-color: #555 !important;
+    color: #e0e0e0 !important;
+  }
+  
+  // 模糊遮罩
+  .blur_mask {
+    background-color: rgba(26, 26, 26, 0.8) !important;
+  }
+  
+  // 首页轮播内容
+  .swiper-slide {
+    color: #e0e0e0 !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  // 日历
+  .el-calendar {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+  }
+  
+  .el-calendar__header {
+    border-bottom: 1px solid #444 !important;
+  }
+  
+  .el-calendar-table td {
+    border-top: 1px solid #444 !important;
+    border-left: 1px solid #444 !important;
+  }
+  
+  .el-calendar-table th {
+    border-bottom: 1px solid #444 !important;
+  }
+  
+  // 链接和图标
+  a {
+    color: #64a5e5 !important;
+  }
+  
+  // 滚动条
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #2d2d2d;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+}

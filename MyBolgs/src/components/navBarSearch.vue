@@ -28,7 +28,10 @@ $opcity: 0.5;
   border-right: solid 1px gray;
   ::v-deep .el-input__wrapper {
     border-radius: 20px;
+    background-color: white !important;
     .el-input__inner {
+      background-color: white !important;
+      color: #333 !important;
       &::placeholder {
         color: $placeholderColor;
         opacity: $opcity;
@@ -49,6 +52,17 @@ $opcity: 0.5;
   }
   ::v-deep .el-input__wrapper.is-focus {
     box-shadow: 0 0 0 1px rgb(2, 102, 252, 0.5) inset;
+  }
+}
+
+// 在暗黑模式下保持搜索栏的原始样式
+.dark-mode .nav_div {
+  ::v-deep .el-input__wrapper {
+    background-color: white !important;
+    .el-input__inner {
+      background-color: white !important;
+      color: #333 !important;
+    }
   }
 }
 </style>

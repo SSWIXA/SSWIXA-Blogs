@@ -5,17 +5,18 @@ body {
   background-size: contain;
   overflow-x: hidden;
   box-sizing: border-box;
+  font-family: 'Noto Sans SC', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  
   &::-webkit-scrollbar {
     width: 6px;
     height: 5px;
   }
   &::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(135, 206, 250, 0.2);
     -webkit-border-radius: 3px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgb(2, 102, 252, 0.3);
-    opacity: 0.1;
+    background-color: rgba(135, 206, 250, 0.5);
     -webkit-border-radius: 3px;
   }
 }

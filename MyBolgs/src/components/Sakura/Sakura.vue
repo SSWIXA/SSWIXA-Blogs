@@ -1,196 +1,183 @@
 <template>
   <div class="Sakura">
-    <canvas id="canvas_sakura" ref="canvas_sakura" :style="{ zIndex: zIndex }"></canvas>
+    <canvas id="canvas_sakura" ref="canvas_sakura" style="zindex: 10"></canvas>
   </div>
 </template>
+<script setup>
+import { onMounted, ref } from 'vue'
+import MONKEY from '@/components/Sakura/monkey.js'
 
-<script>
-import SakuraPic from '@/assets/sakura.png'
+const sakuraImages1 = Object.entries(
+  import.meta.glob(`@/assets/program13/thing_01/thing_01_*.png`, { eager: true })
+).map(([, module]) => module.default)
+const sakuraImages2 = Object.entries(
+  import.meta.glob(`@/assets/program13/thing_02/thing_02_*.png`, { eager: true })
+).map(([, module]) => module.default)
+const sakuraImages3 = Object.entries(
+  import.meta.glob(`@/assets/program13/thing_03/thing_03_*.png`, { eager: true })
+).map(([, module]) => module.default)
+const sakuraImages4 = Object.entries(
+  import.meta.glob(`@/assets/program13/thing_04/thing_04_*.png`, { eager: true })
+).map(([, module]) => module.default)
+const sakuraImages5 = Object.entries(
+  import.meta.glob(`@/assets/program13/thing_05/thing_05_*.png`, { eager: true })
+).map(([, module]) => module.default)
+const sakuraImages6 = Object.entries(
+  import.meta.glob(`@/assets/program13/thing_06/thing_06_*.png`, { eager: true })
+).map(([, module]) => module.default)
+
+let canvas_sakura = ref(null)
 class Sakura {
-  constructor(x, y, s, r, fn, that, img) {
-    this.x = x
-    this.y = y
-    this.s = s
-    this.r = r
-    this.fn = fn
-    this.that = that
-    this.img = img
+  constructor(cvs, nums = 50, w = 1024, h = 768) {
+    this.flowerfps = 1
+    this.options = { num: nums }
+    this.lastTimer = Date.now()
+    this.render = new MONKEY.Renderer({ canvas: cvs, ftp: 40 })
+    this.gamelayer = new MONKEY.Scene({ name: 'gameScene' })
+    this.render.begin()
+    //
+    this.init()
   }
-  draw(cxt) {
-    cxt.save()
-    // eslint-disable-next-line no-unused-vars
-    var xc = (40 * this.s) / 4
-    cxt.translate(this.x, this.y)
-    cxt.rotate(this.r)
-    cxt.drawImage(this.img, 0, 0, 40 * this.s, 40 * this.s)
-    cxt.restore()
-  }
-  update() {
-    this.x = this.fn.x(this.x, this.y)
-    this.y = this.fn.y(this.y, this.y)
-    this.r = this.fn.r(this.r)
-    if (this.x > window.innerWidth || this.x < 0 || this.y > window.innerHeight || this.y < 0) {
-      this.r = this.that.getRandom('fnr')
-      if (Math.random() > 0.4) {
-        this.x = this.that.getRandom('x')
-        this.y = 0
-        this.s = this.that.getRandom('s')
-        this.r = this.that.getRandom('r')
-      } else {
-        this.x = window.innerWidth
-        this.y = this.that.getRandom('y')
-        this.s = this.that.getRandom('s')
-        this.r = this.that.getRandom('r')
-      }
-    }
-  }
-}
-class SakuraList {
-  constructor() {
-    this.list = []
-  }
-  push(sakura) {
-    this.list.push(sakura)
-  }
-  update() {
-    for (var i = 0, len = this.list.length; i < len; i++) {
-      this.list[i].update()
-    }
-  }
-  draw(cxt) {
-    for (var i = 0, len = this.list.length; i < len; i++) {
-      this.list[i].draw(cxt)
-    }
-  }
-  get(i) {
-    return this.list[i]
-  }
-  size() {
-    return this.list.length
-  }
-}
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Sakura',
-  data() {
-    return {
-      staticx: false,
-      stop: null,
-      num: 50,
-      show: true,
-      zIndex: 0
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      if (this.show) {
-        this.startSakura()
-      }
-    })
-  },
-  methods: {
-    getRandom(option) {
-      var ret, random
-      switch (option) {
-        case 'x':
-          ret = Math.random() * window.innerWidth
-          break
-        case 'y':
-          ret = Math.random() * window.innerHeight
-          break
-        case 's':
-          ret = Math.random()
-          break
-        case 'r':
-          ret = Math.random() * 6
-          break
-        case 'fnx':
-          random = -0.5 + Math.random() * 1
-          // eslint-disable-next-line no-unused-vars
-          ret = function (x, y) {
-            return x + 0.15 * random - 1.7 * 0.3
-          }
-          break
-        case 'fny':
-          random = 1.5 + Math.random() * 0.7
-          ret = function (x, y) {
-            return y + 0.3 * random
-          }
-          break
-        case 'fnr':
-          random = Math.random() * 0.03
-          ret = function (r) {
-            return r + random
-          }
-          break
-      }
-      return ret
-    },
-    startSakura() {
-      let that = this
-      // eslint-disable-next-line no-global-assign
-      requestAnimationFrame =
-        window.requestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        window.oRequestAnimationFrame
-      var canvas = document.getElementById('canvas_sakura')
-      this.staticx = true
-      this.$refs.canvas_sakura.width = document.body.clientWidth
-      this.$refs.canvas_sakura.height = window.innerHeight
-      var cxt = this.$refs.canvas_sakura.getContext('2d')
-      var sakuraList = new SakuraList()
-      const img = new Image()
 
-      img.src = SakuraPic//樱花效果图相对路径
-
-      for (var i = 0; i < that.num; i++) {
-        let sakura, randomX, randomY, randomS, randomR, randomFnx, randomFny, randomFnR
-        randomX = this.getRandom('x')
-        randomY = this.getRandom('y')
-        randomR = this.getRandom('r')
-        randomS = this.getRandom('s')
-        randomFnx = this.getRandom('fnx')
-        randomFny = this.getRandom('fny')
-        randomFnR = this.getRandom('fnr')
-        sakura = new Sakura(
-          randomX,
-          randomY,
-          randomS,
-          randomR,
-          {
-            x: randomFnx,
-            y: randomFny,
-            r: randomFnR
-          },
-          this,
-          img
-        )
-        sakura.draw(cxt)
-        sakuraList.push(sakura)
-      }
-      this.stop = requestAnimationFrame(function fn() {
-        cxt.clearRect(0, 0, canvas.width, canvas.height)
-        sakuraList.update()
-        sakuraList.draw(cxt)
-        that.stop = requestAnimationFrame(fn)
-      })
-    },
-    stopp() {
-      if (this.staticx) {
-        var child = document.getElementById('canvas_sakura')
-        child.parentNode.removeChild(child)
-        window.cancelAnimationFrame(this.stop)
-        this.staticx = false
-      } else {
-        this.$nextTick((e) => {
-          this.startSakura()
+  init() {
+    this.render.add(this.gamelayer)
+    this.effect_layer = new MONKEY.Animal({ name: 'effect_layer' })
+    this.effect_layer.scale.set(0.5, 0.5)
+    this.gamelayer.add(this.effect_layer)
+    this.initSakura(100)
+    //
+    this.effect_layer.addMotionFunc('fly', () => {
+      if (Date.now() - this.lastTimer > this.flowerfps) {
+        this.lastTimer = Date.now()
+        this.effect_layer.children.forEach((e) => {
+          this.updateFlower(e)
         })
       }
+    })
+  }
+
+  initSakura(num) {
+    for (let i = 0; i < num; i++) {
+      let flowerP = new MONKEY.Animal({ name: 'flowerMc_' + i })
+      let flowerPool = [
+        { start: 1, end: 9, name: 1, arr: sakuraImages1, cycle: 250 },
+        { start: 1, end: 9, name: 2, arr: sakuraImages2, cycle: 250 },
+        { start: 1, end: 8, name: 3, arr: sakuraImages3, cycle: 250 },
+        { start: 1, end: 14, name: 4, arr: sakuraImages4, cycle: 100 },
+        { start: 1, end: 14, name: 5, arr: sakuraImages5, cycle: 100 },
+        { start: 1, end: 20, name: 6, arr: sakuraImages6, cycle: 100 }
+      ]
+      let flowerData = flowerPool[MONKEY.Math.randInt(0, flowerPool.length - 1)]
+      flowerP.flower = new MONKEY.IntervalAnimation({
+        name: flowerData.name,
+        frameArray: this.loadAniImg(flowerData)
+      })
+      flowerP.flower.intervalStatus = true
+      flowerP.flower.cycle = MONKEY.Math.randInt(flowerData.cycle, flowerData.cycle + 30)
+      flowerP.flower.gotoAndPlay(MONKEY.Math.randInt(0, flowerData.end - 1))
+      this.effect_layer.add(flowerP)
+      flowerP.add(flowerP.flower)
+      //花瓣的下一幀狀態
+      flowerP.fn = {
+        x: this.getRandom('fnx'),
+        y: this.getRandom('fny'),
+        r: this.getRandom('fnr')
+      }
+      //花瓣的初始狀態
+      flowerP.position.set(this.getRandom('x'), this.getRandom('y'))
+      flowerP.flower.rotate = this.getRandom('r')
+      flowerP.scale.x = flowerP.scale.y = this.getRandom('s')
+      flowerP.alpha = this.getRandom('a')
     }
   }
+
+  loadAniImg(data) {
+    let arr = []
+    for (var i = 0; i < data.arr.length; i++) {
+      var img = new Image()
+      img.src = data.arr[i]
+      arr.push(img)
+    }
+    return arr
+  }
+
+  updateFlower(mc) {
+    //更新轉態
+    mc.flower.rotate = mc.fn.r(mc.flower.rotate)
+    mc.position.x = mc.fn.x(mc.position.x, mc.position.y)
+    mc.position.y = mc.fn.y(mc.position.y, mc.position.y)
+    //越界處理
+    if (
+      mc.position.x > window.innerWidth * 2 + 130 ||
+      mc.position.x < -130 ||
+      mc.position.y > window.innerHeight * 2 ||
+      mc.position.y < -130
+    ) {
+      mc.flower.rotate = this.getRandom('fnr')
+      if (Math.random() > 0.4) {
+        mc.position.x = this.getRandom('x')
+        mc.position.y = -130
+        mc.scale.x = mc.scale.y = this.getRandom('s')
+        mc.flower.rotate = this.getRandom('r')
+      } else {
+        mc.position.x = window.innerWidth * 2
+        mc.position.y = this.getRandom('y')
+        mc.scale.x = mc.scale.y = this.getRandom('s')
+        mc.flower.rotate = this.getRandom('r')
+      }
+    }
+  }
+
+  getRandom(config) {
+    var ret, random
+    //
+    switch (config) {
+      //初始化的一些状态 x，y，s，r
+      case 'x':
+        ret = MONKEY.Math.randInt(2, 12) * 0.1 * window.innerWidth * 2
+        break
+      case 'a':
+        ret = MONKEY.Math.randInt(8, 9) * 0.1
+        break
+      case 'y':
+        ret = Math.random() * window.innerHeight * 2
+        break
+      case 's':
+        ret = Math.random() * 0.4
+        break
+      case 'r':
+        ret = Math.random() * 6
+        break
+      case 'fnx':
+        random = -0.5 + Math.random() * this.flowerfps
+        ret = function (x, y) {
+          return x + 0.5 * random - 1.7
+        }
+        break
+      case 'fny':
+        random = 1.5 + Math.random() * 0.7
+        ret = function (x, y) {
+          return y + random
+        }
+        break
+      case 'fnr':
+        random = Math.random() * 2
+        ret = function (r) {
+          return r + random
+        }
+        break
+    }
+    return ret
+  }
 }
+
+onMounted(() => {
+  canvas_sakura.value.width = window.innerWidth
+  canvas_sakura.value.height = window.innerHeight
+  canvas_sakura.value.style.width = window.innerWidth + 'px'
+  canvas_sakura.value.style.height = window.innerHeight + 'px'
+  new Sakura(canvas_sakura.value, 50, 1024, 768)
+})
 </script>
 
 <style scoped>
@@ -201,7 +188,7 @@ export default {
   left: 0;
 }
 
-.Sakura{
+.Sakura {
   box-sizing: border-box;
 }
 </style>

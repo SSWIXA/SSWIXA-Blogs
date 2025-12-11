@@ -14,6 +14,12 @@ import MainContents from '@/views/MainCon.vue'
 
 <style scoped lang="scss">
 .blur_mask {
-  backdrop-filter: blur(150px);
+  backdrop-filter: blur(50px);
+}
+
+// 暗黑模式样式
+.dark-mode .blur_mask {
+  background-color: rgba(26, 26, 26, 0.8) !important;
+  backdrop-filter: blur(50px);
 }
 </style>

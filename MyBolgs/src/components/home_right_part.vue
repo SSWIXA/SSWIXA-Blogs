@@ -1,19 +1,47 @@
 <template>
   <div class="intro_blogers">
-    <div class="intro_blogers">
+    <div class="profile-card">
       <div class="favator">
-        <el-avatar shape="square" src="src/assets/bg.jpg" />
+        <el-avatar shape="circle" :size="100" src="src/assets/bg.jpg" />
       </div>
       <div class="blogers_name">
-        <el-text style="color: #2c3e50; font-weight: 700; font-size: 22px">SSWIXA</el-text>
+        <el-text class="username">SSWIXA</el-text>
+      </div>
+      <div class="profile-info">
+        <p class="bio">前端开发工程师 | 技术爱好者</p>
+        <div class="stats">
+          <div class="stat-item">
+            <el-text class="stat-number">25</el-text>
+            <el-text class="stat-label">文章</el-text>
+          </div>
+          <div class="stat-item">
+            <el-text class="stat-number">0.2k</el-text>
+            <el-text class="stat-label">粉丝</el-text>
+          </div>
+          <div class="stat-item">
+            <el-text class="stat-number">15</el-text>
+            <el-text class="stat-label">标签</el-text>
+          </div>
+        </div>
       </div>
     </div>
-    <div :style="{ width: '330px' ,'opacity': '0.8'}">
-      <a-calendar v-model:value="value" :fullscreen="false" />
+
+    <div class="recent-posts">
+      <div class="section-title">
+        <h3>最近文章</h3>
+      </div>
+      <el-divider class="divider"></el-divider>
+      <div class="post-list">
+        <div class="post-item" v-for="post in recentPosts" :key="post.title">
+          <div class="post-title">{{ post.title }}</div>
+          <div class="post-date">{{ formatDate(post.date) }}</div>
+        </div>
+      </div>
     </div>
+
     <div class="hot_tags">
       <div class="hot_tags_title">
-        <el-icon :size="40" class="hot_tags_logo">
+        <el-icon :size="24" class="hot_tags_logo">
           <svg
             t="1715243864949"
             class="icon"
@@ -36,72 +64,354 @@
             ></path>
           </svg>
         </el-icon>
-        <h1>热门标签</h1>
+        <h2>热门标签</h2>
       </div>
       <el-divider class="divider"></el-divider>
+      <div class="tags-container">
+        <el-tag 
+          v-for="tag in tags" 
+          :key="tag" 
+          class="tag-item"
+          :type="getTagType(tag)"
+        >
+          {{ tag }}
+        </el-tag>
+      </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
-const value = ref<any>()
 
+// 个人标签数据
+const tags = ref([
+  'Vue.js', 'React', 'JavaScript', 'TypeScript', 
+  'Node.js', 'CSS', 'HTML', 'Webpack', 
+  'Vite', 'Git', 'MongoDB', 'Express',
+  '前端框架', '性能优化', '工程化', '响应式设计'
+])
+
+// 最近文章数据
+const recentPosts = ref([
+  {
+    title: "Vue.js 入门指南",
+    date: "2023-10-15"
+  },
+  {
+    title: "React Hooks 完全指南",
+    date: "2023-10-10"
+  },
+  {
+    title: "TypeScript 入门教程",
+    date: "2023-10-05"
+  },
+  {
+    title: "CSS Grid 布局详解",
+    date: "2023-09-28"
+  },
+  {
+    title: "前端性能优化技巧",
+    date: "2023-09-20"
+  }
+])
+
+// 标签类型（颜色）
+const getTagType = (tag: string) => {
+  const typeMap: Record<string, string> = {
+    'Vue.js': 'success',
+    'React': 'success',
+    'JavaScript': 'warning',
+    'TypeScript': 'warning',
+    'Node.js': 'primary',
+    'CSS': 'primary',
+    'HTML': 'primary',
+    'Webpack': '',
+    'Vite': '',
+    'Git': '',
+    'MongoDB': 'info',
+    'Express': 'info'
+  }
+
+  return typeMap[tag] || ''
+}
+
+// 格式化日期
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  }
+  return new Date(dateString).toLocaleDateString('zh-CN', options)
+}
 </script>
+
 <style scoped lang="scss">
 .intro_blogers {
-  .intro_blogers {
-    border-radius: 10px;
+  .profile-card {
+    border-radius: 15px;
     background: inherit;
-    background-color: rgba(255, 255, 255, 0.8);
-    height: 330px;
-    margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-height: 320px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
     .favator {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 150px;
+      height: 120px;
+
       .el-avatar {
         width: 100px;
         height: 100px;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
     }
-    .blogers_name {
-      display: flex;
-      justify-content: center;
+
+    .username {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 10px 0;
+      display: block;
+    }
+
+    .profile-info {
+      .bio {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin: 15px 0;
+        line-height: 1.5;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+
+        .stat-item {
+          display: flex;
+          flex-direction: column;
+
+          .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #3498db;
+          }
+
+          .stat-label {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 4px;
+          }
+        }
+      }
     }
   }
-  .el-calendar {
-    border-radius: 5px;
-    margin-bottom: 10px;
-    ::v-deep .el-calendar__body {
-      padding: 12px 20px 20px;
-      .el-calendar-day {
-        height: 40px;
+
+  .recent-posts {
+      background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    transition: all 0.3s ease;
+      margin-bottom: 20px;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
+
+    .section-title {
+      h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0 0 15px 0;
+      }
+      }
+
+    .divider {
+      margin: 15px 0;
+      }
+
+    .post-list {
+      .post-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        
+        &:last-child {
+          border-bottom: none;
+      }
+
+        .post-title {
+          font-size: 0.95rem;
+          color: #34495e;
+          margin-bottom: 5px;
+          cursor: pointer;
+          
+          &:hover {
+            color: #3498db;
+          }
+        }
+        
+        .post-date {
+          font-size: 0.8rem;
+          color: #95a5a6;
+        }
       }
     }
   }
 
   .hot_tags {
-    height: 330px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    margin-top: 10px;
-    align-items: center;
+    margin-top: 20px;
+    min-height: 300px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+    
     .hot_tags_title {
       display: flex;
-      margin-top: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+
       .hot_tags_logo {
-        margin: 0 0 0 10px;
+        margin-right: 10px;
+        color: #3498db;
       }
-      h1 {
-        font-size: 1.3rem;
+
+      h2 {
+        font-size: 1.4rem;
         font-weight: 600;
         color: #2c3e50;
-        padding-top: 5px;
+        margin: 0;
       }
     }
+
     .divider {
-      margin: 0;
+      margin: 15px 0;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .tag-item {
+        margin: 0;
+        border-radius: 20px;
+        padding: 8px 15px;
+        font-size: 13px;
+        transition: all 0.2s;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+  }
+}
+
+// 暗黑模式样式
+.dark-mode {
+  .intro_blogers {
+    .profile-card {
+      background-color: rgba(45, 45, 45, 0.9) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+      color: #e0e0e0 !important;
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+      }
+
+      .username {
+        color: #f0f0f0 !important;
+      }
+
+      .bio {
+        color: #aaa !important;
+      }
+      
+      .stat-number {
+        color: #64a5e5 !important;
+      }
+      
+      .stat-label {
+        color: #aaa !important;
+      }
+    }
+    
+    .recent-posts {
+      background-color: rgba(45, 45, 45, 0.9) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+      color: #e0e0e0 !important;
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+      }
+
+      .section-title {
+        h3 {
+          color: #f0f0f0 !important;
+        }
+      }
+      
+      .post-item {
+        border-bottom: 1px solid #444 !important;
+        
+        .post-title {
+          color: #e0e0e0 !important;
+          
+          &:hover {
+            color: #64a5e5 !important;
+          }
+        }
+        
+        .post-date {
+          color: #aaa !important;
+        }
+      }
+    }
+
+    .hot_tags {
+      background-color: rgba(45, 45, 45, 0.9) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+      color: #e0e0e0 !important;
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+      }
+      
+      .hot_tags_title {
+        h2 {
+          color: #f0f0f0 !important;
+        }
+      }
+      
+      .tag-item {
+        background-color: #3a3a3a !important;
+        border-color: #555 !important;
+        color: #e0e0e0 !important;
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory,  } from 'vue-router'
+import { createRouter, createWebHashHistory,  } from 'vue-router'
 import HomeView from '@/views/homeView.vue'
 import Note from '@/views/mainContent.vue'
 import Navigation from '@/views/Navigation.vue'
@@ -18,6 +18,10 @@ const routes: Array<any> = [
     component: Note
   },
   {
+    path: '/AINote',
+    component: Note
+  },
+  {
     path: '/Navigation',
     component: Navigation
   }
@@ -31,10 +35,9 @@ const routes: Array<any> = [
   // }
 ]
 
-
 // 创建路由器实例
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHashHistory('/'),
   routes
 })
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="blur_mask">
+  <div class="blur_mask" :class="{ 'dark-mode': isDarkMode }">
     <div class="swiper-container">
       <swiper
         :style="{
@@ -88,8 +88,9 @@ import th1 from '$/images/th1.jpg'
 import th2 from '$/images/th2.jpg'
 import th3 from '$/images/th3.jpg'
 
-import 'swiper/css'
-import 'swiper/scss/pagination'
+
+// 添加暗黑模式状态
+const isDarkMode = ref(false)
 
 interface Slide {
   url: string
@@ -134,6 +135,55 @@ const optionSwiper: Slide[] = reactive([
     title: '乔布斯',
     Subtitle: '',
     txt: 'Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do.'
+  },
+  {
+    url: '../../public/images/nature1.jpg',
+    fit: 'cover',
+    title: '阿尔伯特·爱因斯坦',
+    Subtitle: '',
+    txt: 'Try not to become a man of success, but rather try to become a man of value.'
+  },
+  {
+    url: '../../public/images/nature2.jpg',
+    fit: 'cover',
+    title: '温斯顿·丘吉尔',
+    Subtitle: '',
+    txt: 'Success is not final, failure is not fatal: It is the courage to continue that counts.'
+  },
+  {
+    url: '../../public/images/nature3.jpg',
+    fit: 'cover',
+    title: '纳尔逊·曼德拉',
+    Subtitle: '',
+    txt: 'There is no passion to be found playing small - in settling for a life that is less than the one you are capable of living.'
+  },
+  {
+    url: '../../public/images/nature4.jpg',
+    fit: 'cover',
+    title: '玛雅·安吉洛',
+    Subtitle: '',
+    txt: 'Nothing will work unless you do.'
+  },
+  {
+    url: '../../public/images/nature5.jpg',
+    fit: 'cover',
+    title: '孔子',
+    Subtitle: '',
+    txt: '学而时习之，不亦说乎？'
+  },
+  {
+    url: '../../public/images/nature1.jpg',
+    fit: 'cover',
+    title: '老子',
+    Subtitle: '',
+    txt: '千里之行，始于足下。'
+  },
+  {
+    url: '../../public/images/nature2.jpg',
+    fit: 'cover',
+    title: '苏轼',
+    Subtitle: '',
+    txt: '古之立大事者，不惟有超世之才，亦必有坚忍不拔之志。'
   }
 ])
 
@@ -209,7 +259,7 @@ watch(opacity, (oldval: any, newval: any) => {
     .main_right {
       width: 350px;
       padding: 20px 10px 10px;
-      @media screen and (max-width: 800px) {
+      @media screen and (max-width: 850px) {
         display: none;
       }
     }
@@ -222,7 +272,13 @@ watch(opacity, (oldval: any, newval: any) => {
       background: transparent;
       ::v-deep .swiper-pagination-bullet {
         float: right;
+        background: rgba(135, 206, 250, 0.7);
       }
+      
+      ::v-deep .swiper-pagination-bullet-active {
+        background: rgba(135, 206, 250, 1);
+      }
+      
       .parallax-bg {
         position: absolute;
         left: 0;
@@ -243,6 +299,7 @@ watch(opacity, (oldval: any, newval: any) => {
         display: flex;
         justify-content: center;
         align-items: center;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         .content {
           margin: 0 auto;
           .title {
@@ -273,6 +330,35 @@ watch(opacity, (oldval: any, newval: any) => {
       justify-content: center;
       z-index: 10;
       cursor: pointer;
+      
+      svg {
+        fill: rgba(135, 206, 250, 0.8);
+        filter: drop-shadow(0px 0px 5px rgba(135, 206, 250, 0.5));
+      }
+    }
+  }
+}
+</style>
+
+<style scoped lang="scss">
+// 暗黑模式样式
+.dark-mode {
+  .blur_mask {
+    backdrop-filter: blur(150px);
+    
+    .swiper-slide {
+      color: #e0e0e0 !important;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+    }
+    
+    .home_page_content {
+      .main_left {
+        // 可以在这里添加暗黑模式下左侧内容的样式
+      }
+      
+      .main_right {
+        // 可以在这里添加暗黑模式下右侧内容的样式
+      }
     }
   }
 }
