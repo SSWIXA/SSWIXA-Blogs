@@ -68,12 +68,7 @@
       </div>
       <el-divider class="divider"></el-divider>
       <div class="tags-container">
-        <el-tag 
-          v-for="tag in tags" 
-          :key="tag" 
-          class="tag-item"
-          :type="getTagType(tag)"
-        >
+        <el-tag v-for="tag in tags" :key="tag" class="tag-item" :type="getTagType(tag)">
           {{ tag }}
         </el-tag>
       </div>
@@ -86,33 +81,45 @@ import { ref } from 'vue'
 
 // 个人标签数据
 const tags = ref([
-  'Vue.js', 'React', 'JavaScript', 'TypeScript', 
-  'Node.js', 'CSS', 'HTML', 'Webpack', 
-  'Vite', 'Git', 'MongoDB', 'Express',
-  '前端框架', '性能优化', '工程化', '响应式设计'
+  'Vue.js',
+  'React',
+  'JavaScript',
+  'TypeScript',
+  'Node.js',
+  'CSS',
+  'HTML',
+  'Webpack',
+  'Vite',
+  'Git',
+  'MongoDB',
+  'Express',
+  '前端框架',
+  '性能优化',
+  '工程化',
+  '响应式设计'
 ])
 
 // 最近文章数据
 const recentPosts = ref([
   {
-    title: "Vue.js 入门指南",
-    date: "2023-10-15"
+    title: 'Vue.js 入门指南',
+    date: '2023-10-15'
   },
   {
-    title: "React Hooks 完全指南",
-    date: "2023-10-10"
+    title: 'React Hooks 完全指南',
+    date: '2023-10-10'
   },
   {
-    title: "TypeScript 入门教程",
-    date: "2023-10-05"
+    title: 'TypeScript 入门教程',
+    date: '2023-10-05'
   },
   {
-    title: "CSS Grid 布局详解",
-    date: "2023-09-28"
+    title: 'CSS Grid 布局详解',
+    date: '2023-09-28'
   },
   {
-    title: "前端性能优化技巧",
-    date: "2023-09-20"
+    title: '前端性能优化技巧',
+    date: '2023-09-20'
   }
 ])
 
@@ -120,17 +127,17 @@ const recentPosts = ref([
 const getTagType = (tag: string) => {
   const typeMap: Record<string, string> = {
     'Vue.js': 'success',
-    'React': 'success',
-    'JavaScript': 'warning',
-    'TypeScript': 'warning',
+    React: 'success',
+    JavaScript: 'warning',
+    TypeScript: 'warning',
     'Node.js': 'primary',
-    'CSS': 'primary',
-    'HTML': 'primary',
-    'Webpack': '',
-    'Vite': '',
-    'Git': '',
-    'MongoDB': 'info',
-    'Express': 'info'
+    CSS: 'primary',
+    HTML: 'primary',
+    Webpack: '',
+    Vite: '',
+    Git: '',
+    MongoDB: 'info',
+    Express: 'info'
   }
 
   return typeMap[tag] || ''
@@ -138,10 +145,10 @@ const getTagType = (tag: string) => {
 
 // 格式化日期
 const formatDate = (dateString: string) => {
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
   }
   return new Date(dateString).toLocaleDateString('zh-CN', options)
 }
@@ -221,17 +228,17 @@ const formatDate = (dateString: string) => {
   }
 
   .recent-posts {
-      background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 20px;
     transition: all 0.3s ease;
-      margin-bottom: 20px;
+    margin-bottom: 20px;
 
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-      }
+    }
 
     .section-title {
       h3 {
@@ -240,32 +247,32 @@ const formatDate = (dateString: string) => {
         color: #2c3e50;
         margin: 0 0 15px 0;
       }
-      }
+    }
 
     .divider {
       margin: 15px 0;
-      }
+    }
 
     .post-list {
       .post-item {
         padding: 10px 0;
         border-bottom: 1px solid #eee;
-        
+
         &:last-child {
           border-bottom: none;
-      }
+        }
 
         .post-title {
           font-size: 0.95rem;
           color: #34495e;
           margin-bottom: 5px;
           cursor: pointer;
-          
+
           &:hover {
             color: #3498db;
           }
         }
-        
+
         .post-date {
           font-size: 0.8rem;
           color: #95a5a6;
@@ -287,7 +294,7 @@ const formatDate = (dateString: string) => {
       transform: translateY(-5px);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     }
-    
+
     .hot_tags_title {
       display: flex;
       align-items: center;
@@ -350,16 +357,16 @@ const formatDate = (dateString: string) => {
       .bio {
         color: #aaa !important;
       }
-      
+
       .stat-number {
         color: #64a5e5 !important;
       }
-      
+
       .stat-label {
         color: #aaa !important;
       }
     }
-    
+
     .recent-posts {
       background-color: rgba(45, 45, 45, 0.9) !important;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
@@ -374,18 +381,18 @@ const formatDate = (dateString: string) => {
           color: #f0f0f0 !important;
         }
       }
-      
+
       .post-item {
         border-bottom: 1px solid #444 !important;
-        
+
         .post-title {
           color: #e0e0e0 !important;
-          
+
           &:hover {
             color: #64a5e5 !important;
           }
         }
-        
+
         .post-date {
           color: #aaa !important;
         }
@@ -400,13 +407,13 @@ const formatDate = (dateString: string) => {
       &:hover {
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
       }
-      
+
       .hot_tags_title {
         h2 {
           color: #f0f0f0 !important;
         }
       }
-      
+
       .tag-item {
         background-color: #3a3a3a !important;
         border-color: #555 !important;

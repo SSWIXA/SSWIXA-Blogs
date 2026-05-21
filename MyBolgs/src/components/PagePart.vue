@@ -1,5 +1,5 @@
 <template>
-  <div class="page_container">
+  <div class="page_container" @click="goToArticle">
     <div class="show_list_title">
       <h2>{{ title }}</h2>
     </div>
@@ -16,16 +16,29 @@
         <el-icon><Calendar /></el-icon>
         <span class="info-text">{{ formatDate(createdAt) }}</span>
       </div>
-      <div class="info-item">
-        <div class="like" @click="handleLike">{{ likes }}</div>
+      <div class="info-item like-item" @click.stop="handleLike">
+        <el-icon :class="{ 'liked': userLiked }"><Pointer /></el-icon>
+        <span class="info-text">{{ likes }}</span>
+      </div>
+      <div class="info-item dislike-item" @click.stop="handleDislike">
+        <el-icon :class="{ 'disliked': userDisliked }"><Minus /></el-icon>
+        <span class="info-text">{{ dislikes }}</span>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { View, Calendar } from '@element-plus/icons-vue'
+import { View, Calendar, Pointer, Minus } from '@element-plus/icons-vue'
 import axios from '@/axios/axios'
+import { useRouter } from 'vue-router'
+
+interface ArticleResponse {
+  likes: number
+  dislikes: number
+  [key: string]: any
+}
+
 const props = defineProps(['msg'])
 
 const title = ref<string>('')
@@ -37,60 +50,84 @@ const createdAt = ref<string>('')
 const articleId = ref<string>('')
 const userLiked = ref<boolean>(false)
 const userDisliked = ref<boolean>(false)
+const router = useRouter()
+
+// 跳转到文章详情页
+const goToArticle = () => {
+  router.push(`/article/${articleId.value}`)
+}
 
 // 处理点赞
 const handleLike = async () => {
-  // 如果用户已经点踩，则先取消点踩
-  if (userDisliked.value) {
-    await handleDislike()
-  }
-
-  // 如果用户已经点赞，则取消点赞；否则点赞
   try {
     if (userLiked.value) {
-      // 这里可以实现取消点赞的逻辑，但根据需求我们暂时不实现
-      return
+      // 用户已经点赞，执行取消点赞
+      const response = await axios.delete(`/articles/${articleId.value}/like`) as ArticleResponse
+      console.log('取消点赞响应:', response)
+      likes.value = response?.likes ?? likes.value - 1
+      userLiked.value = false
     } else {
-      const response = await axios.post(`/articles/${articleId.value}/like`)
-      likes.value = response.data.likes
+      // 用户未点赞，执行点赞
+      const response = await axios.put(`/articles/${articleId.value}/like`) as ArticleResponse
+      console.log('点赞响应:', response)
+      likes.value = response?.likes ?? likes.value + 1
       userLiked.value = true
+
+      // 如果用户之前点过踩，需要同时取消点踩状态
+      if (userDisliked.value) {
+        const responseDislike = await axios.delete(`/articles/${articleId.value}/dislike`) as ArticleResponse
+        dislikes.value = responseDislike?.dislikes ?? dislikes.value - 1
+        userDisliked.value = false
+      }
     }
+    console.log('更新后的likes:', likes.value)
   } catch (error) {
-    console.error('点赞失败:', error)
+    console.error('点赞操作失败:', error)
   }
 }
 
 // 处理点踩
 const handleDislike = async () => {
-  // 如果用户已经点赞，则先取消点赞
-  if (userLiked.value) {
-    await handleLike()
-  }
-
-  // 如果用户已经点踩，则取消点踩；否则点踩
   try {
     if (userDisliked.value) {
-      // 这里可以实现取消点踩的逻辑，但根据需求我们暂时不实现
-      return
+      // 用户已经点踩，执行取消点踩
+      const response = await axios.delete(`/articles/${articleId.value}/dislike`) as ArticleResponse
+      dislikes.value = response?.dislikes || dislikes.value
+      userDisliked.value = false
     } else {
-      const response = await axios.post(`/articles/${articleId.value}/dislike`)
-      dislikes.value = response.data.dislikes
+      // 用户未点赞，执行点踩
+      const response = await axios.put(`/articles/${articleId.value}/dislike`) as ArticleResponse
+      dislikes.value = response?.dislikes || dislikes.value
       userDisliked.value = true
+
+      // 如果用户之前点过赞，需要同时取消点赞状态
+      if (userLiked.value) {
+        const responseLike = await axios.delete(`/articles/${articleId.value}/like`) as ArticleResponse
+        likes.value = responseLike?.likes || likes.value
+        userLiked.value = false
+      }
     }
   } catch (error) {
-    console.error('点踩失败:', error)
+    console.error('点踩操作失败:', error)
   }
 }
 
 onMounted(async () => {
   title.value = props.msg.title
-  content.value = props.msg.content || ''
+  // 从contentBlocks中提取文本内容作为预览
+  if (props.msg.contentBlocks && props.msg.contentBlocks.length > 0) {
+    const paragraphs = props.msg.contentBlocks
+      .filter((block: any) => block.type === 'paragraph')
+      .map((block: any) => block.data)
+      .join(' ')
+    content.value = paragraphs
+  }
   views.value = props.msg.views || 0
   // 从数据库获取最新的likes和dislikes数据
   try {
-    const response = await axios.get(`/articles/${props.msg._id}`)
-    likes.value = response.data.likes || 0
-    dislikes.value = response.data.dislikes || 0
+    const article = await axios.get(`/articles/${props.msg._id}`) as ArticleResponse
+    likes.value = article?.likes ?? 0
+    dislikes.value = article?.dislikes ?? 0
   } catch (error) {
     // 如果获取失败，则使用props中的数据
     likes.value = props.msg.likes || 0
@@ -131,6 +168,7 @@ const formatDate = (dateString: string) => {
     transform 0.3s ease,
     box-shadow 0.3s ease;
   overflow: hidden;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-3px);
@@ -184,38 +222,21 @@ const formatDate = (dateString: string) => {
         font-size: 0.9rem;
         color: #999;
       }
+    }
 
-      .like,
-      .dislike {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        color: #888;
-        &:hover {
-          cursor: pointer;
-        }
+    .like-item {
+      cursor: pointer;
+
+      .liked {
+        color: #409eff;
       }
+    }
 
-      .like {
-        &::before {
-          content: '';
-          background-image: url('@/assets/good.png');
-          width: 20px;
-          height: 20px;
-          background-size: cover;
-          display: inline-block;
-        }
-      }
+    .dislike-item {
+      cursor: pointer;
 
-      .dislike {
-        &::before {
-          content: '';
-          background-image: url('@/assets/bad.png');
-          width: 20px;
-          height: 20px;
-          background-size: cover;
-          display: inline-block;
-        }
+      .disliked {
+        color: #f56c6c;
       }
     }
   }
@@ -257,9 +278,16 @@ const formatDate = (dateString: string) => {
           color: #aaa !important;
         }
 
-        .like,
-        .dislike {
-          color: #aaa !important;
+        .like-item {
+          .liked {
+            color: #409eff !important;
+          }
+        }
+
+        .dislike-item {
+          .disliked {
+            color: #f56c6c !important;
+          }
         }
       }
     }

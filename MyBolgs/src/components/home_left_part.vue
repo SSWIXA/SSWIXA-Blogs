@@ -1,7 +1,7 @@
 <template>
   <div class="showlist">
     <div class="list" v-if="showList">
-      <PagePart v-for="item in itemMessage" :key="item.title" :msg="item" />
+      <PagePart v-for="item in itemMessage" :key="item._id" :msg="item" />
     </div>
     <div class="list" v-else></div>
   </div>
@@ -12,8 +12,19 @@ import { ref, onMounted } from 'vue'
 import PagePart from '@/components/PagePart.vue'
 import { getAllArticles } from '@/api/articleService'
 
+interface Article {
+  _id: string
+  title: string
+  contentBlocks?: any[]
+  views: number
+  likes: number
+  dislikes: number
+  createdAt: string
+  [key: string]: any
+}
+
 const showList = ref(false)
-const itemMessage = ref<any[]>([])
+const itemMessage = ref<Article[]>([])
 
 onMounted(() => {
   getData()
@@ -21,7 +32,7 @@ onMounted(() => {
 
 async function getData() {
   try {
-    const data = await getAllArticles()
+    const data = await getAllArticles() as unknown as Article[]
     itemMessage.value = data
     showList.value = true
     console.log('itemMessage', itemMessage.value)

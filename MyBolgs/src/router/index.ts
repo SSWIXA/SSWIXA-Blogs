@@ -1,7 +1,9 @@
-import { createRouter, createWebHashHistory,  } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '@/views/homeView.vue'
 import Note from '@/views/mainContent.vue'
 import Navigation from '@/views/Navigation.vue'
+import Admin from '@/views/Admin.vue'
+import ArticleDetail from '@/views/ArticleDetail.vue'
 
 // 路由配置
 const routes: Array<any> = [
@@ -24,6 +26,15 @@ const routes: Array<any> = [
   {
     path: '/Navigation',
     component: Navigation
+  },
+  {
+    path: '/admin',
+    component: Admin
+  },
+  {
+    path: '/article/:id',
+    component: ArticleDetail,
+    props: true
   }
   // {
   //   path: '/dist',

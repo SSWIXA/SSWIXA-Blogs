@@ -2,8 +2,11 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    // 简化连接字符串，移除已弃用的选项
-    const conn = await mongoose.connect('mongodb://127.0.0.1:27017/blog');
+    // 添加选项以消除弃用警告
+    const conn = await mongoose.connect('mongodb://127.0.0.1:27017/blog', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Error: ${error.message}`);

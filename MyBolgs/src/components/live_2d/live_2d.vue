@@ -89,12 +89,52 @@ const switchModel = (direction: string) => {
 
 <style scoped lang="scss">
 .live_2d_container {
-  z-index: 10;
+  z-index: 9999;
   position: fixed;
-  left: 0;
+  left: 20px;
   bottom: 0;
-  transform: scale(0.5, 0.5);
+  transform: scale(0.4, 0.4);
   transform-origin: left bottom;
+  
+  // 响应式调整，在小屏幕上缩小模型
+  @media screen and (max-width: 1200px) {
+    transform: scale(0.35, 0.35);
+  }
+  
+  @media screen and (max-width: 992px) {
+    transform: scale(0.3, 0.3);
+  }
+  
+  @media screen and (max-width: 768px) {
+    left: 10px;
+    transform: scale(0.25, 0.25);
+  }
+
+  // 在有侧边栏的页面增加左边距，避免重叠
+  :global(.home_page_content) + & {
+    left: max(20px, calc(50vw - 550px + 20px)); // 居中宽度的一半加上左侧间距
+    
+    @media screen and (max-width: 1100px) {
+      left: 20px;
+    }
+    
+    @media screen and (max-width: 850px) {
+      left: 10px;
+    }
+  }
+
+  // 在文章详情页也适配位置
+  :global(.article-detail-page) + & {
+    left: max(20px, calc(50vw - 550px + 20px));
+    
+    @media screen and (max-width: 1100px) {
+      left: 20px;
+    }
+    
+    @media screen and (max-width: 850px) {
+      left: 10px;
+    }
+  }
 
   .model-switcher {
     position: absolute;

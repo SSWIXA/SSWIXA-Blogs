@@ -299,11 +299,13 @@ onMounted(() => {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     border: none;
     margin-top: 8px;
+    background-color: #ffffff;
   }
 
   ::v-deep .el-dropdown-menu__item {
     padding: 10px 20px;
     transition: all 0.2s ease;
+    color: #606266;
 
     &:not(.is-disabled) {
       &:focus {
@@ -330,37 +332,67 @@ onMounted(() => {
   }
 }
 
+// 全局暗黑模式下拉菜单样式（不使用scoped）
+:global(.dark-mode) .drop_menu ::v-deep .el-dropdown-menu {
+  background-color: #2d2d2d !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+
+  .el-dropdown-menu__item {
+    color: #e0e0e0 !important;
+
+    &:not(.is-disabled) {
+      &:focus {
+        background-color: #3a3a3a !important;
+        color: #e0e0e0 !important;
+      }
+    }
+
+    &:hover {
+      background-color: #3a3a3a !important;
+      color: #64a5e5 !important;
+    }
+
+    .secondTxt {
+      color: #e0e0e0 !important;
+
+      &:hover {
+        color: #64a5e5 !important;
+      }
+    }
+  }
+}
+
 // 暗黑模式下拉菜单样式
 .dark-mode {
   ::v-deep .drop_menu {
     background-color: #2d2d2d !important;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
-    
+
     .el-dropdown-menu__item {
       color: #e0e0e0 !important;
-      
+
       &:not(.is-disabled) {
         &:focus {
           background-color: #3a3a3a !important;
           color: #e0e0e0 !important;
         }
       }
-      
+
       &:hover {
         background-color: #3a3a3a !important;
         color: #64a5e5 !important;
       }
-      
+
       .secondTxt {
         color: #e0e0e0 !important;
-        
+
         &:hover {
           color: #64a5e5 !important;
         }
       }
     }
   }
-  
+
   .iconSpan_item {
     &:hover {
       background-color: rgba(255, 255, 255, 0.1) !important;

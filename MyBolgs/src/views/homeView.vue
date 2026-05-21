@@ -1,5 +1,10 @@
 <template>
   <div class="blur_mask" :class="{ 'dark-mode': isDarkMode }">
+    <!-- 添加到Admin页面的链接 -->
+    <div class="admin-link" @click="$router.push('/admin')">
+      <el-button type="primary" size="small" round>博客管理</el-button>
+    </div>
+
     <div class="swiper-container">
       <swiper
         :style="{
@@ -87,7 +92,6 @@ import th0 from '$/images/th0.jpg'
 import th1 from '$/images/th1.jpg'
 import th2 from '$/images/th2.jpg'
 import th3 from '$/images/th3.jpg'
-
 
 // 添加暗黑模式状态
 const isDarkMode = ref(false)
@@ -244,6 +248,14 @@ watch(opacity, (oldval: any, newval: any) => {
 </script>
 
 <style scoped lang="scss">
+// 添加Admin链接样式
+.admin-link {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
 .blur_mask {
   backdrop-filter: blur(150px);
 
@@ -274,11 +286,11 @@ watch(opacity, (oldval: any, newval: any) => {
         float: right;
         background: rgba(135, 206, 250, 0.7);
       }
-      
+
       ::v-deep .swiper-pagination-bullet-active {
         background: rgba(135, 206, 250, 1);
       }
-      
+
       .parallax-bg {
         position: absolute;
         left: 0;
@@ -330,7 +342,7 @@ watch(opacity, (oldval: any, newval: any) => {
       justify-content: center;
       z-index: 10;
       cursor: pointer;
-      
+
       svg {
         fill: rgba(135, 206, 250, 0.8);
         filter: drop-shadow(0px 0px 5px rgba(135, 206, 250, 0.5));
@@ -345,17 +357,17 @@ watch(opacity, (oldval: any, newval: any) => {
 .dark-mode {
   .blur_mask {
     backdrop-filter: blur(150px);
-    
+
     .swiper-slide {
       color: #e0e0e0 !important;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
     }
-    
+
     .home_page_content {
       .main_left {
         // 可以在这里添加暗黑模式下左侧内容的样式
       }
-      
+
       .main_right {
         // 可以在这里添加暗黑模式下右侧内容的样式
       }

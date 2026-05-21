@@ -8,23 +8,13 @@
 
       <div class="navigation-grid">
         <!-- 动态渲染导航卡片 -->
-        <el-card 
-          v-for="item in navigationItems" 
-          :key="item.title" 
-          class="nav-card" 
-          shadow="hover"
-        >
+        <el-card v-for="item in navigationItems" :key="item.title" class="nav-card" shadow="hover">
           <div class="card-content" @click="$router.push(item.route)">
             <div class="card-icon">{{ item.icon }}</div>
             <h3 class="card-title">{{ item.title }}</h3>
             <p class="card-description">{{ item.description }}</p>
             <div v-if="item.tags && item.tags.length" class="card-tags">
-              <el-tag 
-                v-for="tag in item.tags" 
-                :key="tag.text"
-                size="small" 
-                :type="tag.type"
-              >
+              <el-tag v-for="tag in item.tags" :key="tag.text" size="small" :type="tag.type">
                 {{ tag.text }}
               </el-tag>
             </div>
@@ -35,10 +25,10 @@
       <div class="featured-section">
         <h2 class="section-title">特色内容</h2>
         <div class="featured-grid">
-          <el-card 
-            v-for="feature in featuredItems" 
+          <el-card
+            v-for="feature in featuredItems"
             :key="feature.title"
-            class="featured-card" 
+            class="featured-card"
             shadow="never"
           >
             <div class="featured-content">

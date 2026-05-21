@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, onUnmounted } from 'vue'
 import MONKEY from '@/components/Sakura/monkey.js'
 
 const sakuraImages1 = Object.entries(
@@ -27,6 +27,25 @@ const sakuraImages6 = Object.entries(
 ).map(([, module]) => module.default)
 
 let canvas_sakura = ref(null)
+let sakuraInstance = null
+
+// 添加resize处理函数
+const handleResize = () => {
+  if (canvas_sakura.value && sakuraInstance) {
+    // 更新canvas尺寸
+    canvas_sakura.value.width = window.innerWidth
+    canvas_sakura.value.height = window.innerHeight
+    canvas_sakura.value.style.width = window.innerWidth + 'px'
+    canvas_sakura.value.style.height = window.innerHeight + 'px'
+
+    // 更新Renderer的backBuffer和canvas尺寸
+    if (sakuraInstance.render) {
+      sakuraInstance.render.changeWidth(window.innerWidth)
+      sakuraInstance.render.changeHeight(window.innerHeight)
+    }
+  }
+}
+
 class Sakura {
   constructor(cvs, nums = 50, w = 1024, h = 768) {
     this.flowerfps = 1
@@ -172,11 +191,22 @@ class Sakura {
 }
 
 onMounted(() => {
+  // 初始化canvas尺寸
   canvas_sakura.value.width = window.innerWidth
   canvas_sakura.value.height = window.innerHeight
   canvas_sakura.value.style.width = window.innerWidth + 'px'
   canvas_sakura.value.style.height = window.innerHeight + 'px'
-  new Sakura(canvas_sakura.value, 50, 1024, 768)
+  
+  // 创建Sakura实例
+  sakuraInstance = new Sakura(canvas_sakura.value, 50, 1024, 768)
+  
+  // 添加窗口resize事件监听器
+  window.addEventListener('resize', handleResize)
+})
+
+// 组件卸载时移除事件监听器
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 
