@@ -391,11 +391,11 @@ const submitArticle = async () => {
       let response
       if (isEditMode.value) {
         // 更新文章
-        response = await axios.put(`/api/articles/${articleForm.id}`, articleForm)
+        response = await axios.put(`/articles/${articleForm.id}`, articleForm)
         ElMessage.success('文章更新成功!')
       } else {
         // 创建新文章
-        response = await axios.post('/api/articles', articleForm)
+        response = await axios.post('/articles', articleForm)
         ElMessage.success('文章发布成功!')
       }
 
@@ -428,7 +428,7 @@ const resetForm = () => {
 // 加载文章数据（编辑模式）
 const loadArticleData = async (id) => {
   try {
-    const response = await axios.get(`/api/articles/${id}`)
+    const response = await axios.get(`/articles/${id}`)
     const article = response.data
 
     articleForm.id = article._id

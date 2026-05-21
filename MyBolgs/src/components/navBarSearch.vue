@@ -7,17 +7,25 @@
       placeholder="搜索"
       :prefix-icon="Search"
       class="searchBar"
+      @keyup.enter="handleSearch"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
-const input1 = ref('')
 
-let warpper = ref<HTMLCollection | null>(null)
-onMounted(() => {})
+const input1 = ref('')
+const router = useRouter()
+
+const handleSearch = () => {
+  const keyword = input1.value.trim()
+  if (keyword) {
+    router.push({ path: '/search', query: { keyword } })
+  }
+}
 </script>
 
 <style scoped lang="scss">

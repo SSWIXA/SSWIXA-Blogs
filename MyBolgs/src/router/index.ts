@@ -4,6 +4,7 @@ import Note from '@/views/mainContent.vue'
 import Navigation from '@/views/Navigation.vue'
 import Admin from '@/views/Admin.vue'
 import ArticleDetail from '@/views/ArticleDetail.vue'
+import SearchResults from '@/views/SearchResults.vue'
 
 // 路由配置
 const routes: Array<any> = [
@@ -35,6 +36,10 @@ const routes: Array<any> = [
     path: '/article/:id',
     component: ArticleDetail,
     props: true
+  },
+  {
+    path: '/search',
+    component: SearchResults
   }
   // {
   //   path: '/dist',

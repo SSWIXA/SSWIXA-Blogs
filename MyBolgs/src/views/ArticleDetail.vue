@@ -106,7 +106,7 @@ const handleDislike = () => {
 
 const fetchArticle = async () => {
   try {
-    const response = await axios.get(`/api/articles/${route.params.id}`)
+    const response = await axios.get(`/articles/${route.params.id}`)
     article.value = response.data
 
     // 增加浏览量
