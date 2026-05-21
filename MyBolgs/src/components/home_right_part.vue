@@ -11,16 +11,16 @@
         <p class="bio">前端开发工程师 | 技术爱好者</p>
         <div class="stats">
           <div class="stat-item">
-            <el-text class="stat-number">25</el-text>
+            <el-text class="stat-number">{{ totalArticles }}</el-text>
             <el-text class="stat-label">文章</el-text>
           </div>
           <div class="stat-item">
-            <el-text class="stat-number">0.2k</el-text>
-            <el-text class="stat-label">粉丝</el-text>
+            <el-text class="stat-number">{{ formatViews(totalViews) }}</el-text>
+            <el-text class="stat-label">浏览</el-text>
           </div>
           <div class="stat-item">
-            <el-text class="stat-number">15</el-text>
-            <el-text class="stat-label">标签</el-text>
+            <el-text class="stat-number">{{ totalLikes }}</el-text>
+            <el-text class="stat-label">点赞</el-text>
           </div>
         </div>
       </div>
@@ -32,7 +32,12 @@
       </div>
       <el-divider class="divider"></el-divider>
       <div class="post-list">
-        <div class="post-item" v-for="post in recentPosts" :key="post.title">
+        <div
+          class="post-item"
+          v-for="post in recentPosts"
+          :key="post._id"
+          @click="$router.push(`/article/${post._id}`)"
+        >
           <div class="post-title">{{ post.title }}</div>
           <div class="post-date">{{ formatDate(post.date) }}</div>
         </div>
@@ -77,51 +82,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getAllArticles, getArticleStats } from '@/api/articleService'
 
-// 个人标签数据
-const tags = ref([
-  'Vue.js',
-  'React',
-  'JavaScript',
-  'TypeScript',
-  'Node.js',
-  'CSS',
-  'HTML',
-  'Webpack',
-  'Vite',
-  'Git',
-  'MongoDB',
-  'Express',
-  '前端框架',
-  '性能优化',
-  '工程化',
-  '响应式设计'
-])
+const totalArticles = ref(0)
+const totalViews = ref(0)
+const totalLikes = ref(0)
 
-// 最近文章数据
-const recentPosts = ref([
-  {
-    title: 'Vue.js 入门指南',
-    date: '2023-10-15'
-  },
-  {
-    title: 'React Hooks 完全指南',
-    date: '2023-10-10'
-  },
-  {
-    title: 'TypeScript 入门教程',
-    date: '2023-10-05'
-  },
-  {
-    title: 'CSS Grid 布局详解',
-    date: '2023-09-28'
-  },
-  {
-    title: '前端性能优化技巧',
-    date: '2023-09-20'
+// 最近文章（真实数据）
+interface RecentPost {
+  title: string
+  date: string
+  _id: string
+}
+const recentPosts = ref<RecentPost[]>([])
+
+// 热门标签（从真实文章中聚合）
+const tags = ref<string[]>([])
+
+onMounted(async () => {
+  // 获取统计信息
+  try {
+    const stats: any = await getArticleStats()
+    totalArticles.value = stats.totalArticles || 0
+    totalViews.value = stats.totalViews || 0
+    totalLikes.value = stats.totalLikes || 0
+  } catch (err) {
+    console.error('获取统计信息失败:', err)
   }
-])
+
+  // 获取最近文章
+  try {
+    const articles: any = await getAllArticles()
+    const latest = articles.slice(0, 5)
+    recentPosts.value = latest.map((a: any) => ({
+      title: a.title,
+      date: a.createdAt,
+      _id: a._id
+    }))
+    // 聚合所有标签
+    const allTags = new Set<string>()
+    articles.forEach((a: any) => {
+      if (a.tags && Array.isArray(a.tags)) {
+        a.tags.forEach((t: string) => allTags.add(t))
+      }
+    })
+    tags.value = Array.from(allTags)
+  } catch (err) {
+    console.error('获取文章列表失败:', err)
+  }
+})
 
 // 标签类型（颜色）
 const getTagType = (tag: string) => {
@@ -141,6 +151,13 @@ const getTagType = (tag: string) => {
   }
 
   return typeMap[tag] || ''
+}
+
+// 格式化浏览量
+const formatViews = (count: number) => {
+  if (count >= 10000) return (count / 1000).toFixed(1) + 'k'
+  if (count >= 1000) return (count / 1000).toFixed(1) + 'k'
+  return count.toString()
 }
 
 // 格式化日期

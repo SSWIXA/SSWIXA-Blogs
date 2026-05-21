@@ -429,7 +429,7 @@ const resetForm = () => {
 const loadArticleData = async (id) => {
   try {
     const response = await axios.get(`/articles/${id}`)
-    const article = response.data
+    const article = response
 
     articleForm.id = article._id
     articleForm.title = article.title

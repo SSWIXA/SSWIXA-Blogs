@@ -703,6 +703,367 @@ git branch -d feature/new-feature`
     tags: ["Webpack", "构建工具", "前端工程化"],
     likes: 0,
     dislikes: 0
+  },
+  {
+    id: 13,
+    title: "Python 数据处理入门",
+    author: "博主",
+    category: "编程语言",
+    summary: "Python 是数据科学领域最流行的语言之一。本文将介绍使用 Python 进行数据处理的基本方法，包括 Pandas 和 NumPy 的使用。",
+    contentBlocks: [
+      {
+        type: "heading",
+        level: 1,
+        data: "Python 数据处理入门"
+      },
+      {
+        type: "paragraph",
+        data: "Python 因其简洁的语法和强大的数据处理库，成为了数据科学家和工程师的首选语言。今天，我们来学习两个核心库：Pandas 和 NumPy。"
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "Pandas 基础操作"
+      },
+      {
+        type: "code",
+        language: "python",
+        data: `import pandas as pd
+
+# 读取 CSV 文件
+df = pd.read_csv('data.csv')
+
+# 查看前5行
+print(df.head())
+
+# 基本统计信息
+print(df.describe())
+
+# 筛选数据
+filtered = df[df['score'] > 80]
+print(filtered)`
+      }
+    ],
+    views: 85,
+    tags: ["Python", "数据处理", "Pandas"],
+    likes: 5,
+    dislikes: 0
+  },
+  {
+    id: 14,
+    title: "Linux 常用命令速查",
+    author: "博主",
+    category: "运维",
+    summary: "Linux 是服务器端最常用操作系统。本文整理了日常开发中最常用的 Linux 命令，帮助你快速上手命令行操作。",
+    contentBlocks: [
+      {
+        type: "heading",
+        level: 1,
+        data: "Linux 常用命令速查"
+      },
+      {
+        type: "paragraph",
+        data: "无论你是后端开发、运维还是全栈工程师，Linux 命令行都是必须掌握的技能。以下是我整理的常用命令，建议收藏。"
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "文件和目录操作"
+      },
+      {
+        type: "code",
+        language: "bash",
+        data: `# 列出文件
+ls -la
+
+# 创建目录
+mkdir my-project
+
+# 复制文件
+cp source.txt dest.txt
+
+# 移动/重命名
+mv oldname.txt newname.txt
+
+# 删除文件（慎用！）
+rm -rf unused-folder/`
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "进程和系统管理"
+      },
+      {
+        type: "code",
+        language: "bash",
+        data: `# 查看所有进程
+ps aux
+
+# 实时系统监控
+htop
+
+# 查看内存使用
+free -h
+
+# 查看磁盘空间
+df -h`
+      }
+    ],
+    views: 120,
+    tags: ["Linux", "运维", "Shell"],
+    likes: 8,
+    dislikes: 0
+  },
+  {
+    id: 15,
+    title: "ES6+ 常用新特性总结",
+    author: "博主",
+    category: "前端开发",
+    summary: "ES6（ECMAScript 2015）为 JavaScript 带来了革命性的变化。本文将总结日常开发中最常用的 ES6+ 特性。",
+    contentBlocks: [
+      {
+        type: "heading",
+        level: 1,
+        data: "ES6+ 常用新特性总结"
+      },
+      {
+        type: "paragraph",
+        data: "ES6 是 JavaScript 发展史上的一个重要里程碑。箭头函数、解构赋值、Promise、模块化等特性，让 JavaScript 从一个简陋的脚本语言进化成了现代化编程语言。"
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "箭头函数"
+      },
+      {
+        type: "code",
+        language: "javascript",
+        data: `// 传统函数
+const add = function(a, b) {
+  return a + b;
+};
+
+// 箭头函数（更简洁）
+const add = (a, b) => a + b;
+
+// 箭头函数没有自己的 this
+const obj = {
+  name: 'ES6',
+  greet: function() {
+    setTimeout(() => {
+      console.log(this.name); // 正确输出 'ES6'
+    }, 1000);
+  }
+};`
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "解构赋值"
+      },
+      {
+        type: "code",
+        language: "javascript",
+        data: `// 数组解构
+const [first, second, ...rest] = [1, 2, 3, 4, 5];
+console.log(first, second, rest); // 1 2 [3, 4, 5]
+
+// 对象解构
+const { name, age, city = '未知' } = user;
+console.log(name, age, city);`
+      }
+    ],
+    views: 96,
+    tags: ["JavaScript", "ES6", "前端开发"],
+    likes: 12,
+    dislikes: 0
+  },
+  {
+    id: 16,
+    title: "什么是 CI/CD 持续集成",
+    author: "博主",
+    category: "运维",
+    summary: "CI/CD 是现代软件开发中不可或缺的一环。本文将带你了解 CI/CD 的概念、流程以及如何使用 GitHub Actions 搭建持续集成流水线。",
+    contentBlocks: [
+      {
+        type: "heading",
+        level: 1,
+        data: "什么是 CI/CD 持续集成"
+      },
+      {
+        type: "paragraph",
+        data: "CI/CD 是持续集成（Continuous Integration）和持续部署（Continuous Deployment）的缩写，是现代软件开发的核心实践。"
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "CI/CD 工作流程"
+      },
+      {
+        type: "list",
+        style: "ordered",
+        items: [
+          "开发者提交代码到 Git 仓库",
+          "CI 系统自动触发构建和测试",
+          "如果测试通过，自动部署到测试环境",
+          "审核通过后，自动部署到生产环境"
+        ]
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "GitHub Actions 示例"
+      },
+      {
+        type: "code",
+        language: "yaml",
+        data: `name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test
+      - run: npm run build`
+      }
+    ],
+    views: 67,
+    tags: ["CI/CD", "DevOps", "GitHub Actions"],
+    likes: 6,
+    dislikes: 0
+  },
+  {
+    id: 17,
+    title: "正则表达式完全指南",
+    author: "博主",
+    category: "编程语言",
+    summary: "正则表达式是处理文本的强大工具。本文将带你从零开始学习正则表达式，包括基础语法、常用模式和实战案例。",
+    contentBlocks: [
+      {
+        type: "heading",
+        level: 1,
+        data: "正则表达式完全指南"
+      },
+      {
+        type: "paragraph",
+        data: "正则表达式（Regular Expression）是一种模式匹配工具，几乎所有编程语言都支持它。掌握正则表达式，能让你的文本处理效率提升十倍。"
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "基础元字符"
+      },
+      {
+        type: "list",
+        style: "unordered",
+        items: [
+          ". 匹配任意单个字符（除换行符）",
+          "^ 匹配字符串开头",
+          "$ 匹配字符串结尾",
+          "* 匹配前一个字符 0 次或多次",
+          "+ 匹配前一个字符 1 次或多次",
+          "? 匹配前一个字符 0 次或 1 次",
+          "\\d 匹配数字",
+          "\\w 匹配字母、数字或下划线",
+          "\\s 匹配空白字符"
+        ]
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "实战案例"
+      },
+      {
+        type: "code",
+        language: "javascript",
+        data: `// 验证邮箱
+const emailRegex = /^[\\w.-]+@[\\w.-]+\\.\\w+$/;
+
+// 提取 URL
+const urlRegex = /https?:\\/\\/[^\\s]+/g;
+
+// 匹配手机号（中国）
+const phoneRegex = /^1[3-9]\\d{9}$/;
+
+// 替换敏感词
+const text = "联系电话：13800138000";
+const masked = text.replace(/(\\d{3})\\d{4}(\\d{4})/, '$1****$2');
+console.log(masked); // 138****8000`
+      }
+    ],
+    views: 74,
+    tags: ["正则表达式", "编程语言", "JavaScript"],
+    likes: 9,
+    dislikes: 0
+  },
+  {
+    id: 18,
+    title: "API 接口安全防护策略",
+    author: "博主",
+    category: "后端开发",
+    summary: "API 安全是后端开发中不可忽视的一部分。本文将介绍常见的 API 安全防护措施，包括限流、防 SQL 注入、XSS 防护等。",
+    contentBlocks: [
+      {
+        type: "heading",
+        level: 1,
+        data: "API 接口安全防护策略"
+      },
+      {
+        type: "paragraph",
+        data: "随着前后端分离架构的普及，API 接口的安全性变得越来越重要。一个没有安全防护的 API，就像一扇没有锁的门。"
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "常见安全措施"
+      },
+      {
+        type: "list",
+        style: "unordered",
+        items: [
+          "JWT 认证：验证请求的合法性",
+          "CORS 白名单：限制跨域来源",
+          "接口限流：防止恶意请求刷接口",
+          "参数校验：使用 validator 库校验输入",
+          "SQL 注入防护：使用 ORM 参数化查询",
+          "XSS 防护：对输出内容进行转义",
+          "HTTPS 加密：防止中间人攻击"
+        ]
+      },
+      {
+        type: "heading",
+        level: 2,
+        data: "Express 限流示例"
+      },
+      {
+        type: "code",
+        language: "javascript",
+        data: `const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15分钟
+  max: 100, // 最多100个请求
+  message: '请求过于频繁，请稍后重试'
+});
+
+app.use('/api/', limiter);`
+      }
+    ],
+    views: 58,
+    tags: ["API", "安全", "后端开发"],
+    likes: 7,
+    dislikes: 0
   }
 ];
 

@@ -17,7 +17,6 @@
             :props="defaultProps"
             :filter-node-method="filterNode"
             @node-click="handleNodeClick"
-            allow-drag="false"
           />
         </el-scrollbar>
       </div>
@@ -320,7 +319,8 @@ $opcity: 0.7;
     min-width: 18rem;
     width: 18rem;
     height: 100vh;
-    background: linear-gradient(135deg, rgba(135, 206, 250, 0.1) 0%, rgba(135, 206, 250, 0.2) 100%);
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
     padding: 15px;
     border-radius: 15px;
     box-shadow:
@@ -380,12 +380,12 @@ $opcity: 0.7;
     .aside_tree {
       height: calc(100% - 70px);
       box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.5);
       border-radius: 12px;
       padding: 10px;
       box-shadow:
         inset 2px 2px 5px rgba(135, 206, 250, 0.1),
-        inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        inset -2px -2px 5px rgba(255, 255, 255, 0.6);
     }
 
     ::v-deep .el-tree {
@@ -451,6 +451,22 @@ $opcity: 0.7;
 .dark-mode {
   .el-aside {
     .aside_main {
+      background-color: rgba(40, 40, 40, 0.9) !important;
+      box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.05),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.1) !important;
+
+      .aside_tree {
+        background: rgba(45, 45, 45, 0.6) !important;
+        box-shadow:
+          inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+          inset -2px -2px 5px rgba(45, 45, 45, 0.4) !important;
+      }
+
+      ::v-deep .el-tree {
+        color: #e0e0e0 !important;
+      }
       .aside_title {
         .filter_input {
           ::v-deep .el-input__wrapper {
