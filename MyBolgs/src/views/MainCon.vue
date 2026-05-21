@@ -54,10 +54,10 @@
           <!-- 图片 -->
           <div v-else-if="block.type === 'image'" class="block-image">
             <img
-              :src="block.url"
+              :src="resolveImageUrl(block.url)"
               :alt="block.alt || ''"
               :title="block.title || ''"
-              @click="previewImage(block.url)"
+              @click="previewImage(resolveImageUrl(block.url))"
             />
             <p v-if="block.caption" class="image-caption">{{ block.caption }}</p>
           </div>
@@ -203,6 +203,13 @@ const renderMarkdownText = (content: string): string => {
 }
 
 // 图片预览
+// 解析图片 URL，相对路径补后端地址
+const resolveImageUrl = (url: string): string => {
+  if (!url) return ''
+  if (url.startsWith('http')) return url
+  return 'http://localhost:5000' + url
+}
+
 const previewImage = (url: string) => {
   previewImageUrl.value = url
   imagePreviewVisible.value = true

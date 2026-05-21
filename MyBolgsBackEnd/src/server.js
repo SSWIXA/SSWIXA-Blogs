@@ -1,9 +1,14 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import v1Routes from './routes/v1/index.js';
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 創建Express應用
 const app = express();
@@ -17,6 +22,9 @@ app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:3000'], // 前端地址
   credentials: true
 }));
+
+// 靜態文件服務（上傳的圖片可通過 /uploads/xxx.png 訪問）
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // 忽略 favicon.ico 請求
 app.get('/favicon.ico', (req, res) => res.status(204).end());

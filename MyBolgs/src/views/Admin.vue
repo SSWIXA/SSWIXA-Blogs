@@ -155,7 +155,25 @@
 
                   <!-- 图片 -->
                   <div v-else-if="block.type === 'image'">
-                    <el-input v-model="block.url" placeholder="请输入图片URL" />
+                    <el-upload
+                      :action="uploadUrl"
+                      :headers="uploadHeaders"
+                      :show-file-list="false"
+                      :on-success="(res) => { block.url = res.data.url; ElMessage.success('上传成功') }"
+                      :on-error="() => ElMessage.error('上传失败')"
+                      :before-upload="beforeUpload"
+                      accept="image/*"
+                    >
+                      <el-button type="primary" size="small">选择图片上传</el-button>
+                    </el-upload>
+                    <div v-if="block.url" class="upload-preview">
+                      <img :src="'http://localhost:5000' + block.url" alt="预览" />
+                    </div>
+                    <el-input
+                      v-model="block.url"
+                      placeholder="或手动输入图片URL"
+                      style="margin-top: 10px"
+                    />
                     <el-input
                       v-model="block.alt"
                       placeholder="请输入图片ALT描述"
@@ -247,6 +265,24 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from '@/axios/axios.ts'
 import { useRouter, useRoute } from 'vue-router'
+
+// 上传配置
+const uploadUrl = 'http://localhost:5000/api/v1/upload'
+const uploadHeaders = { Authorization: 'Bearer ' + (localStorage.getItem('token') || '') }
+
+const beforeUpload = (file) => {
+  const isImage = file.type.startsWith('image/')
+  const isLt5M = file.size / 1024 / 1024 < 5
+  if (!isImage) {
+    ElMessage.error('只能上传图片文件')
+    return false
+  }
+  if (!isLt5M) {
+    ElMessage.error('图片大小不能超过 5MB')
+    return false
+  }
+  return true
+}
 
 // 表单引用
 const articleFormRef = ref()
@@ -540,6 +576,17 @@ onMounted(() => {
 
 .code-input {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.upload-preview {
+  margin-top: 10px;
+
+  img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+  }
 }
 
 // 暗黑模式适配

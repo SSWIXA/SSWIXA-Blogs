@@ -25,15 +25,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeMount, watch, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick, watch } from 'vue'
 import { ElTree } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import router from '@/router'
+import { getAllArticles } from '@/api/articleService'
 
 interface Tree {
   label: string
   children?: Tree[]
   route?: string
+  isCategory?: boolean
 }
 
 const defaultProps = {
@@ -41,233 +43,71 @@ const defaultProps = {
   label: 'label'
 }
 
-const asideServerTree = [
-  {
-    label: 'Python',
-    children: [
-      {
-        label: 'Flask',
-        children: []
-      },
-      {
-        label: 'Django',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'PHP',
-    children: [
-      {
-        label: 'Larval',
-        children: []
-      },
-      {
-        label: 'PHPExcel',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'NodeJS',
-    children: [
-      {
-        label: 'Node入门',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'Lua',
-    children: [
-      {
-        label: 'lua入门',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'MySQL',
-    children: [
-      {
-        label: 'sql命令',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'MongoDB',
-    children: [
-      {
-        label: 'mongoDB入门',
-        children: []
-      }
-    ]
-  }
-]
+const filterText = ref('')
+const treeRef = ref<InstanceType<typeof ElTree>>()
+const TreeData: Tree[] = reactive([])
 
-const asideWebTree = [
-  {
-    label: 'web技术',
-    children: [
-      {
-        label: 'javaScript',
-        children: []
-      },
-      {
-        label: 'typeScript',
-        children: []
-      },
-      {
-        label: 'HTML',
-        children: []
-      },
-      {
-        label: 'CSS',
-        children: []
-      },
-      {
-        label: 'H5Canvas',
-        children: []
-      },
-      {
-        label: 'Vue',
-        children: []
-      },
-      {
-        label: 'React',
-        children: []
-      },
-      {
-        label: 'Taro',
-        children: []
-      },
-      {
-        label: 'Uniapp',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'npm教程',
-    children: [
-      {
-        label: 'npm安装',
-        children: []
-      },
-      {
-        label: 'cnpm',
-        children: []
-      },
-      {
-        label: 'npm命令',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'git教程',
-    children: [
-      {
-        label: 'git安装',
-        children: []
-      },
-      {
-        label: 'git仓库',
-        children: []
-      },
-      {
-        label: 'git命令',
-        children: []
-      }
-    ]
-  },
-  {
-    label: 'markdown笔记',
-    children: [
-      {
-        label: 'markdown安装',
-        children: []
-      },
-      {
-        label: 'markown使用',
-        children: []
-      }
-    ]
-  },
-  {
-    label: '技术分享',
-    children: [
-      {
-        label: 'ElementPlus',
-        children: []
-      },
-      {
-        label: 'Antd Design',
-        children: []
-      },
-      {
-        label: 'Swiper',
-        children: []
-      },
-      {
-        label: 'E-charts',
-        children: []
-      },
-      {
-        label: 'monaco editor',
-        children: []
-      }
-    ]
-  }
-]
+// 从 API 获取文章并构建分类树
+const buildTreeData = async () => {
+  try {
+    const articles: any = await getAllArticles()
 
+    // 按分类分组
+    const categoryMap = new Map<string, Tree[]>()
+    articles.forEach((a: any) => {
+      const cat = a.category || '未分类'
+      if (!categoryMap.has(cat)) categoryMap.set(cat, [])
+      categoryMap.get(cat)!.push({
+        label: a.title,
+        route: `/article/${a._id}`,
+        children: []
+      })
+    })
+
+    // 构建树
+    TreeData.length = 0
+    categoryMap.forEach((children, category) => {
+      TreeData.push({
+        label: `${category} (${children.length})`,
+        children,
+        isCategory: true,
+        route: `/category/${encodeURIComponent(category)}`
+      })
+    })
+  } catch (err) {
+    console.error('构建侧边栏分类树失败:', err)
+  }
+}
+
+// 点击处理
 const handleNodeClick = (data: Tree) => {
-  if (data.route) console.log(data.route)
-  else {
+  if (data.route) {
+    router.push(data.route)
   }
 }
 
-const currentRoutePath: any = ref(router.currentRoute.value.path)
-const filterText = ref('') //过滤框
-const treeRef = ref<InstanceType<typeof ElTree>>() //响应式过滤文本
-let TreeData: Tree[] = reactive(
-  currentRoutePath.value == '/WebNote' ? asideWebTree : asideServerTree
-) //树状数据
-
-onBeforeMount(async () => {
-  currentRoutePath.value = router.currentRoute.value.path
-  hashChange()
-})
-
-const hashChange = async () => {
-  console.log(TreeData)
-  //给二级目录添加路由
-  setRoute(TreeData)
+// 过滤目录结构
+const filterNode = (value: string, data: Tree) => {
+  if (!value) return true
+  return data.label.includes(value)
 }
 
-//监听过滤框文本
+// 监听过滤文本
 watch(filterText, (val) => {
   treeRef.value!.filter(val)
 })
 
-watch(router.currentRoute, function (to, from) {
-  currentRoutePath.value = router.currentRoute.value.path
-  hashChange()
-})
-
-//自适应填充左侧树状栏
+// 自适应填充左侧树状栏
 let controlSize = (classname: string) => {
   let el: HTMLCollection | any = document.getElementsByClassName(classname)
   if (el[0]) {
-    // console.log(el[0], el[0].offsetHeight)
     let curHeight = parseInt(el[0].offsetHeight)
     el[0].style.height = curHeight - 100 + 'px'
   }
 }
 
 onMounted(() => {
-  //挂载时候的节点
+  buildTreeData()
   nextTick(() => {
     controlSize('aside_tree')
     window.addEventListener('resize', () => {
@@ -279,26 +119,6 @@ onMounted(() => {
     })
   })
 })
-
-//设置层级路由
-const setRoute = (data: Array<Tree>) => {
-  data.forEach((e: any) => {
-    if (e.children.length == 0) e.route = '/' + e.label
-    for (const key in e) {
-      if (Object.prototype.hasOwnProperty.call(e, key)) {
-        if (key === 'children' && e.children.length > 0) {
-          setRoute(e.children)
-        }
-      }
-    }
-  })
-}
-
-//过滤目录结构
-const filterNode = (value: string, data: Tree) => {
-  if (!value) return true
-  return data.label.includes(value)
-}
 </script>
 
 <style scoped lang="scss">

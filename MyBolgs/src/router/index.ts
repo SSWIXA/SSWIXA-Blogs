@@ -5,6 +5,7 @@ import Navigation from '@/views/Navigation.vue'
 import Admin from '@/views/Admin.vue'
 import ArticleDetail from '@/views/ArticleDetail.vue'
 import SearchResults from '@/views/SearchResults.vue'
+import CategoryView from '@/views/CategoryView.vue'
 
 // 路由配置
 const routes: Array<any> = [
@@ -40,6 +41,10 @@ const routes: Array<any> = [
   {
     path: '/search',
     component: SearchResults
+  },
+  {
+    path: '/category/:name',
+    component: CategoryView
   }
   // {
   //   path: '/dist',
