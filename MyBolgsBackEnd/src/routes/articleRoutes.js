@@ -11,63 +11,30 @@ import {
   toggleDislike,
   getArticleStats
 } from '../controllers/articleController.js';
+import { authMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-// ==================== 基礎 CRUD 操作 (RESTful) ====================
+// ==================== 公開接口（無需登錄）====================
 
-// 獲取所有文章列表
-// GET /api/articles
 router.get('/', getArticles);
-
-// 獲取文章統計信息
-// GET /api/articles/stats
 router.get('/stats', getArticleStats);
-
-// 根據標題搜索文章（支持模糊查詢）
-// GET /api/articles/search?title=關鍵詞
 router.get('/search', getArticlesByTitle);
-
-// 分頁獲取文章列表（標準查詢參數）
-// GET /api/articles?page=1&limit=10
 router.get('/paginated', getArticlesByPage);
-
-// 根據ID獲取單篇文章詳情
-// GET /api/articles/:id
 router.get('/:id', getArticleById);
 
-// 創建新文章
-// POST /api/articles
-router.post('/', createArticle);
+// ==================== 交互操作（無需登錄）====================
 
-// 更新文章（部分更新）
-// PATCH /api/articles/:id
-router.patch('/:id', updateArticle);
-
-// 完全更新文章
-// PUT /api/articles/:id
-router.put('/:id', updateArticle);
-
-// 刪除文章
-// DELETE /api/articles/:id
-router.delete('/:id', deleteArticle);
-
-// ==================== 交互操作 (RESTful 風格) ====================
-
-// 切換點贊狀態（點贊/取消點贊）
-// PUT /api/articles/:id/like
 router.put('/:id/like', toggleLike);
-
-// 取消點贊（專用）
-// DELETE /api/articles/:id/like
 router.delete('/:id/like', toggleLike);
-
-// 切換點踩狀態（點踩/取消點踩）
-// PUT /api/articles/:id/dislike
 router.put('/:id/dislike', toggleDislike);
-
-// 取消點踩（專用）
-// DELETE /api/articles/:id/dislike
 router.delete('/:id/dislike', toggleDislike);
+
+// ==================== 寫操作（需要登录）====================
+
+router.post('/', authMiddleware, createArticle);
+router.patch('/:id', authMiddleware, updateArticle);
+router.put('/:id', authMiddleware, updateArticle);
+router.delete('/:id', authMiddleware, deleteArticle);
 
 export default router;

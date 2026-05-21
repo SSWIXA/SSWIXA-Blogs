@@ -1,5 +1,44 @@
 <template>
   <div class="admin-container">
+    <!-- 文章列表 -->
+    <el-card class="admin-card" style="margin-bottom: 20px">
+      <template #header>
+        <div class="card-header">
+          <span>文章管理（共 {{ total }} 篇）</span>
+          <el-button type="primary" size="small" @click="resetForm">新建文章</el-button>
+        </div>
+      </template>
+      <el-table
+        :data="articles"
+        stripe
+        size="small"
+        @row-click="editArticle"
+        v-if="articles.length"
+      >
+        <el-table-column prop="title" label="标题" min-width="200" />
+        <el-table-column prop="category" label="分类" width="100" />
+        <el-table-column prop="views" label="浏览" width="70" />
+        <el-table-column prop="likes" label="点赞" width="70" />
+        <el-table-column label="操作" width="100">
+          <template #default="{ row }">
+            <el-button type="danger" size="small" @click.stop="deleteArticles(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div v-if="total > pageSize" style="margin-top: 10px; display: flex; justify-content: center">
+        <el-pagination
+          v-model:current-page="currentPage"
+          :page-size="pageSize"
+          :total="total"
+          layout="prev, pager, next"
+          background
+          @current-change="fetchArticles"
+        />
+      </div>
+      <el-empty v-else-if="!articles.length" description="暂无文章" />
+    </el-card>
+
+    <!-- 编辑表单 -->
     <el-card class="admin-card">
       <template #header>
         <div class="card-header">
@@ -156,10 +195,16 @@
                   <!-- 图片 -->
                   <div v-else-if="block.type === 'image'">
                     <el-upload
+                      name="image"
                       :action="uploadUrl"
                       :headers="uploadHeaders"
                       :show-file-list="false"
-                      :on-success="(res) => { block.url = res.data.url; ElMessage.success('上传成功') }"
+                      :on-success="
+                        (res) => {
+                          block.url = res.data.url
+                          ElMessage.success('上传成功')
+                        }
+                      "
                       :on-error="() => ElMessage.error('上传失败')"
                       :before-upload="beforeUpload"
                       accept="image/*"
@@ -265,6 +310,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from '@/axios/axios.ts'
 import { useRouter, useRoute } from 'vue-router'
+import { ElMessageBox } from 'element-plus'
 
 // 上传配置
 const uploadUrl = 'http://localhost:5000/api/v1/upload'
@@ -296,6 +342,12 @@ const route = useRoute()
 
 // 提交按钮加载状态
 const submitLoading = ref(false)
+
+// 文章列表 + 分页
+const articles = ref([])
+const currentPage = ref(1)
+const pageSize = ref(10)
+const total = ref(0)
 
 // 常用标签
 const commonTags = ref([
@@ -459,6 +511,46 @@ const resetForm = () => {
   articleForm.tags = []
   articleForm.contentBlocks = []
   isEditMode.value = false
+  // 回到第1页
+  currentPage.value = 1
+}
+
+// 获取文章列表（分页）
+const fetchArticles = async () => {
+  try {
+    const result = await axios.get('/articles/paginated', {
+      params: { page: currentPage.value, limit: pageSize.value }
+    })
+    articles.value = result.items || result || []
+    total.value = result.pagination?.total ?? articles.value.length
+  } catch (err) {
+    console.error('获取文章列表失败:', err)
+  }
+}
+
+// 点击文章行 → 加载编辑
+const editArticle = (row) => {
+  loadArticleData(row._id)
+}
+
+// 删除文章
+const deleteArticles = async (row) => {
+  try {
+    await ElMessageBox.confirm(`确定要删除「${row.title}」吗？`, '确认删除', {
+      type: 'warning',
+      confirmButtonText: '删除',
+      cancelButtonText: '取消'
+    })
+    await axios.delete(`/articles/${row._id}`)
+    ElMessage.success('删除成功')
+    // 如果删掉当前页最后一条，回退一页
+    if (articles.value.length === 1 && currentPage.value > 1) {
+      currentPage.value--
+    }
+    fetchArticles()
+  } catch (err) {
+    if (err !== 'cancel') console.error('删除失败:', err)
+  }
 }
 
 // 加载文章数据（编辑模式）
@@ -482,8 +574,9 @@ const loadArticleData = async (id) => {
   }
 }
 
-// 页面加载时检查是否为编辑模式
+// 页面加载时获取文章列表
 onMounted(() => {
+  fetchArticles()
   const articleId = route.query.id
   if (articleId) {
     loadArticleData(articleId)

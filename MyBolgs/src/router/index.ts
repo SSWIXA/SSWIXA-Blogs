@@ -6,6 +6,7 @@ import Admin from '@/views/Admin.vue'
 import ArticleDetail from '@/views/ArticleDetail.vue'
 import SearchResults from '@/views/SearchResults.vue'
 import CategoryView from '@/views/CategoryView.vue'
+import Login from '@/views/Login.vue'
 
 // 路由配置
 const routes: Array<any> = [
@@ -45,6 +46,10 @@ const routes: Array<any> = [
   {
     path: '/category/:name',
     component: CategoryView
+  },
+  {
+    path: '/login',
+    component: Login
   }
   // {
   //   path: '/dist',
@@ -64,11 +69,26 @@ const router = createRouter({
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
+  // 访问 /admin 需要登录
+  if (to.path === '/admin') {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      next('/login')
+      return
+    }
+  }
+  // 如果已登录，访问 /login 直接跳 admin
+  if (to.path === '/login') {
+    const token = localStorage.getItem('token')
+    if (token) {
+      next('/admin')
+      return
+    }
+  }
   if (!to.matched.length) {
-    // 如果没有匹配的路由
-    next('/') // 重定向到/页面
+    next('/')
   } else {
-    next() // 否则继续导航
+    next()
   }
 })
 

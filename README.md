@@ -4,22 +4,23 @@
 
 ## 技术栈
 
-| 层 | 技术 | 说明 |
-|---|------|------|
-| 前端 | Vue 3 + TypeScript + Vite | Composition API |
-| UI | Element Plus | 组件库 |
-| 路由 | Vue Router 4 | Hash 模式 |
-| 状态管理 | Pinia | 轻量状态管理 |
-| HTTP | Axios | 请求/响应拦截器 |
-| 轮播 | Swiper | 视差效果 |
-| 代码高亮 | Monaco Editor | VS Code 同款编辑器 |
-| 后端 | Express 5 | Node.js Web 框架 |
-| 数据库 | MongoDB + Mongoose | 文档型数据库 |
-| 图片上传 | Multer | 本地文件存储 |
+| 层       | 技术                      | 说明               |
+| -------- | ------------------------- | ------------------ |
+| 前端     | Vue 3 + TypeScript + Vite | Composition API    |
+| UI       | Element Plus              | 组件库             |
+| 路由     | Vue Router 4              | Hash 模式          |
+| 状态管理 | Pinia                     | 轻量状态管理       |
+| HTTP     | Axios                     | 请求/响应拦截器    |
+| 轮播     | Swiper                    | 视差效果           |
+| 代码高亮 | Monaco Editor             | VS Code 同款编辑器 |
+| 后端     | Express 5                 | Node.js Web 框架   |
+| 数据库   | MongoDB + Mongoose        | 文档型数据库       |
+| 图片上传 | Multer                    | 本地文件存储       |
 
 ## 功能特性
 
 ### 前台展示
+
 - **首页**：全屏视差轮播 + 文章列表 + 右侧个人信息栏
 - **文章详情**：支持 7 种内容块渲染（段落/标题/代码/图片/引用/列表/分割线）
 - **代码高亮**：Monaco Editor 渲染代码块，支持 20+ 种编程语言
@@ -31,6 +32,7 @@
 - **图片预览**：点击图片放大查看
 
 ### 后台管理
+
 - **文章列表**：分页展示，每页 10 条
 - **创建/编辑文章**：可视化内容块编辑器
   - 段落、标题（H2-H5）、代码块（选择语言）
@@ -41,6 +43,7 @@
 - **图片上传**：支持本地上传，限制 5MB / jpg/png/gif/webp
 
 ### API
+
 - **版本控制**：`/api/v1/` 前缀
 - **统一响应格式**：`{ code, success, message, data }`
 - **文章 CRUD**：创建/读取/更新/删除
@@ -123,12 +126,12 @@ npm run dev                # 启动在 http://localhost:5173
 
 ### 访问
 
-| 服务 | 地址 |
-|------|------|
-| 博客首页 | http://localhost:5173 |
+| 服务     | 地址                          |
+| -------- | ----------------------------- |
+| 博客首页 | http://localhost:5173         |
 | 后台管理 | http://localhost:5173/#/admin |
-| 后端 API | http://localhost:5000/api/v1 |
-| 健康检查 | http://localhost:5000/health |
+| 后端 API | http://localhost:5000/api/v1  |
+| 健康检查 | http://localhost:5000/health  |
 
 ## 数据模型
 

@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import ApiResponse from '../utils/apiResponse.js';
+import { authMiddleware } from '../middlewares/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,8 +32,8 @@ const upload = multer({ storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024
 
 const router = express.Router();
 
-// POST /api/v1/upload - 上传单张图片
-router.post('/', upload.single('image'), (req, res) => {
+// POST /api/v1/upload - 上传单张图片（需要登录）
+router.post('/', authMiddleware, upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json(ApiResponse.error('请选择要上传的图片'));
   }

@@ -1,4 +1,5 @@
 import Post from './models/Post.js';
+import User from './models/User.js';
 import mongoose from 'mongoose';
 
 // 直接连接数据库
@@ -1081,7 +1082,13 @@ const seedPosts = async () => {
     const createdPosts = await Post.insertMany(posts);
     console.log(`成功插入 ${createdPosts.length} 篇文章`);
 
-    // 关闭数据库连接
+    // 创建默认管理员
+    const existingAdmin = await User.findOne({ username: 'admin' });
+    if (!existingAdmin) {
+      await User.create({ username: 'admin', password: 'admin123', role: 'admin' });
+      console.log('已创建默认管理员: admin / admin123');
+    }
+
     mongoose.connection.close();
     process.exit(0);
   } catch (error) {
