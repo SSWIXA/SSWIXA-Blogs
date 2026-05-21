@@ -186,6 +186,41 @@ PUT /api/v1/articles/:id/dislike
 DELETE /api/v1/articles/:id/dislike
 ```
 
+## 圖片上傳接口
+
+### 13. 上傳圖片
+```
+POST /api/v1/upload
+```
+
+**請求格式:** `multipart/form-data`
+
+**表單字段:**
+| 字段 | 類型 | 說明 |
+|------|------|------|
+| `image` | File | 圖片文件 |
+
+**限制:**
+- 大小: ≤ 5MB
+- 格式: jpg / png / gif / webp
+
+**響應示例:**
+```json
+{
+  "code": 200,
+  "success": true,
+  "message": "上傳成功",
+  "data": {
+    "url": "/uploads/1716000000-123456.png"
+  }
+}
+```
+
+**訪問上傳的圖片:**
+```
+GET http://localhost:5000/uploads/1716000000-123456.png
+```
+
 ## HTTP 狀態碼
 
 | 狀態碼 | 說明 |
