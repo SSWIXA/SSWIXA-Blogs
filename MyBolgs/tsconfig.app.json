@@ -12,7 +12,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "lib":["es2015", "DOM"],
+    "lib":["esnext", "DOM"],
     "skipLibCheck": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false
