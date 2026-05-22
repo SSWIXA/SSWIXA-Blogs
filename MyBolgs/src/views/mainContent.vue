@@ -24,6 +24,7 @@ const showAside = computed(() => {
 
 <style scoped lang="scss">
 .blur_mask {
+  min-height: 100vh;
   backdrop-filter: blur(50px);
   transition: margin-left 0.4s ease-in-out;
   margin-left: 0;

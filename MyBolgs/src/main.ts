@@ -1,6 +1,6 @@
 import './assets/main.css'
 import '@/js/heartEffect.js'
-import './utils/monacoConfig.ts'
+import './utils/monacoConfig'
 
 import { createApp } from 'vue'
 import App from './App.vue'

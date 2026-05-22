@@ -59,8 +59,7 @@ const buildTreeData = async () => {
       if (!categoryMap.has(cat)) categoryMap.set(cat, [])
       categoryMap.get(cat)!.push({
         label: a.title,
-        route: `/article/${a._id}`,
-        children: []
+        route: `/article/${a._id}`
       })
     })
 
@@ -80,16 +79,22 @@ const buildTreeData = async () => {
 }
 
 // 点击处理
-const handleNodeClick = (data: Tree) => {
+const handleNodeClick = (data: any) => {
   if (data.route) {
     router.push(data.route)
   }
 }
 
-// 过滤目录结构
-const filterNode = (value: string, data: Tree) => {
+// 过滤目录结构（子节点匹配时父节点也显示）
+const filterNode = (value: string, data: any) => {
   if (!value) return true
-  return data.label.includes(value)
+  // 当前节点匹配
+  if (data.label.includes(value)) return true
+  // 任一子节点匹配
+  if (data.children && data.children.length) {
+    return data.children.some((child: Tree) => child.label.includes(value))
+  }
+  return false
 }
 
 // 监听过滤文本

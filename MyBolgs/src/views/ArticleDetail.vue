@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import MainCon from './MainCon.vue'
 import Asider from './Aside.vue'
@@ -47,7 +47,7 @@ interface Article {
 }
 
 const route = useRoute()
-const article = ref<Article | null>(null)
+const article = ref<any>(null)
 const loading = ref(true)
 const userLiked = ref(false)
 const userDisliked = ref(false)
@@ -106,7 +106,7 @@ const handleDislike = () => {
 
 const fetchArticle = async () => {
   try {
-    const response = await axios.get(`/articles/${route.params.id}`)
+    const response: any = await axios.get(`/articles/${route.params.id}`)
     article.value = response
 
     // 增加浏览量
@@ -121,10 +121,18 @@ const fetchArticle = async () => {
 }
 
 fetchArticle()
+
+// 侧边栏点击切换文章时重新加载
+watch(() => route.params.id, () => {
+  loading.value = true
+  article.value = null
+  fetchArticle()
+})
 </script>
 
 <style scoped lang="scss">
 .blur_mask {
+  min-height: 100vh;
   backdrop-filter: blur(50px);
   transition: margin-left 0.4s ease-in-out;
   margin-left: 0;

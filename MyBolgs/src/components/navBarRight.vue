@@ -106,7 +106,7 @@ let navData = [
       }
     ]
   },
-  { icon: '🔅', href: '/', txt: '关于', child: [] },
+  { icon: '🔅', href: '/about', txt: '关于', child: [] },
   { icon: '', href: 'https://gitee.com/sswixa', txt: 'Gitee', child: [] }
 ]
 

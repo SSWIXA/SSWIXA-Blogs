@@ -125,7 +125,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 // 导入 Monaco 配置
-import '../utils/monacoConfig.ts'
+import '../utils/monacoConfig'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 
 // 定义文章内容块类型

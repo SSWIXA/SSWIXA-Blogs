@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api/v1', // 更新為帶版本號的 API 路徑
+  baseURL: '/api/v1',
   timeout: 10000, // 增加超時時間到 10 秒
   headers: {
     'Content-Type': 'application/json'

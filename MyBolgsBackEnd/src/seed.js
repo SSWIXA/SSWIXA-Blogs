@@ -1,11 +1,12 @@
+import 'dotenv/config';
 import Post from './models/Post.js';
 import User from './models/User.js';
 import mongoose from 'mongoose';
 
-// 直接连接数据库
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect('mongodb://127.0.0.1:27017/blog');
+    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/blog';
+    const conn = await mongoose.connect(uri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {

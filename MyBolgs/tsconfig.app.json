@@ -12,6 +12,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "lib":["es2015", "DOM"]
+    "lib":["es2015", "DOM"],
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   }
 }

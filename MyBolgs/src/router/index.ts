@@ -7,6 +7,7 @@ import ArticleDetail from '@/views/ArticleDetail.vue'
 import SearchResults from '@/views/SearchResults.vue'
 import CategoryView from '@/views/CategoryView.vue'
 import Login from '@/views/Login.vue'
+import About from '@/views/About.vue'
 
 // 路由配置
 const routes: Array<any> = [
@@ -50,6 +51,10 @@ const routes: Array<any> = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/about',
+    component: About
   }
   // {
   //   path: '/dist',
