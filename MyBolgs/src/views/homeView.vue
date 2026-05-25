@@ -423,12 +423,3 @@ watch(opacity, (oldval: any, newval: any) => {
   }
 }
 </style>
-      }
-
-      .main_right {
-        // 可以在这里添加暗黑模式下右侧内容的样式
-      }
-    }
-  }
-}
-</style>
