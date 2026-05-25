@@ -34,10 +34,22 @@ body {
   background-color: rgba(20, 20, 28, 0.75);
 }
 
+// Live2D 画布归位（强制清除 oh-my-live2d 入场动画残留的 translateY）
+#oml2d-stage {
+  transform: translateY(0) !important;
+}
+
+// Live2D 对话框
+#oml2d-tips {
+  top: -40% !important;
+  left: 60% !important;
+}
+
 // Live2D 画布归位
 #oml2d-stage {
   bottom: 0 !important;
   left: 0 !important;
+  transform-origin: center !important;
 }
 
 // Live2D 对话框
