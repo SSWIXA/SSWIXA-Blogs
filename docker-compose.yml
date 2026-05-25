@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  blog:
+    build: .
+    container_name: sswixa-blog
+    ports:
+      - "5000:5000"
+    env_file:
+      - MyBolgsBackEnd/.env
+    restart: unless-stopped
