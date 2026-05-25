@@ -1,63 +1,91 @@
 <template>
-  <el-main class="catalogue">
+  <div class="blur_mask nav-page">
     <div class="navigation-container">
-      <div class="page-header">
-        <h1 class="page-title">网站导航</h1>
-        <p class="page-subtitle">探索我的博客和技术分享</p>
+      <!-- 头部 -->
+      <div class="page-hero">
+        <h1 class="hero-title">
+          <span class="gradient-text">探索导航</span>
+        </h1>
+        <p class="hero-sub">技术博客 · 知识分享 · 成长记录</p>
       </div>
 
-      <div class="navigation-grid">
-        <!-- 动态渲染导航卡片 -->
-        <el-card v-for="item in navigationItems" :key="item.title" class="nav-card" shadow="hover">
-          <div class="card-content" @click="$router.push(item.route)">
-            <div class="card-icon">{{ item.icon }}</div>
+      <!-- 主卡片区 -->
+      <div class="nav-cards">
+        <div
+          v-for="(item, index) in navigationItems"
+          :key="item.title"
+          class="nav-card"
+          :class="`card-${index}`"
+          @click="$router.push(item.route)"
+        >
+          <div class="card-bg" :style="{ background: cardGradients[index] }"></div>
+          <div class="card-inner">
+            <div class="card-icon-wrap">
+              <span class="card-icon">{{ item.icon }}</span>
+            </div>
             <h3 class="card-title">{{ item.title }}</h3>
-            <p class="card-description">{{ item.description }}</p>
-            <div v-if="item.tags && item.tags.length" class="card-tags">
-              <el-tag v-for="tag in item.tags" :key="tag.text" size="small" :type="tag.type">
+            <p class="card-desc">{{ item.description }}</p>
+            <div v-if="item.tags.length" class="card-tags">
+              <el-tag
+                v-for="tag in item.tags"
+                :key="tag.text"
+                size="small"
+                :type="tag.type as any"
+                effect="plain"
+              >
                 {{ tag.text }}
               </el-tag>
             </div>
+            <div class="card-arrow">→</div>
           </div>
-        </el-card>
+        </div>
       </div>
 
-      <div class="featured-section">
-        <h2 class="section-title">特色内容</h2>
-        <div class="featured-grid">
-          <el-card
-            v-for="feature in featuredItems"
-            :key="feature.title"
-            class="featured-card"
-            shadow="never"
+      <!-- 快捷入口 -->
+      <div class="quick-links">
+        <h2 class="section-heading">
+          <span class="heading-dot"></span>
+          快捷入口
+        </h2>
+        <div class="quick-grid">
+          <div
+            v-for="link in quickLinks"
+            :key="link.label"
+            class="quick-item"
+            @click="$router.push(link.route)"
           >
-            <div class="featured-content">
-              <h4>{{ feature.title }}</h4>
-              <p>{{ feature.description }}</p>
-            </div>
-          </el-card>
+            <span class="quick-icon">{{ link.icon }}</span>
+            <span class="quick-label">{{ link.label }}</span>
+          </div>
         </div>
       </div>
     </div>
-  </el-main>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// 导航项数据
+const cardGradients = [
+  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+  'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+  'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+]
+
 const navigationItems = ref([
   {
     icon: '🏠',
     title: '首页',
     description: '返回博客主页，查看最新文章和动态',
     route: '/',
-    tags: []
+    tags: [] as { text: string; type: string }[]
   },
   {
     icon: '💻',
     title: '前端开发',
-    description: 'Web技术、框架、工具等相关内容',
+    description: 'Web 技术、前端框架、工程化实践',
     route: '/WebNote',
     tags: [
       { text: 'Vue.js', type: 'success' },
@@ -68,7 +96,7 @@ const navigationItems = ref([
   {
     icon: '📦',
     title: '后端开发',
-    description: '服务器端技术、数据库、API等内容',
+    description: 'Node.js、数据库、API 设计与部署',
     route: '/ServerNote',
     tags: [
       { text: 'Node.js', type: 'primary' },
@@ -79,250 +107,241 @@ const navigationItems = ref([
   {
     icon: '🤖',
     title: '人工智能',
-    description: '机器学习、深度学习、AI应用等内容',
+    description: '机器学习、深度学习与 AI 应用探索',
     route: '/AINote',
     tags: [
-      { text: '机器学习', type: 'success' },
-      { text: '深度学习', type: 'warning' },
-      { text: 'Python', type: 'primary' }
+      { text: 'ML', type: 'success' },
+      { text: 'DL', type: 'warning' },
+      { text: 'NLP', type: 'primary' }
     ]
   },
   {
     icon: '🔅',
     title: '关于',
-    description: '了解更多关于我和这个博客的信息',
-    route: '/',
+    description: '了解更多关于我和这个博客的故事',
+    route: '/about',
     tags: []
   }
 ])
 
-// 特色内容数据
-const featuredItems = ref([
-  {
-    title: '📘 技术教程',
-    description: '详细的编程教程和实践经验分享'
-  },
-  {
-    title: '📝 开发笔记',
-    description: '日常开发中的问题记录和解决方案'
-  },
-  {
-    title: '🔧 工具推荐',
-    description: '实用的开发工具和资源整理'
-  }
+const quickLinks = ref([
+  { icon: '📝', label: '最新文章', route: '/' },
+  { icon: '🏷️', label: '前端开发', route: '/WebNote' },
+  { icon: '🔧', label: '后端开发', route: '/ServerNote' },
+  { icon: '🧠', label: '人工智能', route: '/AINote' },
+  { icon: '👤', label: '关于我', route: '/about' },
+  { icon: '🔐', label: '管理后台', route: '/admin' }
 ])
 </script>
 
 <style scoped lang="scss">
-.catalogue {
-  padding: 80px 20px 40px;
-  min-height: calc(100vh - 80px);
-  background: linear-gradient(135deg, #f0f4f8 0%, #e6ecf3 100%);
+.nav-page {
+  min-height: 100vh;
+  backdrop-filter: blur(150px);
+  padding: 80px 20px 60px;
+}
 
-  .navigation-container {
-    max-width: 1200px;
-    margin: 0 auto;
+.navigation-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
 
-    .page-header {
-      text-align: center;
-      margin-bottom: 40px;
+// 头部
+.page-hero {
+  text-align: center;
+  margin-bottom: 48px;
 
-      .page-title {
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: #4a5568;
-        margin-bottom: 10px;
-      }
+  .hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 0 0 12px;
 
-      .page-subtitle {
-        font-size: 1.1rem;
-        color: #718096;
-        margin: 0;
-      }
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #f5576c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
+  }
 
-    .navigation-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      margin-bottom: 50px;
-
-      .nav-card {
-        border-radius: 15px;
-        border: none;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-
-        &:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
-        }
-
-        .card-content {
-          padding: 25px;
-          text-align: center;
-
-          .card-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: rgb(100, 165, 229);
-          }
-
-          .card-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 15px 0;
-            color: #4a5568;
-          }
-
-          .card-description {
-            color: #718096;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-          }
-
-          .card-tags {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-          }
-        }
-      }
-    }
-
-    .featured-section {
-      .section-title {
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: #4a5568;
-        margin-bottom: 25px;
-        text-align: center;
-      }
-
-      .featured-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-
-        .featured-card {
-          border-radius: 12px;
-          border: 1px solid #e2e8f0;
-          background: rgba(255, 255, 255, 0.7);
-          backdrop-filter: blur(10px);
-
-          .featured-content {
-            padding: 20px;
-
-            h4 {
-              margin: 0 0 10px 0;
-              color: #4a5568;
-              font-size: 1.2rem;
-            }
-
-            p {
-              margin: 0;
-              color: #718096;
-              font-size: 0.95rem;
-              line-height: 1.5;
-            }
-          }
-        }
-      }
-    }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: #909399;
+    margin: 0;
+    letter-spacing: 2px;
   }
 }
 
-// 暗黑模式样式
-.dark-mode .catalogue {
-  background: linear-gradient(135deg, #1a1c26 0%, #161923 100%);
+// 卡片
+.nav-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 56px;
+}
 
-  .navigation-container {
-    .page-header {
-      .page-title {
-        color: #e2e8f0;
-      }
+.nav-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  min-height: 200px;
 
-      .page-subtitle {
-        color: #a0aec0;
-      }
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+
+    .card-bg { opacity: 0.12; }
+    .card-arrow { opacity: 1; transform: translateX(0); }
+  }
+
+  .card-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    transition: opacity 0.35s;
+  }
+
+  .card-inner {
+    position: relative;
+    padding: 28px 24px 24px;
+    z-index: 1;
+  }
+
+  .card-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .card-icon { font-size: 28px; }
+
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px;
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: #909399;
+    line-height: 1.6;
+    margin: 0 0 16px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .card-arrow {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+    font-size: 20px;
+    color: #909399;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.3s;
+  }
+}
+
+// 快捷入口
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 24px;
+
+  .heading-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #f5576c);
+  }
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.quick-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .quick-icon { font-size: 22px; }
+  .quick-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4a5568;
+  }
+}
+
+// 暗黑模式
+.dark-mode .nav-page {
+  background-color: rgba(26, 26, 26, 0.8) !important;
+
+  .hero-sub { color: #888 !important; }
+
+  .nav-card {
+    background: rgba(40, 40, 40, 0.85) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+
+    &:hover { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important; }
+
+    .card-icon-wrap {
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
+    .card-title { color: #e2e8f0 !important; }
+    .card-desc { color: #888 !important; }
+    .card-arrow { color: #888 !important; }
+  }
 
-    .navigation-grid {
-      .nav-card {
-        background: rgba(45, 55, 72, 0.7);
+  .section-heading { color: #e2e8f0 !important; }
 
-        &:hover {
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
-        }
+  .quick-item {
+    background: rgba(40, 40, 40, 0.75) !important;
 
-        .card-content {
-          .card-icon {
-            color: rgb(100, 165, 229);
-          }
+    &:hover { background: rgba(102, 126, 234, 0.15) !important; }
 
-          .card-title {
-            color: #e2e8f0;
-          }
-
-          .card-description {
-            color: #a0aec0;
-          }
-        }
-      }
-    }
-
-    .featured-section {
-      .section-title {
-        color: #e2e8f0;
-      }
-
-      .featured-grid {
-        .featured-card {
-          background: rgba(45, 55, 72, 0.7);
-          border-color: #2d3748;
-
-          .featured-content {
-            h4 {
-              color: #e2e8f0;
-            }
-
-            p {
-              color: #a0aec0;
-            }
-          }
-        }
-      }
-    }
+    .quick-label { color: #ccc !important; }
   }
 }
 
 @media (max-width: 768px) {
-  .catalogue {
-    padding: 80px 15px 20px;
-
-    .navigation-container {
-      .page-header {
-        .page-title {
-          font-size: 2rem;
-        }
-
-        .page-subtitle {
-          font-size: 1rem;
-        }
-      }
-
-      .navigation-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .featured-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  }
+  .nav-page { padding: 60px 12px 40px; }
+  .hero-title { font-size: 2rem !important; }
+  .nav-cards { grid-template-columns: 1fr; }
+  .quick-grid { grid-template-columns: repeat(3, 1fr); }
 }
 </style>
