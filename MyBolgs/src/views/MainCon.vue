@@ -428,102 +428,211 @@ const exampleFunction = (param) => {
 </script>
 
 <style scoped lang="scss">
+// 顶部光条动画
+@keyframes cardShine {
+  0% { left: -100%; }
+  40%, 100% { left: 100%; }
+}
+
+@keyframes headerGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .article-container {
   min-width: 800px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   transition: all 0.3s ease;
-}
 
-// 当侧边栏可见时，调整文章容器的布局
-@media screen and (min-width: 1200px) {
-  .article-container {
-    margin-left: calc(50% - 450px); // 230px是为了补偿侧边栏宽度的一半
+  @media screen and (min-width: 1200px) {
+    margin-left: calc(50% - 450px);
     margin-right: auto;
   }
-}
-
-@media screen and (max-width: 1199px) {
-  .article-container {
+  @media screen and (max-width: 1199px) {
     min-width: auto;
     max-width: none;
-    margin: 0 auto; // 屏幕较小时保持居中
+    margin: 0 auto;
     padding: 20px;
   }
 }
 
 .article-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  border: none;
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 4px 24px rgba(102, 126, 234, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.4s;
+
+  // 流光划过
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-25deg);
+    animation: cardShine 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  &:hover {
+    box-shadow:
+      0 12px 40px rgba(102, 126, 234, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  ::v-deep .el-card__header {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #f5576c, #667eea);
+      background-size: 200% 100%;
+      animation: headerGlow 3s ease-in-out infinite;
+    }
+  }
 }
 
 .article-header {
   .article-title {
-    margin: 0 0 15px 0;
-    color: #333;
-    font-weight: 600;
+    margin: 0 0 16px 0;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.3;
+    background: linear-gradient(135deg, #2c3e50 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .article-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    color: #999;
-    font-size: 14px;
+    color: #909399;
+    font-size: 13px;
 
     .meta-item {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(102, 126, 234, 0.06);
+      transition: all 0.25s;
+
+      &:hover {
+        background: rgba(102, 126, 234, 0.12);
+        transform: translateY(-1px);
+      }
     }
   }
 }
 
 .article-content {
-  line-height: 1.8;
+  line-height: 1.9;
 
   .content-block {
-    margin-bottom: 20px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    margin-bottom: 24px;
+    animation: slideUp 0.4s ease-out both;
+    &:last-child { margin-bottom: 0; }
   }
 
-  .block-paragraph {
-    p {
-      margin: 0;
-      font-size: 16px;
-      color: #333;
-    }
+  .block-paragraph p {
+    margin: 0;
+    font-size: 16px;
+    color: #4a5568;
   }
 
   .block-heading {
-    margin: 24px 0 16px 0;
+    margin: 32px 0 18px 0;
+    position: relative;
+    padding-left: 16px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 4px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #667eea, #f5576c);
+    }
 
     &.h2 {
-      border-bottom: 1px solid #eee;
       padding-bottom: 10px;
+      border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: inline;
+      }
+    }
+
+    h3, h4, h5 {
+      color: #444;
+      font-weight: 600;
     }
   }
 
   .block-code {
-    border-radius: 6px;
+    border-radius: 12px;
     overflow: hidden;
-    margin: 16px 0;
+    margin: 20px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    background: #1e1e2e;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 
     .code-header {
-      background-color: #f6f8fa;
-      color: #555;
-      padding: 8px 12px;
-      font-size: 14px;
+      background: linear-gradient(135deg, #2d2d3f 0%, #252538 100%);
+      color: #a6accd;
+      padding: 10px 16px;
+      font-size: 13px;
       font-weight: 500;
-      border-bottom: 1px solid #e1e4e8;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #f5576c;
+        box-shadow: 14px 0 0 #f0c040, 28px 0 0 #43e97b;
+      }
     }
 
-    .code-editor {
-      height: 300px;
-    }
+    .code-editor { height: 300px; }
   }
 
   .block-image {
@@ -531,19 +640,21 @@ const exampleFunction = (param) => {
 
     img {
       max-width: 100%;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 
       &:hover {
-        transform: scale(1.02);
+        transform: scale(1.01);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.18);
       }
     }
 
     .image-caption {
       margin-top: 10px;
-      font-size: 14px;
-      color: #666;
+      font-size: 13px;
+      color: #909399;
       font-style: italic;
     }
   }
@@ -551,13 +662,14 @@ const exampleFunction = (param) => {
   .block-quote {
     blockquote {
       margin: 0;
-      padding: 0 1em;
-      color: #666;
-      border-left: 0.25em solid #dfe2e5;
+      padding: 12px 20px;
+      color: #5a6a7e;
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.06) 0%, transparent 100%);
+      border-left: 4px solid #667eea;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
 
-      p {
-        margin: 0;
-      }
+      p { margin: 0; }
 
       cite {
         display: block;
@@ -569,13 +681,18 @@ const exampleFunction = (param) => {
   }
 
   .block-list {
-    ul,
-    ol {
+    ul, ol {
       padding-left: 20px;
       margin: 0;
 
       li {
         margin-bottom: 8px;
+        color: #4a5568;
+        line-height: 1.8;
+
+        &::marker {
+          color: #667eea;
+        }
       }
     }
   }
@@ -584,7 +701,7 @@ const exampleFunction = (param) => {
     hr {
       border: none;
       height: 1px;
-      background-color: #eee;
+      background: linear-gradient(90deg, transparent, #667eea44, #f5576c44, transparent);
       margin: 30px 0;
     }
   }
@@ -592,8 +709,9 @@ const exampleFunction = (param) => {
 
 .article-footer {
   margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  padding-top: 24px;
+  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  position: relative;
 
   .article-tags {
     display: flex;
@@ -602,9 +720,13 @@ const exampleFunction = (param) => {
 
     .article-tag {
       cursor: pointer;
+      border-radius: 20px;
+      font-weight: 500;
+      transition: all 0.25s;
 
       &:hover {
-        opacity: 0.8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
       }
     }
   }
@@ -616,40 +738,53 @@ const exampleFunction = (param) => {
   border-radius: 6px;
 }
 
-// 暗黑模式适配
+// 暗黑模式
 .dark-mode {
   .article-card {
-    background-color: #2d2d2d !important;
-    color: #f0f0f0 !important;
-  }
+    background: rgba(30, 30, 40, 0.85) !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
 
-  .article-title {
-    color: #ffffff !important;
-  }
-
-  .article-meta {
-    color: #cccccc !important;
-  }
-
-  .block-paragraph p {
-    color: #f0f0f0 !important;
-  }
-
-  .block-code {
-    .code-header {
-      background-color: #1e1e1e !important;
-      color: #ccc !important;
-      border-bottom: 1px solid #444 !important;
+    &::after {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
     }
   }
 
-  .block-divider hr {
-    background-color: #444 !important;
+  .article-title {
+    background: linear-gradient(135deg, #e2e8f0 0%, #64a5e5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .article-meta .meta-item {
+    background: rgba(255, 255, 255, 0.05);
+    color: #a0aec0 !important;
+    &:hover { background: rgba(255, 255, 255, 0.1); }
+  }
+
+  .block-paragraph p { color: #c0c0c0 !important; }
+  .block-heading h3, .block-heading h4, .block-heading h5 { color: #ccc !important; }
+
+  .block-code {
+    background: #1a1a28;
+    border-color: rgba(255, 255, 255, 0.03);
+
+    .code-header {
+      background: linear-gradient(135deg, #222235 0%, #1a1a28 100%);
+      color: #999;
+      border-bottom-color: rgba(255, 255, 255, 0.04);
+    }
   }
 
   .block-quote blockquote {
-    border-left-color: #444 !important;
-    color: #cccccc !important;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, transparent 100%);
+    border-left-color: #667eea;
+    color: #bbb !important;
   }
+
+  .block-divider hr { background: linear-gradient(90deg, transparent, #444, transparent); }
+  .block-list li { color: #bbb !important; }
 }
 </style>
