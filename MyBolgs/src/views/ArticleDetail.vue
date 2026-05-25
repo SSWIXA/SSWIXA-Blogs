@@ -152,7 +152,7 @@ watch(() => route.params.id, () => {
 .loading {
   padding: 40px;
   text-align: center;
-  min-height: 60vh;
+  min-height: calc(100vh - 80px);
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(20px);
   border-radius: 16px;
