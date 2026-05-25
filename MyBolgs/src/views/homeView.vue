@@ -248,12 +248,38 @@ watch(opacity, (oldval: any, newval: any) => {
 </script>
 
 <style scoped lang="scss">
-// 添加Admin链接样式
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(102, 126, 234, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(245, 87, 108, 0.3); }
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -10px); }
+}
+
+@keyframes titleShine {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+// 管理按钮
 .admin-link {
   position: fixed;
   top: 70px;
   right: 20px;
   z-index: 9999;
+
+  .el-button {
+    background: linear-gradient(135deg, #667eea, #f5576c);
+    border: none;
+    animation: glowPulse 3s ease-in-out infinite;
+    transition: all 0.3s;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+  }
 }
 
 .blur_mask {
@@ -282,13 +308,20 @@ watch(opacity, (oldval: any, newval: any) => {
     .mySwiper {
       width: 100%;
       background: transparent;
+
       ::v-deep .swiper-pagination-bullet {
         float: right;
-        background: rgba(135, 206, 250, 0.7);
+        background: rgba(255, 255, 255, 0.5);
+        width: 10px;
+        height: 10px;
+        transition: all 0.3s;
+        &:hover { background: rgba(255, 255, 255, 0.8); }
       }
-
       ::v-deep .swiper-pagination-bullet-active {
-        background: rgba(135, 206, 250, 1);
+        background: linear-gradient(135deg, #667eea, #f5576c);
+        width: 12px;
+        height: 12px;
+        box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
       }
 
       .parallax-bg {
@@ -297,55 +330,80 @@ watch(opacity, (oldval: any, newval: any) => {
         top: 0;
         width: 130%;
         height: 100%;
-        -webkit-background-size: cover;
         background-size: cover;
         background-position: center;
       }
+
       .swiper-slide {
         font-size: 18px;
-        color: #efefef;
-        font-family: cursive;
-        -webkit-box-sizing: border-box;
+        color: #fff;
+        font-family: 'Noto Sans SC', Georgia, serif;
         box-sizing: border-box;
         user-select: none;
         display: flex;
         justify-content: center;
         align-items: center;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.3) 100%);
+          pointer-events: none;
+        }
+
         .content {
+          position: relative;
+          z-index: 1;
           margin: 0 auto;
+
           .title {
             text-align: center;
             font-size: 50px;
             font-weight: 300;
+            background: linear-gradient(90deg, #fff, #e0e7ff, #fff, #fce7f3);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShine 4s linear infinite;
           }
           .subtitle {
             text-align: center;
             font-size: 30px;
+            color: rgba(255, 255, 255, 0.85);
           }
           .text {
             text-align: center;
-            font-size: 24px;
+            font-size: 22px;
             max-width: 400px;
-            line-height: 1.3;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.8);
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
           }
         }
       }
     }
     .arrow-down {
       position: absolute;
-      bottom: 0;
+      bottom: 20px;
       left: 50%;
       margin-left: -50px;
-      opacity: 0.7;
-      display: flex;
-      justify-content: center;
       z-index: 10;
       cursor: pointer;
+      animation: arrowBounce 2s ease-in-out infinite;
 
       svg {
-        fill: rgba(135, 206, 250, 0.8);
-        filter: drop-shadow(0px 0px 5px rgba(135, 206, 250, 0.5));
+        fill: rgba(255, 255, 255, 0.8);
+        filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.5));
+        transition: filter 0.3s;
+      }
+      &:hover svg {
+        fill: #fff;
+        filter: drop-shadow(0 0 16px rgba(245, 87, 108, 0.7));
       }
     }
   }
@@ -353,19 +411,18 @@ watch(opacity, (oldval: any, newval: any) => {
 </style>
 
 <style scoped lang="scss">
-// 暗黑模式样式
-.dark-mode {
-  .blur_mask {
-    backdrop-filter: blur(150px);
+// 暗黑模式
+.dark-mode .blur_mask {
+  .swiper-slide {
+    color: #e0e0e0 !important;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8) !important;
 
-    .swiper-slide {
-      color: #e0e0e0 !important;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+    &::after {
+      background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%);
     }
-
-    .home_page_content {
-      .main_left {
-        // 可以在这里添加暗黑模式下左侧内容的样式
+  }
+}
+</style>
       }
 
       .main_right {
