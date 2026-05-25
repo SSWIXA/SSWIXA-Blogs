@@ -139,6 +139,11 @@ watch(() => route.params.id, () => {
 }
 
 // 暗黑模式样式
+.dark-mode {
+  .loading {
+    background: rgba(30, 30, 40, 0.6) !important;
+  }
+}
 .dark-mode .blur_mask {
   background-color: rgba(26, 26, 26, 0.8) !important;
   backdrop-filter: blur(50px);
@@ -147,6 +152,11 @@ watch(() => route.params.id, () => {
 .loading {
   padding: 40px;
   text-align: center;
+  min-height: 60vh;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  margin: 20px;
 }
 
 // 暗黑模式样式
