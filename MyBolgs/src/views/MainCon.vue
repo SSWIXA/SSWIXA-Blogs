@@ -620,13 +620,14 @@ const exampleFunction = (param) => {
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 42px;
 
       &::before {
         content: '';
         width: 8px;
         height: 8px;
         border-radius: 50%;
+        flex-shrink: 0;
         background: #f5576c;
         box-shadow: 14px 0 0 #f0c040, 28px 0 0 #43e97b;
       }
