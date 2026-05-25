@@ -24,6 +24,16 @@ body {
   }
 }
 
+// 毛玻璃容器兜底底色（防止切换页面时短暂透底图）
+.blur_mask {
+  background-color: rgba(245, 247, 250, 0.7);
+}
+
+// 暗黑模式毛玻璃底色
+.dark-mode .blur_mask {
+  background-color: rgba(20, 20, 28, 0.75);
+}
+
 // Live2D 画布归位
 #oml2d-stage {
   bottom: 0 !important;
