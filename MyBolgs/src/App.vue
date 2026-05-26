@@ -23,8 +23,8 @@ onMounted(() => {
 
     const isDark = document.body.classList.contains('dark-mode')
     const modelPath = isDark
-      ? '/model/tororo/tororo.model.json' // 暗黑 → 黑猫
-      : '/model/hijiki/hijiki.model.json' // 白天 → 白猫
+      ? '/model/tororo/tororo.model.json' // 暗黑 → 白猫
+      : '/model/hijiki/hijiki.model.json' // 白天 → 黑猫
 
     oml2dInstance = await loadOml2d({
       models: [

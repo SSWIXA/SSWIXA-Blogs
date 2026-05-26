@@ -254,8 +254,8 @@ watch(opacity, (oldval: any, newval: any) => {
 }
 
 @keyframes arrowBounce {
-  0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, -10px); }
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
 }
 
 @keyframes titleShine {
@@ -391,7 +391,7 @@ watch(opacity, (oldval: any, newval: any) => {
       position: absolute;
       bottom: 20px;
       left: 50%;
-      margin-left: -50px;
+      transform: translateX(-50%);
       z-index: 10;
       cursor: pointer;
       animation: arrowBounce 2s ease-in-out infinite;
