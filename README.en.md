@@ -62,57 +62,30 @@ sswixa-blogs/
 │       ├── routes/              # API routes + versioning
 │       ├── utils/               # Helpers (ApiResponse)
 │       └── seed.js              # 18 sample articles
+├── Dockerfile                   # Multi-stage Docker build
+├── docker-compose.yml           # One-command container startup
 ├── API.md                       # API documentation
 ├── start.bat                    # Windows quick start
 └── start.sh                     # Linux/macOS quick start
 ```
 
-## Quick Start
+## Deployment
 
-### Prerequisites
+### Live Demo
 
-- Node.js >= 18
-- MongoDB >= 4.0
+🌐 **[https://sswzhu-ixa-blogs.onrender.com](https://sswzhu-ixa-blogs.onrender.com)** (Auto-deployed on Render)
 
-### One-click (Windows)
-
-```
-start.bat
-```
-
-### Manual
-
-**1. Start MongoDB**
+### Docker (Recommended)
 
 ```bash
-mongod --dbpath="D:\Software\mongodb\data\db"
+git clone git@github.com:SSWIXA/SSWIXA-Blogs.git
+cd SSWIXA-Blogs
+docker compose up --build
 ```
 
-**2. Backend**
+Visit `http://localhost:5000` — the full-stack app runs inside a single container. No need to install Node.js or MongoDB locally.
 
-```bash
-cd MyBolgsBackEnd
-cnpm install
-node src/seed.js          # Import 18 sample articles
-npm start                  # http://localhost:5000
-```
-
-**3. Frontend**
-
-```bash
-cd MyBolgs
-cnpm install
-npm run dev                # http://localhost:5173
-```
-
-### URLs
-
-| Service | URL |
-|---------|-----|
-| Home | http://localhost:5173 |
-| Admin | http://localhost:5173/#/admin |
-| API | http://localhost:5000/api/v1 |
-| Health | http://localhost:5000/health |
+### Local Development
 
 ## Data Model
 

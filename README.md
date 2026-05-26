@@ -59,79 +59,50 @@
 ```
 sswixa-blogs/
 ├── MyBolgs/                    # 前端
-│   ├── src/
-│   │   ├── api/                 # API 接口封装
-│   │   ├── axios/               # Axios 配置 + 拦截器
-│   │   ├── components/          # 公共组件
-│   │   │   ├── Sakura/          # 樱花特效
-│   │   │   ├── backTop/         # 回到顶部
-│   │   │   └── live_2d/         # Live2D 看板娘
-│   │   ├── router/              # 路由配置
-│   │   ├── store/               # Pinia 状态
-│   │   ├── utils/               # 工具函数
-│   │   └── views/               # 页面级组件
-│   └── vite.config.ts
+│   └── src/
+│       ├── api/                 # API 接口封装
+│       ├── axios/               # Axios 配置 + 拦截器
+│       ├── components/          # 公共组件
+│       │   ├── Sakura/          # 樱花特效
+│       │   ├── backTop/         # 回到顶部
+│       │   └── live_2d/         # Live2D 看板娘
+│       ├── router/              # 路由配置
+│       ├── store/               # Pinia 状态
+│       ├── utils/               # 工具函数
+│       └── views/               # 页面级组件
 ├── MyBolgsBackEnd/             # 后端
-│   ├── src/
-│   │   ├── config/              # 数据库连接
-│   │   ├── controllers/         # 控制器
-│   │   ├── middlewares/         # 中间件
-│   │   ├── models/              # Mongoose 模型
-│   │   ├── routes/              # 路由 + 版本控制
-│   │   ├── utils/               # 工具类（ApiResponse）
-│   │   └── seed.js              # 种子数据（18 篇文章）
-│   └── public/uploads/          # 图片上传目录
+│   └── src/
+│       ├── config/              # 数据库连接
+│       ├── controllers/         # 控制器
+│       ├── middlewares/         # 中间件
+│       ├── models/              # Mongoose 模型
+│       ├── routes/              # 路由 + 版本控制
+│       ├── utils/               # 工具类（ApiResponse）
+│       └── seed.js              # 种子数据（18 篇文章）
+├── Dockerfile                   # Docker 多阶段构建
+├── docker-compose.yml           # 一键容器启动
 ├── API.md                       # API 文档
 ├── start.bat                    # Windows 一键启动
 └── start.sh                     # Linux/macOS 一键启动
 ```
 
-## 快速开始
+## 部署
 
-### 前置环境
+### 线上地址
 
-- Node.js >= 18
-- MongoDB >= 4.0
+🌐 **[https://sswzhu-ixa-blogs.onrender.com](https://sswzhu-ixa-blogs.onrender.com)**（Render 自动部署）
 
-### 一键启动（Windows）
-
-```
-start.bat
-```
-
-### 手动启动
-
-**1. 启动 MongoDB**
+### Docker 部署（推荐）
 
 ```bash
-mongod --dbpath="D:\Software\mongodb\data\db"
+git clone git@github.com:SSWIXA/SSWIXA-Blogs.git
+cd SSWIXA-Blogs
+docker compose up --build
 ```
 
-**2. 安装依赖 + 启动后端**
+访问 `http://localhost:5000`，前后端一体化运行在容器中，无需单独安装 Node.js 或 MongoDB。
 
-```bash
-cd MyBolgsBackEnd
-cnpm install
-node src/seed.js          # 导入 18 篇种子文章
-npm start                  # 启动在 http://localhost:5000
-```
-
-**3. 安装依赖 + 启动前端**
-
-```bash
-cd MyBolgs
-cnpm install
-npm run dev                # 启动在 http://localhost:5173
-```
-
-### 访问
-
-| 服务     | 地址                          |
-| -------- | ----------------------------- |
-| 博客首页 | http://localhost:5173         |
-| 后台管理 | http://localhost:5173/#/admin |
-| 后端 API | http://localhost:5000/api/v1  |
-| 健康检查 | http://localhost:5000/health  |
+### 本地开发
 
 ## 数据模型
 
