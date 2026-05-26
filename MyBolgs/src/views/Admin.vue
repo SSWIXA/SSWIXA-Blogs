@@ -593,7 +593,7 @@ onMounted(() => {
   padding-top: 80px;
 }
 
-// 添加blur_mask样式以实现朦胧模糊效果
+// 毛玻璃背景（适配暗黑模式）
 .admin-container::before {
   content: '';
   position: fixed;
@@ -601,8 +601,13 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
+  background-color: rgba(245, 247, 250, 0.7);
   backdrop-filter: blur(150px);
   z-index: -1;
+}
+
+.dark-mode .admin-container::before {
+  background-color: rgba(20, 20, 28, 0.75);
 }
 
 .card-header {
