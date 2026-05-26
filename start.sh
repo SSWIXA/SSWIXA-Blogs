@@ -1,29 +1,41 @@
 #!/bin/bash
+set -e
 
-# 启动 MongoDB 数据库
-echo "Starting MongoDB..."
-mongod --dbpath="D:\Software\mongodb\data\db" &
-MONGO_PID=$!
+cd "$(dirname "$0")"
 
-# 等待 MongoDB 启动完成
-sleep 5
+echo "=================================="
+echo "   SSWIXA Blog - 一键启动"
+echo "=================================="
 
-# 启动后端服务
-echo "Starting backend service..."
-cd "d:/Software/phpEnv/www/192.168.21.115/sswixa-blogs/MyBolgsBackEnd" || { echo "Failed to enter MyBolgsBackEnd directory"; exit 1; }
-npm start &
+# 1) 后端
+echo "[1/2] 启动后端..."
+cd MyBolgsBackEnd
+if [ ! -d "node_modules" ]; then
+    echo "正在安装后端依赖..."
+    npm install
+fi
+node src/server.js &
 BACKEND_PID=$!
+cd ..
 
-# 等待后端服务启动完成
-sleep 5
-
-# 启动前端网页
-echo "Starting frontend application..."
-cd "d:/Software/phpEnv/www/192.168.21.115/sswixa-blogs/MyBolgs" || { echo "Failed to enter MyBolgs directory"; exit 1; }
+# 2) 前端
+echo "[2/2] 启动前端..."
+cd MyBolgs
+if [ ! -d "node_modules" ]; then
+    echo "正在安装前端依赖..."
+    npm install
+fi
 npm run dev &
 FRONTEND_PID=$!
+cd ..
 
-echo "All services started successfully!"
-echo "MongoDB PID: $MONGO_PID"
-echo "Backend PID: $BACKEND_PID"
-echo "Frontend PID: $FRONTEND_PID"
+echo "=================================="
+echo "  ✅ 服务已启动"
+echo "  前端: http://localhost:5173"
+echo "  后端: http://localhost:5000"
+echo "  MongoDB: 请确认已运行"
+echo "=================================="
+echo "按 Ctrl+C 停止所有服务"
+
+trap "kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit" INT TERM
+wait

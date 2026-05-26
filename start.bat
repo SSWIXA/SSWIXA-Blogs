@@ -1,22 +1,45 @@
 @echo off
-REM 启动 MongoDB 数据库
-echo Starting MongoDB...
-start "" "mongod" --dbpath="D:\Software\mongodb\data\db"
+chcp 65001 >nul
+cd /d "%~dp0"
 
-REM 等待 MongoDB 启动完成
-timeout /t 5 >nul
+echo ==================================
+echo    SSWIXA Blog - 一键启动
+echo ==================================
 
-REM 启动后端服务
-echo Starting backend service...
-cd /d "d:\Software\phpEnv\www\192.168.21.115\sswixa-blogs\MyBolgsBackEnd"
-start "" "npm" start
+REM 1) 启动 MongoDB
+echo [1/3] 启动 MongoDB...
+set MONGO_PATH=D:\Software\mongodb\data\db
+if not exist "%MONGO_PATH%" (
+    echo [警告] MongoDB 数据目录不存在: %MONGO_PATH%
+    echo 请修改 start.bat 中的 MONGO_PATH 为你真实的 db 路径
+    pause
+    exit /b 1
+)
+start "" mongod --dbpath="%MONGO_PATH%"
+timeout /t 4 >nul
 
-REM 等待后端服务启动完成
-timeout /t 5 >nul
+REM 2) 后端
+echo [2/3] 启动后端...
+cd /d "%~dp0MyBolgsBackEnd"
+if not exist "node_modules" (
+    echo 正在安装后端依赖...
+    call npm install
+)
+start "" node src/server.js
+timeout /t 4 >nul
 
-REM 启动前端网页
-echo Starting frontend application...
-cd /d "d:\Software\phpEnv\www\192.168.21.115\sswixa-blogs\MyBolgs"
-start "" "npm" run dev
+REM 3) 前端
+echo [3/3] 启动前端...
+cd /d "%~dp0MyBolgs"
+if not exist "node_modules" (
+    echo 正在安装前端依赖...
+    call npm install
+)
+start "" npm run dev
 
-echo All services started successfully!
+echo ==================================
+echo   ✅ 服务已启动
+echo   前端: http://localhost:5173
+echo   后端: http://localhost:5000
+echo ==================================
+pause
