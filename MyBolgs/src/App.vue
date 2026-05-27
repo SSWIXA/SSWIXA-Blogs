@@ -40,7 +40,7 @@ const quotes = [
   '你的鼠标轨迹，我都记着呢～ 🐾',
   '别一直盯着屏幕，眼睛会累的 👁️',
   'Git push 之前记得 Git pull 🚀',
-  '给我加个鸡腿，明天更新更多功能 🍗',
+  '给我加个鸡腿，明天更新更多功能 🍗'
 ]
 
 // 获得随机语录（排除最近几条避免重复）
@@ -57,9 +57,7 @@ function randomQuote(): string {
 
 function initWidget() {
   const isDark = document.body.classList.contains('dark-mode')
-  const modelPath = isDark
-    ? '/model/tororo/tororo.model.json'
-    : '/model/hijiki/hijiki.model.json'
+  const modelPath = isDark ? '/model/tororo/tororo.model.json' : '/model/hijiki/hijiki.model.json'
 
   widgetInstance = createWidget({
     model: {
@@ -69,13 +67,13 @@ function initWidget() {
         messages: quotes,
         duration: 5000,
         interval: 10000,
-        typing: { speed: 80 },
-      },
+        typing: { speed: 80 }
+      }
     },
     menus: { items: [] },
     position: 'bottom-left',
     size: 280,
-    transitionTime: 0,
+    transitionType: 'none',
   })
 }
 
