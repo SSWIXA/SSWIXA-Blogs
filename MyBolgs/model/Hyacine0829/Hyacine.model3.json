@@ -1,0 +1,30 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "Hyacine.moc3",
+		"Textures": [
+			"Hyacine.4096/texture_00.png",
+			"Hyacine.4096/texture_01.png"
+		],
+		"Physics": "Hyacine.physics3.json",
+		"DisplayInfo": "Hyacine.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeLOpen",
+				"ParamEyeROpen"
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": [
+				"ParamMouthForm",
+				"ParamMouthOpenY"
+			]
+		}
+	]
+}

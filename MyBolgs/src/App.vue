@@ -57,7 +57,7 @@ function randomQuote(): string {
 
 function initWidget() {
   const isDark = document.body.classList.contains('dark-mode')
-  const modelPath = isDark ? '/model/tororo/tororo.model.json' : '/model/hijiki/hijiki.model.json'
+  const modelPath = isDark ? '/model/xianghe_2/xianghe_2.model3.json' : '/model/dafeng_2/dafeng_2.model3.json'
 
   widgetInstance = createWidget({
     model: {
