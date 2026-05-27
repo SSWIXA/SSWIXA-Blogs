@@ -1,27 +1,50 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import Favatar from '@/components/favatar.vue'
 import navBarSearch from '@/components/navBarSearch.vue'
 import navBarRight from '@/components/navBarRight.vue'
 
+const route = useRoute()
 const headerHidden = ref(false)
 
 let scrollHandler: () => void
 let mouseHandler: (e: MouseEvent) => void
 
-onMounted(() => {
-  scrollHandler = () => {
-    headerHidden.value = window.scrollY <= 0
+function isHomePage() {
+  return route.path === '/'
+}
+
+function updateHeader() {
+  if (!isHomePage()) {
+    headerHidden.value = false
+    return
   }
+  headerHidden.value = window.scrollY <= 0
+}
+
+onMounted(() => {
+  scrollHandler = () => updateHeader()
   mouseHandler = (e: MouseEvent) => {
+    if (!isHomePage()) return
     if (window.scrollY <= 0) {
       headerHidden.value = e.clientY > 60
     }
   }
   window.addEventListener('scroll', scrollHandler, { passive: true })
   document.addEventListener('mousemove', mouseHandler, { passive: true })
-  scrollHandler()
+  updateHeader()
 })
+
+// 路由切换时重置
+watch(
+  () => route.path,
+  () => {
+    if (!isHomePage()) {
+      headerHidden.value = false
+    }
+  }
+)
 
 onUnmounted(() => {
   window.removeEventListener('scroll', scrollHandler)
