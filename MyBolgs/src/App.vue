@@ -73,7 +73,6 @@ function initWidget() {
     menus: { items: [] },
     position: 'bottom-left',
     size: 280,
-    transitionType: 'none',
   })
 }
 
