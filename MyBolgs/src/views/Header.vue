@@ -1,13 +1,37 @@
 <script setup lang="ts">
-import { reactive, toRefs } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import Favatar from '@/components/favatar.vue'
 import navBarSearch from '@/components/navBarSearch.vue'
 import navBarRight from '@/components/navBarRight.vue'
+
+const headerHidden = ref(false)
+
+let scrollHandler: () => void
+let mouseHandler: (e: MouseEvent) => void
+
+onMounted(() => {
+  scrollHandler = () => {
+    headerHidden.value = window.scrollY <= 0
+  }
+  mouseHandler = (e: MouseEvent) => {
+    if (window.scrollY <= 0) {
+      headerHidden.value = e.clientY > 60
+    }
+  }
+  window.addEventListener('scroll', scrollHandler, { passive: true })
+  document.addEventListener('mousemove', mouseHandler, { passive: true })
+  scrollHandler()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', scrollHandler)
+  document.removeEventListener('mousemove', mouseHandler)
+})
 </script>
 
 <template>
   <el-container>
-    <el-header class="el_hd">
+    <el-header class="el_hd" :class="{ 'header-hidden': headerHidden }">
       <div class="nav_all">
         <Favatar class="fav"></Favatar>
         <navBarSearch></navBarSearch>
@@ -20,6 +44,7 @@ import navBarRight from '@/components/navBarRight.vue'
 <style scoped lang="scss">
 .el_hd {
   position: fixed;
+  top: 0;
   background-color: rgb(247, 247, 247, 0.9);
   width: 100%;
   padding: 0.5rem;
@@ -29,6 +54,13 @@ import navBarRight from '@/components/navBarRight.vue'
   box-shadow: 0px 2px 2px rgba(135, 206, 250, 0.3);
   overflow: hidden;
   z-index: 999;
+  transform: translateY(0);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.header-hidden {
+    transform: translateY(-100%);
+  }
+
   .nav_all {
     display: flex;
     .fav {

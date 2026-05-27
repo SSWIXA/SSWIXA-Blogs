@@ -1,5 +1,5 @@
 import './assets/main.css'
-import '@/js/heartEffect.js'
+import '@/js/particleEffect.js'
 import './utils/monacoConfig'
 
 import { createApp } from 'vue'

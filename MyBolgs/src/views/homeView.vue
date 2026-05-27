@@ -88,10 +88,9 @@ import { Autoplay, Parallax, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import HomeLeft from '@/components/home_left_part.vue'
 import HomeRight from '@/components/home_right_part.vue'
-import th0 from '$/images/th0.jpg'
-import th1 from '$/images/th1.jpg'
-import th2 from '$/images/th2.jpg'
-import th3 from '$/images/th3.jpg'
+// 自动导入 src/images/ 下所有 th 前缀的背景图，只需往里扔图片即可
+const bgModules = import.meta.glob('$/images/th*.{jpg,jpeg,png,webp}', { eager: true })
+const bgPics: string[] = Object.values(bgModules).map((m: any) => m.default)
 
 // 添加暗黑模式状态
 const isDarkMode = ref(false)
@@ -108,93 +107,120 @@ const optionSwiper: Slide[] = reactive([
   {
     url: '../../public/images/nature1.jpg',
     fit: 'cover',
+    title: '鲁迅',
+    Subtitle: '《热风》',
+    txt: '愿中国青年都摆脱冷气，只是向上走，不必听自暴自弃者流的话。能做事的做事，能发声的发声。有一分热，发一分光。'
+  },
+  {
+    url: '../../public/images/nature2.jpg',
+    fit: 'cover',
+    title: '尼采',
+    Subtitle: '《查拉图斯特拉如是说》',
+    txt: '谁将声震人间，必长久深自缄默；谁将点燃闪电，必长久如云漂泊。'
+  },
+  {
+    url: '../../public/images/nature3.jpg',
+    fit: 'cover',
+    title: '王阳明',
+    Subtitle: '《传习录》',
+    txt: '破山中贼易，破心中贼难。'
+  },
+  {
+    url: '../../public/images/nature4.jpg',
+    fit: 'cover',
     title: '维克多·雨果',
     Subtitle: '《悲惨世界》',
-    txt: '人类的真正区别是这样的：光明中人和黑暗中人。'
+    txt: '世界上最宽阔的是海洋，比海洋更宽阔的是天空，比天空更宽阔的是人的胸怀。'
   },
   {
-    url: '../../public/images/nature2.jpg',
+    url: '../../public/images/nature5.jpg',
+    fit: 'cover',
+    title: '庄子',
+    Subtitle: '《逍遥游》',
+    txt: '井蛙不可以语于海者，拘于虚也；夏虫不可以语于冰者，笃于时也。'
+  },
+  {
+    url: '../../public/images/nature1.jpg',
     fit: 'cover',
     title: '列夫·托尔斯泰',
-    Subtitle: '《三个问题》',
-    txt: '记住吧：只有一个时间是重要的，那就是现在！它所以重要，就是因为它是我们唯一有所作为的时间。'
-  },
-  {
-    url: '../../public/images/nature3.jpg',
-    fit: 'cover',
-    title: '马克·吐温',
-    Subtitle: '',
-    txt: "Twenty years from now you will be more disappointed by the things that you didn't do than by the ones you did do."
-  },
-  {
-    url: '../../public/images/nature4.jpg',
-    fit: 'cover',
-    title: '阿尔伯特·施韦策',
-    Subtitle: '',
-    txt: 'Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.'
-  },
-  {
-    url: '../../public/images/nature5.jpg',
-    fit: 'cover',
-    title: '乔布斯',
-    Subtitle: '',
-    txt: 'Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do.'
-  },
-  {
-    url: '../../public/images/nature1.jpg',
-    fit: 'cover',
-    title: '阿尔伯特·爱因斯坦',
-    Subtitle: '',
-    txt: 'Try not to become a man of success, but rather try to become a man of value.'
+    Subtitle: '《战争与和平》',
+    txt: '每个人都会有缺陷，就像被上帝咬过的苹果。有的人缺陷比较大，正是因为上帝特别喜欢他的芬芳。'
   },
   {
     url: '../../public/images/nature2.jpg',
     fit: 'cover',
-    title: '温斯顿·丘吉尔',
-    Subtitle: '',
-    txt: 'Success is not final, failure is not fatal: It is the courage to continue that counts.'
+    title: '泰戈尔',
+    Subtitle: '《飞鸟集》',
+    txt: '世界以痛吻我，要我报之以歌。'
   },
   {
     url: '../../public/images/nature3.jpg',
     fit: 'cover',
-    title: '纳尔逊·曼德拉',
-    Subtitle: '',
-    txt: 'There is no passion to be found playing small - in settling for a life that is less than the one you are capable of living.'
+    title: '罗曼·罗兰',
+    Subtitle: '《约翰·克利斯朵夫》',
+    txt: '世界上只有一种真正的英雄主义，那就是在认清生活的真相后，依然热爱生活。'
   },
   {
     url: '../../public/images/nature4.jpg',
     fit: 'cover',
-    title: '玛雅·安吉洛',
-    Subtitle: '',
-    txt: 'Nothing will work unless you do.'
+    title: '村上春树',
+    Subtitle: '《挪威的森林》',
+    txt: '不必太纠结于当下，也不必太忧虑未来，当你经历过一些事情的时候，眼前的风景已经和从前不一样了。'
   },
   {
     url: '../../public/images/nature5.jpg',
-    fit: 'cover',
-    title: '孔子',
-    Subtitle: '',
-    txt: '学而时习之，不亦说乎？'
-  },
-  {
-    url: '../../public/images/nature1.jpg',
-    fit: 'cover',
-    title: '老子',
-    Subtitle: '',
-    txt: '千里之行，始于足下。'
-  },
-  {
-    url: '../../public/images/nature2.jpg',
     fit: 'cover',
     title: '苏轼',
-    Subtitle: '',
+    Subtitle: '《晁错论》',
     txt: '古之立大事者，不惟有超世之才，亦必有坚忍不拔之志。'
+  },
+  {
+    url: '../../public/images/nature1.jpg',
+    fit: 'cover',
+    title: '阿尔贝·加缪',
+    Subtitle: '《西西弗神话》',
+    txt: '重要的不是治愈，而是带着病痛活下去。'
+  },
+  {
+    url: '../../public/images/nature2.jpg',
+    fit: 'cover',
+    title: '老子',
+    Subtitle: '《道德经》',
+    txt: '上善若水，水善利万物而不争，处众人之所恶，故几于道。'
+  },
+  {
+    url: '../../public/images/nature3.jpg',
+    fit: 'cover',
+    title: '爱因斯坦',
+    Subtitle: '',
+    txt: '一个人的价值，应当看他贡献什么，而不应当看他取得什么。'
+  },
+  {
+    url: '../../public/images/nature4.jpg',
+    fit: 'cover',
+    title: '孔子',
+    Subtitle: '《论语》',
+    txt: '知者不惑，仁者不忧，勇者不惧。'
+  },
+  {
+    url: '../../public/images/nature5.jpg',
+    fit: 'cover',
+    title: '赫尔曼·黑塞',
+    Subtitle: '《德米安》',
+    txt: '每个人的生命都是通向自我的征途，是对一条道路的尝试，是对一条小径的悄然召唤。'
+  },
+  {
+    url: '../../public/images/nature1.jpg',
+    fit: 'cover',
+    title: '曾国藩',
+    Subtitle: '',
+    txt: '天下古今之庸人，皆以一惰字致败；天下古今之才人，皆以一傲字致败。'
   }
 ])
 
 let curBackPic: any = ref()
 onBeforeMount(() => {
-  let picUrl = [th1, th2, th3, th0]
-  curBackPic.value = picUrl[Math.floor(Math.random() * picUrl.length)]
+  curBackPic.value = bgPics[Math.floor(Math.random() * bgPics.length)]
 })
 
 onMounted(() => {
@@ -217,6 +243,7 @@ const controlSizeSwiper = () => {
     mySwiper.style.height = innerHeight.value + 'px'
   }
 }
+
 
 //scrolltop到主要内容区域
 const gotoMain = () => {
@@ -249,18 +276,32 @@ watch(opacity, (oldval: any, newval: any) => {
 
 <style scoped lang="scss">
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(102, 126, 234, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(245, 87, 108, 0.3); }
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(245, 87, 108, 0.3);
+  }
 }
 
 @keyframes arrowBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-10px); }
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
 }
 
 @keyframes titleShine {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 // 管理按钮
@@ -315,7 +356,9 @@ watch(opacity, (oldval: any, newval: any) => {
         width: 10px;
         height: 10px;
         transition: all 0.3s;
-        &:hover { background: rgba(255, 255, 255, 0.8); }
+        &:hover {
+          background: rgba(255, 255, 255, 0.8);
+        }
       }
       ::v-deep .swiper-pagination-bullet-active {
         background: linear-gradient(135deg, #667eea, #f5576c);
@@ -332,12 +375,13 @@ watch(opacity, (oldval: any, newval: any) => {
         height: 100%;
         background-size: cover;
         background-position: center;
+        transition: background-image 0.8s ease;
       }
 
       .swiper-slide {
         font-size: 18px;
         color: #fff;
-        font-family: 'Noto Sans SC', Georgia, serif;
+        font-family: 'Zhi Mang Xing', 'Ma Shan Zheng', cursive, serif;
         box-sizing: border-box;
         user-select: none;
         display: flex;
@@ -350,7 +394,13 @@ watch(opacity, (oldval: any, newval: any) => {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.3) 100%);
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.2) 0%,
+            transparent 40%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.3) 100%
+          );
           pointer-events: none;
         }
 
@@ -418,7 +468,13 @@ watch(opacity, (oldval: any, newval: any) => {
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8) !important;
 
     &::after {
-      background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%);
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.5) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(0, 0, 0, 0.5) 100%
+      );
     }
   }
 }
