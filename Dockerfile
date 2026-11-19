@@ -7,7 +7,9 @@ COPY MyBolgs/package.json ./
 RUN npm install --no-audit --no-fund
 
 COPY MyBolgs/index.html MyBolgs/vite.config.ts MyBolgs/env.d.ts ./
-COPY MyBolgs/tsconfig.json MyBolgs/tsconfig.app.json MyBolgs/tsconfig.node.json ./
+# 必须包含 tsconfig.vitest.json：tsconfig.json 的 references 里有它，
+# Vite 解析 tsconfig 时会顺着 references 去找，缺文件会直接构建失败。
+COPY MyBolgs/tsconfig*.json ./
 COPY MyBolgs/src ./src
 COPY MyBolgs/public ./public
 RUN npm run build-only
