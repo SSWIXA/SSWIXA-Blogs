@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>扇形图案演示 - 实时变化占比</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #fff;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+      text-align: center;
+      background: linear-gradient(90deg, #e94560, #f5a623, #50fa7b, #6272a4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      margin-bottom: 30px;
+      color: #8be9fd;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* SVG 扇形区域 */
+    .chart-area {
+      position: relative;
+    }
+
+    svg {
+      filter: drop-shadow(0 0 20px rgba(233, 69, 96, 0.3));
+      transition: filter 0.3s;
+    }
+
+    svg:hover {
+      filter: drop-shadow(0 0 30px rgba(233, 69, 96, 0.5));
+    }
+
+    /* 中心文字 */
+    .center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .center-text .total {
+      font-size: 32px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .center-text .label {
+      font-size: 12px;
+      color: #bd93f9;
+    }
+
+    /* 控制面板 */
+    .controls {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      min-width: 300px;
+      backdrop-filter: blur(10px);
+    }
+
+    .controls h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #bd93f9;
+    }
+
+    .control-item {
+      margin-bottom: 18px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .control-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .control-value {
+      font-size: 14px;
+      font-weight: bold;
+      color: #f8f8f2;
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .control-item input[type="range"] {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .control-item input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    /* 每个滑块不同颜色 */
+    .slider-0 { background: linear-gradient(90deg, #333, #e94560); }
+    .slider-0::-webkit-slider-thumb { background: #e94560; }
+    .slider-1 { background: linear-gradient(90deg, #333, #f5a623); }
+    .slider-1::-webkit-slider-thumb { background: #f5a623; }
+    .slider-2 { background: linear-gradient(90deg, #333, #50fa7b); }
+    .slider-2::-webkit-slider-thumb { background: #50fa7b; }
+    .slider-3 { background: linear-gradient(90deg, #333, #6272a4); }
+    .slider-3::-webkit-slider-thumb { background: #6272a4; }
+
+    /* 按钮 */
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+      color: #fff;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-random {
+      background: linear-gradient(135deg, #e94560, #bd93f9);
+    }
+
+    .btn-equal {
+      background: linear-gradient(135deg, #50fa7b, #0f3460);
+    }
+
+    .btn-animate {
+      background: linear-gradient(135deg, #f5a623, #e94560);
+    }
+
+    /* 图例 */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    /* 百分比标签 */
+    .percent-label {
+      font-size: 12px;
+      fill: #fff;
+      font-weight: bold;
+      pointer-events: none;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    /* 方式切换 */
+    .method-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .method-tab {
+      padding: 6px 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      background: transparent;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .method-tab.active {
+      background: rgba(189, 147, 249, 0.3);
+      border-color: #bd93f9;
+      color: #fff;
+    }
+
+    .method-tab:hover {
+      border-color: #bd93f9;
+    }
+
+    /* CSS conic-gradient 方式 */
+    .css-chart {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      position: relative;
+      transition: background 0.3s ease;
+    }
+
+    .css-chart .center-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    /* Canvas 方式 */
+    .canvas-chart {
+      border-radius: 50%;
+    }
+
+    /* 信息面板 */
+    .info-panel {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: #888;
+      line-height: 1.8;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .info-panel strong {
+      color: #bd93f9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎨 扇形图案演示</h1>
+  <p class="subtitle">HTML 实现扇形并实时变化占比 — 支持 SVG / CSS / Canvas 三种方式</p>
+
+  <!-- 方式切换 -->
+  <div class="method-tabs">
+    <button class="method-tab active" onclick="switchMethod('svg')">SVG 方式</button>
+    <button class="method-tab" onclick="switchMethod('css')">CSS conic-gradient</button>
+    <button class="method-tab" onclick="switchMethod('canvas')">Canvas 方式</button>
+  </div>
+
+  <div class="container">
+    <!-- 图表区域 -->
+    <div class="chart-area" id="chartArea">
+      <!-- SVG 方式 -->
+      <div id="svgChart">
+        <svg width="300" height="300" viewBox="0 0 300 300" id="pieSvg"></svg>
+        <div class="center-text">
+          <div class="total" id="totalValue">100</div>
+          <div class="label">总计</div>
+        </div>
+      </div>
+      <!-- CSS 方式 -->
+      <div id="cssChart" style="display:none;">
+        <div class="css-chart" id="cssPie">
+          <div class="center-circle">
+            <span style="font-size:24px;font-weight:bold;color:#fff;" id="cssTotal">100</span>
+            <span style="font-size:11px;color:#bd93f9;">总计</span>
+          </div>
+        </div>
+      </div>
+      <!-- Canvas 方式 -->
+      <div id="canvasChart" style="display:none;">
+        <canvas id="pieCanvas" class="canvas-chart" width="300" height="300"></canvas>
+        <div class="center-text">
+          <div class="total" id="canvasTotal">100</div>
+          <div class="label">总计</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 控制面板 -->
+    <div class="controls">
+      <h2>🎛️ 调节扇形占比</h2>
+
+      <div class="control-item" id="ctrl-0">
+        <div class="control-header">
+          <span class="control-label"><span class="color-dot" style="background:#e94560"></span>类别 A</span>
+          <span class="control-value" id="val-0">25</span>
+        </div>
+        <input type="range" min="1" max="100" value="25" class="slider-0" oninput="updateValue(0, this.value)">
+      </div>
+
+      <div class="control-item" id="ctrl-1">
+        <div class="control-header">
+          <span class="control-label"><span class="color-dot" style="background:#f5a623"></span>类别 B</span>
+          <span class="control-value" id="val-1">25</span>
+        </div>
+        <input type="range" min="1" max="100" value="25" class="slider-1" oninput="updateValue(1, this.value)">
+      </div>
+
+      <div class="control-item" id="ctrl-2">
+        <div class="control-header">
+          <span class="control-label"><span class="color-dot" style="background:#50fa7b"></span>类别 C</span>
+          <span class="control-value" id="val-2">25</span>
+        </div>
+        <input type="range" min="1" max="100" value="25" class="slider-2" oninput="updateValue(2, this.value)">
+      </div>
+
+      <div class="control-item" id="ctrl-3">
+        <div class="control-header">
+          <span class="control-label"><span class="color-dot" style="background:#6272a4"></span>类别 D</span>
+          <span class="control-value" id="val-3">25</span>
+        </div>
+        <input type="range" min="1" max="100" value="25" class="slider-3" oninput="updateValue(3, this.value)">
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-random" onclick="randomize()">🎲 随机</button>
+        <button class="btn btn-equal" onclick="equalize()">⚖️ 均分</button>
+        <button class="btn btn-animate" onclick="autoAnimate()">🔄 自动动画</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <strong>实现说明：</strong><br>
+    ✅ <strong>SVG 方式</strong>：使用 <path> 的弧线命令(A)绘制扇形，适合交互和动画，可精确控制每个扇形<br>
+    ✅ <strong>CSS conic-gradient 方式</strong>：纯 CSS 实现，代码最简洁，适合静态展示<br>
+    ✅ <strong>Canvas 方式</strong>：使用 arc() 方法绘制，适合大量数据和复杂动画<br>
+    💡 拖动滑块即可实时调整各扇形占比，点击按钮查看预设效果
+  </div>
+
+  <script>
+    // ========== 数据 ==========
+    const COLORS = ['#e94560', '#f5a623', '#50fa7b', '#6272a4'];
+    const LABELS = ['类别 A', '类别 B', '类别 C', '类别 D'];
+    let values = [25, 25, 25, 25];
+    let currentMethod = 'svg';
+    let animationTimer = null;
+
+    // ========== 切换方式 ==========
+    function switchMethod(method) {
+      currentMethod = method;
+      // 更新 tab 样式
+      document.querySelectorAll('.method-tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      // 显示/隐藏
+      document.getElementById('svgChart').style.display = method === 'svg' ? '' : 'none';
+      document.getElementById('cssChart').style.display = method === 'css' ? '' : 'none';
+      document.getElementById('canvasChart').style.display = method === 'canvas' ? '' : 'none';
+      render();
+    }
+
+    // ========== 更新数值 ==========
+    function updateValue(index, val) {
+      values[index] = parseInt(val);
+      document.getElementById(`val-${index}`).textContent = val;
+      render();
+    }
+
+    // ========== 渲染入口 ==========
+    function render() {
+      const total = values.reduce((a, b) => a + b, 0);
+      const percentages = values.map(v => v / total);
+
+      // 更新总计显示
+      document.getElementById('totalValue').textContent = total;
+      document.getElementById('cssTotal').textContent = total;
+      document.getElementById('canvasTotal').textContent = total;
+
+      switch (currentMethod) {
+        case 'svg': renderSVG(percentages); break;
+        case 'css': renderCSS(percentages); break;
+        case 'canvas': renderCanvas(percentages); break;
+      }
+    }
+
+    // ========== SVG 渲染 ==========
+    function renderSVG(percentages) {
+      const svg = document.getElementById('pieSvg');
+      const cx = 150, cy = 150, r = 140;
+      let startAngle = -Math.PI / 2; // 从12点方向开始
+
+      let paths = '';
+      percentages.forEach((p, i) => {
+        const angle = p * 2 * Math.PI;
+        const endAngle = startAngle + angle;
+        const largeArc = angle > Math.PI ? 1 : 0;
+
+        const x1 = cx + r * Math.cos(startAngle);
+        const y1 = cy + r * Math.sin(startAngle);
+        const x2 = cx + r * Math.cos(endAngle);
+        const y2 = cy + r * Math.sin(endAngle);
+
+        const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+
+        paths += `<path d="${d}" fill="${COLORS[i]}" opacity="0.9" 
+          style="transition: all 0.3s ease; cursor: pointer;"
+          onmouseover="this.style.opacity='1'; this.style.transform='scale(1.03)'; this.style.transform-origin='${cx}px ${cy}px'"
+          onmouseout="this.style.opacity='0.9'; this.style.transform='scale(1)'"
+        />`;
+
+        // 百分比标签
+        const midAngle = startAngle + angle / 2;
+        const labelR = r * 0.65;
+        const lx = cx + labelR * Math.cos(midAngle);
+        const ly = cy + labelR * Math.sin(midAngle);
+        const percentText = (p * 100).toFixed(1) + '%';
+        if (p > 0.05) {
+          paths += `<text class="percent-label" x="${lx}" y="${ly}">${percentText}</text>`;
+        }
+
+        startAngle = endAngle;
+      });
+
+      svg.innerHTML = paths;
+    }
+
+    // ========== CSS conic-gradient 渲染 ==========
+    function renderCSS(percentages) {
+      let stops = [];
+      let cumulative = 0;
+      percentages.forEach((p, i) => {
+        const start = cumulative * 360;
+        cumulative += p;
+        const end = cumulative * 360;
+        stops.push(`${COLORS[i]} ${start}deg ${end}deg`);
+      });
+      const gradient = `conic-gradient(${stops.join(', ')})`;
+      document.getElementById('cssPie').style.background = gradient;
+    }
+
+    // ========== Canvas 渲染 ==========
+    function renderCanvas(percentages) {
+      const canvas = document.getElementById('pieCanvas');
+      const ctx = canvas.getContext('2d');
+      const cx = 150, cy = 150, r = 140;
+
+      ctx.clearRect(0, 0, 300, 300);
+
+      let startAngle = -Math.PI / 2;
+      percentages.forEach((p, i) => {
+        const angle = p * 2 * Math.PI;
+        const endAngle = startAngle + angle;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = COLORS[i];
+        ctx.globalAlpha = 0.9;
+        ctx.fill();
+
+        // 百分比标签
+        const midAngle = startAngle + angle / 2;
+        const labelR = r * 0.65;
+        const lx = cx + labelR * Math.cos(midAngle);
+        const ly = cy + labelR * Math.sin(midAngle);
+        if (p > 0.05) {
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 12px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText((p * 100).toFixed(1) + '%', lx, ly);
+        }
+
+        startAngle = endAngle;
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // ========== 随机 ==========
+    function randomize() {
+      values = values.map(() => Math.floor(Math.random() * 100) + 1);
+      syncSliders();
+      render();
+    }
+
+    // ========== 均分 ==========
+    function equalize() {
+      values = [25, 25, 25, 25];
+      syncSliders();
+      render();
+    }
+
+    // ========== 自动动画 ==========
+    function autoAnimate() {
+      if (animationTimer) {
+        clearInterval(animationTimer);
+        animationTimer = null;
+        return;
+      }
+      let step = 0;
+      animationTimer = setInterval(() => {
+        step++;
+        values = values.map((_, i) => {
+          const base = 50;
+          const wave = Math.sin(step * 0.05 + i * Math.PI / 2) * 40;
+          return Math.max(5, Math.round(base + wave));
+        });
+        syncSliders();
+        render();
+      }, 50);
+    }
+
+    // ========== 同步滑块 ==========
+    function syncSliders() {
+      values.forEach((v, i) => {
+        document.querySelector(`#ctrl-${i} input`).value = v;
+        document.getElementById(`val-${i}`).textContent = v;
+      });
+    }
+
+    // ========== 初始渲染 ==========
+    render();
+  </script>
+</body>
+</html>

@@ -76,6 +76,24 @@ function initWidget() {
   })
 }
 
+// 等到首屏关键资源加载完毕、浏览器空闲后再初始化看板娘。
+// Live2D 模型约 3MB，若在首屏同步拉取，会和主内容抢带宽（弱网尤其明显）。
+function whenIdle(cb: () => void) {
+  const run = () => {
+    const ric = (window as any).requestIdleCallback
+    if (typeof ric === 'function') {
+      ric(cb, { timeout: 3000 })
+    } else {
+      setTimeout(cb, 1200)
+    }
+  }
+  if (document.readyState === 'complete') {
+    run()
+  } else {
+    window.addEventListener('load', run, { once: true })
+  }
+}
+
 onMounted(() => {
   nextTick(() => {
     window.addEventListener('resize', () => {
@@ -86,16 +104,18 @@ onMounted(() => {
       }
     })
 
-    initWidget()
-
-    // 监听暗黑模式切换，重建 widget
-    darkObserver = new MutationObserver(() => {
-      if (widgetInstance) {
-        widgetInstance.destroy?.()
-      }
+    whenIdle(() => {
       initWidget()
+
+      // 监听暗黑模式切换，重建 widget
+      darkObserver = new MutationObserver(() => {
+        if (widgetInstance) {
+          widgetInstance.destroy?.()
+        }
+        initWidget()
+      })
+      darkObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
     })
-    darkObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
   })
 })
 

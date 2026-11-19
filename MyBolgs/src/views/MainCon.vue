@@ -124,9 +124,30 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-// 导入 Monaco 配置
-import '../utils/monacoConfig'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+// Monaco 类型只在编译期使用，运行时不会打包
+import type * as MonacoType from 'monaco-editor'
+
+// Monaco 按需加载：首屏不下载编辑器（约 2.6MB），只在真的渲染代码块时才拉取。
+// 同一页面多个代码块共用同一个加载 Promise。
+type MonacoApi = typeof import('monaco-editor/esm/vs/editor/editor.api')
+let monacoApi: MonacoApi | null = null
+let monacoLoading: Promise<MonacoApi> | null = null
+
+const loadMonaco = (): Promise<MonacoApi> => {
+  if (!monacoLoading) {
+    monacoLoading = (async () => {
+      // monacoConfig 负责注册 Web Worker 等环境配置，必须先执行
+      await import('../utils/monacoConfig')
+      monacoApi = await import('monaco-editor/esm/vs/editor/editor.api')
+      return monacoApi
+    })().catch((err) => {
+      // 失败后允许下次重试，避免一次网络抖动导致永久不可用
+      monacoLoading = null
+      throw err
+    })
+  }
+  return monacoLoading
+}
 
 // 定义文章内容块类型
 interface ContentBlock {
@@ -168,7 +189,7 @@ const md = {
 }
 
 // Monaco Editor 实例映射
-const editorInstances = new Map<number, monaco.editor.IStandaloneCodeEditor>()
+const editorInstances = new Map<number, MonacoType.editor.IStandaloneCodeEditor>()
 
 // 假设从父组件或API获取文章数据
 const props = defineProps<{
@@ -250,8 +271,8 @@ const initMonaco = (
 ) => {
   if (!el || editorInstances.has(index)) return
 
-  // 动态导入 Monaco Editor
-  import('monaco-editor')
+  // 按需加载 Monaco Editor
+  loadMonaco()
     .then((monacoModule) => {
       // 销毁已存在的实例
       if (editorInstances.has(index)) {
@@ -430,18 +451,34 @@ const exampleFunction = (param) => {
 <style scoped lang="scss">
 // 顶部光条动画
 @keyframes cardShine {
-  0% { left: -100%; }
-  40%, 100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  40%,
+  100% {
+    left: 100%;
+  }
 }
 
 @keyframes headerGlow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .article-container {
@@ -557,7 +594,9 @@ const exampleFunction = (param) => {
   .content-block {
     margin-bottom: 24px;
     animation: slideUp 0.4s ease-out both;
-    &:last-child { margin-bottom: 0; }
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .block-paragraph p {
@@ -597,7 +636,9 @@ const exampleFunction = (param) => {
       }
     }
 
-    h3, h4, h5 {
+    h3,
+    h4,
+    h5 {
       color: #444;
       font-weight: 600;
     }
@@ -629,11 +670,15 @@ const exampleFunction = (param) => {
         border-radius: 50%;
         flex-shrink: 0;
         background: #f5576c;
-        box-shadow: 14px 0 0 #f0c040, 28px 0 0 #43e97b;
+        box-shadow:
+          14px 0 0 #f0c040,
+          28px 0 0 #43e97b;
       }
     }
 
-    .code-editor { height: 300px; }
+    .code-editor {
+      height: 300px;
+    }
   }
 
   .block-image {
@@ -670,7 +715,9 @@ const exampleFunction = (param) => {
       border-radius: 0 8px 8px 0;
       font-style: italic;
 
-      p { margin: 0; }
+      p {
+        margin: 0;
+      }
 
       cite {
         display: block;
@@ -682,7 +729,8 @@ const exampleFunction = (param) => {
   }
 
   .block-list {
-    ul, ol {
+    ul,
+    ol {
       padding-left: 20px;
       margin: 0;
 
@@ -762,11 +810,19 @@ const exampleFunction = (param) => {
   .article-meta .meta-item {
     background: rgba(255, 255, 255, 0.05);
     color: #a0aec0 !important;
-    &:hover { background: rgba(255, 255, 255, 0.1); }
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 
-  .block-paragraph p { color: #c0c0c0 !important; }
-  .block-heading h3, .block-heading h4, .block-heading h5 { color: #ccc !important; }
+  .block-paragraph p {
+    color: #c0c0c0 !important;
+  }
+  .block-heading h3,
+  .block-heading h4,
+  .block-heading h5 {
+    color: #ccc !important;
+  }
 
   .block-code {
     background: #1a1a28;
@@ -785,7 +841,11 @@ const exampleFunction = (param) => {
     color: #bbb !important;
   }
 
-  .block-divider hr { background: linear-gradient(90deg, transparent, #444, transparent); }
-  .block-list li { color: #bbb !important; }
+  .block-divider hr {
+    background: linear-gradient(90deg, transparent, #444, transparent);
+  }
+  .block-list li {
+    color: #bbb !important;
+  }
 }
 </style>

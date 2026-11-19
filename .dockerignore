@@ -1,5 +1,12 @@
 node_modules
+**/node_modules
 .git
-.env
-dist
+**/.env
+**/dist
 *.md
+
+# 只保留运行时真正加载的两个 Live2D 模型，
+# 否则 690MB 的模型目录会全部进入构建上下文，构建极慢。
+MyBolgs/model/*
+!MyBolgs/model/dafeng_2
+!MyBolgs/model/xianghe_2

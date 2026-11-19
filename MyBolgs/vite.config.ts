@@ -28,9 +28,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'monaco-editor': ['monaco-editor']
-        }
+        // 说明：原先这里用 manualChunks 把 monaco-editor 提成独立 chunk，
+        // 但数组写法会让它被当成入口依赖，导致 index.html 里注入 modulepreload，
+        // 首屏无条件下载约 2.7MB 的编辑器。现在 Monaco 已改为按需 dynamic import，
+        // 交给 Rollup 自动分包即可，无需手动指定。
+        manualChunks: undefined
       }
     }
   },

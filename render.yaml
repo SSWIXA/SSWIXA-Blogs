@@ -1,0 +1,19 @@
+# Render Blueprint：一键在 Singapore 区域创建服务
+# 用法：Render Dashboard → New + → Blueprint → 选择本仓库
+# 注意：区域在创建后无法修改，所以必须新建服务（旧的美西服务可保留或删除）。
+services:
+  - type: web
+    name: sswixa-blogs
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: MONGODB_URI
+        # sync: false 表示不写进仓库，创建时在 Render 面板里手填
+        sync: false
+      - key: JWT_SECRET
+        # 自动生成一个随机值，避免使用代码里硬编码的兜底密钥
+        generateValue: true

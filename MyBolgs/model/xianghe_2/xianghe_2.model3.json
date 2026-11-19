@@ -3,7 +3,7 @@
   "FileReferences": {
     "Moc": "xianghe_2.moc3",
     "Textures": [
-      "textures/texture_00.png"
+      "textures/texture_00.webp"
     ],
     "Physics": "xianghe_2.physics3.json",
     "Motions": {
