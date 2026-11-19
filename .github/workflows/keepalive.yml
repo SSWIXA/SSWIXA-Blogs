@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Ping /health
         env:
-          BASE_URL: https://sswzhu-ixa-blogs.onrender.com
+          BASE_URL: https://sswixa-blogs.onrender.com
         run: |
           set -u
           # 冷启动可能超过 60s，给足超时并重试
