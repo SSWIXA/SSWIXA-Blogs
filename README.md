@@ -90,7 +90,7 @@ sswixa-blogs/
 
 ### 线上地址
 
-🌐 **[https://sswzhu-ixa-blogs.onrender.com](https://sswzhu-ixa-blogs.onrender.com)**（Render 自动部署）
+🌐 **[https://sswixa-blogs.onrender.com](https://sswixa-blogs.onrender.com)**（Render 自动部署，Singapore 节点）
 
 ### Docker 部署（推荐）
 

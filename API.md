@@ -6,7 +6,7 @@
 
 - **基礎 URL**: `http://localhost:5000`
 - **API 版本**: `/api/v1`
-- **認證方式**: Bearer Token (待實現)
+- **認證方式**: Bearer Token（文章新增/更新/刪除、圖片上傳等寫操作需要）
 - **數據格式**: JSON
 
 ## 統一響應格式

@@ -11,6 +11,7 @@ import {
   toggleDislike,
   getArticleStats
 } from '../../controllers/articleController.js';
+import { authMiddleware } from '../../middlewares/auth.js';
 
 const router = express.Router();
 
@@ -36,21 +37,22 @@ router.get('/paginated', getArticlesByPage);
 // GET /api/v1/articles/:id
 router.get('/:id', getArticleById);
 
+// 以下寫操作均需登錄（JWT）
 // 創建新文章
 // POST /api/v1/articles
-router.post('/', createArticle);
+router.post('/', authMiddleware, createArticle);
 
 // 更新文章（部分更新）
 // PATCH /api/v1/articles/:id
-router.patch('/:id', updateArticle);
+router.patch('/:id', authMiddleware, updateArticle);
 
 // 完全更新文章
 // PUT /api/v1/articles/:id
-router.put('/:id', updateArticle);
+router.put('/:id', authMiddleware, updateArticle);
 
 // 刪除文章
 // DELETE /api/v1/articles/:id
-router.delete('/:id', deleteArticle);
+router.delete('/:id', authMiddleware, deleteArticle);
 
 // ==================== 交互操作 (RESTful 風格) ====================
 

@@ -73,7 +73,7 @@ sswixa-blogs/
 
 ### Live Demo
 
-🌐 **[https://sswzhu-ixa-blogs.onrender.com](https://sswzhu-ixa-blogs.onrender.com)** (Auto-deployed on Render)
+🌐 **[https://sswixa-blogs.onrender.com](https://sswixa-blogs.onrender.com)** (Auto-deployed on Render, Singapore region)
 
 ### Docker (Recommended)
 

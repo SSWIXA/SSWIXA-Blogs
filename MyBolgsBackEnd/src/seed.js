@@ -2,6 +2,7 @@ import 'dotenv/config';
 import Post from './models/Post.js';
 import User from './models/User.js';
 import mongoose from 'mongoose';
+import extraPosts from './seed-extra.js';
 
 const connectDB = async () => {
   try {
@@ -1079,8 +1080,8 @@ const seedPosts = async () => {
     await Post.deleteMany({});
     console.log('已清空现有文章数据');
 
-    // 插入新数据
-    const createdPosts = await Post.insertMany(posts);
+    // 插入新数据（基础 18 篇 + 增量文章）
+    const createdPosts = await Post.insertMany([...posts, ...extraPosts]);
     console.log(`成功插入 ${createdPosts.length} 篇文章`);
 
     // 创建默认管理员
