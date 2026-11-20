@@ -5,6 +5,10 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import Post from './models/Post.js';
 import extraPosts from './seed-extra.js';
+import extraPosts2 from './seed-extra-2.js';
+
+// 两批增量文章合并，统一按 id / title 去重
+const allExtraPosts = [...extraPosts, ...extraPosts2];
 
 const run = async () => {
   const uri = process.env.MONGODB_URI;
@@ -22,7 +26,7 @@ const run = async () => {
     const existingIds = new Set(existing.map((p) => p.id));
     const existingTitles = new Set(existing.map((p) => p.title));
 
-    const toInsert = extraPosts.filter(
+    const toInsert = allExtraPosts.filter(
       (p) => !existingIds.has(p.id) && !existingTitles.has(p.title)
     );
 
