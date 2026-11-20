@@ -1,5 +1,9 @@
 <template>
-  <el-aside style="z-index: 100; padding-top: 60px">
+  <el-aside
+    class="article-aside"
+    :class="{ 'is-collapsed': isCollapsed }"
+    style="z-index: 100; padding-top: 60px"
+  >
     <div class="aside_main">
       <div class="aside_header">
         <div class="header-glow"></div>
@@ -7,6 +11,14 @@
           <span class="title-dot"></span>
           文章目录
         </h3>
+        <button
+          class="collapse-btn"
+          @click="toggleCollapse"
+          :title="isCollapsed ? '展开文章目录' : '收起文章目录'"
+          :aria-label="isCollapsed ? '展开文章目录' : '收起文章目录'"
+        >
+          <el-icon><ArrowLeftBold v-if="!isCollapsed" /><ArrowRightBold v-else /></el-icon>
+        </button>
       </div>
       <div class="aside_title">
         <el-input
@@ -29,14 +41,34 @@
       </div>
     </div>
   </el-aside>
+  <!-- 收起后贴在屏幕左缘的展开把手 -->
+  <button
+    v-if="isCollapsed"
+    class="aside-expand-handle"
+    @click="toggleCollapse"
+    title="展开文章目录"
+    aria-label="展开文章目录"
+  >
+    <el-icon><ArrowRightBold /></el-icon>
+    <span class="handle-text">文章目录</span>
+  </button>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, nextTick, watch } from 'vue'
 import { ElTree } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
+import { Search, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import router from '@/router'
 import { getAllArticles } from '@/api/articleService'
+
+// 侧边栏收合状态（持久化，刷新后保持）
+const COLLAPSE_KEY = 'aside-collapsed'
+const isCollapsed = ref<boolean>(localStorage.getItem(COLLAPSE_KEY) === '1')
+
+const toggleCollapse = () => {
+  isCollapsed.value = !isCollapsed.value
+  localStorage.setItem(COLLAPSE_KEY, isCollapsed.value ? '1' : '0')
+}
 
 interface Tree {
   label: string
@@ -109,6 +141,11 @@ onMounted(() => {
   position: fixed;
   transition: transform 0.4s ease-in-out;
 
+  // 手动收合：整个侧栏移出屏幕左侧
+  &.is-collapsed {
+    transform: translateX(-300px);
+  }
+
   @media screen and (max-width: 1200px) {
     transform: translateX(-300px);
   }
@@ -162,6 +199,32 @@ onMounted(() => {
         border-radius: 50%;
         background: linear-gradient(135deg, #667eea, #f5576c);
         animation: dotPulse 2s ease-in-out infinite;
+      }
+    }
+
+    // 收合按钮：贴在标题右侧
+    .collapse-btn {
+      position: absolute;
+      top: 18px;
+      right: 14px;
+      z-index: 2;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(102, 126, 234, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.6);
+      color: #667eea;
+      cursor: pointer;
+      transition: all 0.25s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #667eea, #f5576c);
+        color: #fff;
+        border-color: transparent;
+        transform: scale(1.08);
       }
     }
   }
@@ -306,6 +369,54 @@ onMounted(() => {
   ::v-deep .el-tree {
     color: #c0c0c0 !important;
   }
+}
+
+// 收起后贴在屏幕左缘的展开把手
+.aside-expand-handle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: #667eea;
+  cursor: pointer;
+  box-shadow: 2px 0 12px rgba(102, 126, 234, 0.12);
+  transition: all 0.25s ease;
+
+  .handle-text {
+    writing-mode: vertical-rl;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #667eea, #f5576c);
+    color: #fff;
+    padding-right: 10px;
+    box-shadow: 2px 0 18px rgba(102, 126, 234, 0.3);
+  }
+
+  // 小屏下侧栏本就隐藏，把手也不需要
+  @media screen and (max-width: 1200px) {
+    display: none;
+  }
+}
+
+.dark-mode .aside-expand-handle {
+  background: rgba(30, 30, 40, 0.85) !important;
+  border-color: rgba(102, 126, 234, 0.35) !important;
 }
 
 // 动画

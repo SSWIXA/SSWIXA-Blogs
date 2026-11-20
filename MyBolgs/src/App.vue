@@ -67,7 +67,18 @@ function initWidget() {
         messages: quotes,
         duration: 5000,
         interval: 10000,
-        typing: { speed: 80 }
+        typing: { speed: 80 },
+        // 库默认 whiteSpace:nowrap + maxWidth:200px 互相打架，
+        // 长句子不会换行而是直接撑破气泡。这里覆盖成可换行并放宽尺寸。
+        style: {
+          whiteSpace: 'normal',
+          maxWidth: '280px',
+          minWidth: '120px',
+          lineHeight: '1.6',
+          padding: '10px 16px',
+          textAlign: 'left',
+          wordBreak: 'break-word'
+        }
       }
     },
     menus: { items: [] },
